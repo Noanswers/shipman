@@ -51,11 +51,12 @@ bool CGraphicsClass::frame()
 	return true;
 }
 
+//	여기서 Scene 작업을 하면 됩니다.
+//	Scene Stack으로부터 Scene을 받아와서 그리도록 합니다.
 bool CGraphicsClass::render()
 {
 	// Clear the buffers to begin the scene.
 	m_Direct3D->beginScene(0.5f, 0.5f, 0.5f, 1.0f);
-
 
 	// Present the rendered scene to the screen.
 	m_Direct3D->endScene();

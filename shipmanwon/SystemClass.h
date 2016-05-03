@@ -8,6 +8,7 @@
 #include <windows.h>
 #include "InputClass.h"
 #include "GraphicsClass.h"
+#include "SceneManager.h"
 
 class CSystemClass
 {
@@ -32,6 +33,7 @@ private:
 //	variables
 	CGraphicsClass* Graphics;
 	CInputClass* Input;
+	CSceneManager* SceneManager;
 
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;

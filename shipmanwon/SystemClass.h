@@ -33,7 +33,6 @@ private:
 //	variables
 	CGraphicsClass* Graphics;
 	CInputClass* Input;
-	CSceneManager* SceneManager;
 
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;

@@ -2,11 +2,11 @@
 #include "MyLayer.h"
 
 
-CMyLayer::CLayer()
+CMyLayer::CMyLayer()
 {
 }
 
 
-CMyLayer::~CLayer()
+CMyLayer::~CMyLayer()
 {
 }

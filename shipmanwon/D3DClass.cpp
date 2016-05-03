@@ -1,9 +1,14 @@
 #include "stdafx.h"
 #include "D3DClass.h"
+#include "SceneManager.h"
+#include "MyScene.h"
 
 bool CD3DClass::initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen,
 	float screenDepth, float screenNear)
 {
+	m_SceneManager = CSceneManager::GetInstance();
+	m_SceneManager->initialize();
+
 	HRESULT result;
 	IDXGIFactory* factory;
 	IDXGIAdapter* adapter;
@@ -401,7 +406,6 @@ void CD3DClass::beginScene(float red, float green, float blue, float alpha)
 	return;
 }
 
-
 void CD3DClass::endScene()
 {
 	// Present the back buffer to the screen since rendering is complete.
@@ -424,7 +428,6 @@ ID3D11Device* CD3DClass::getDevice()
 	return m_device;
 }
 
-
 ID3D11DeviceContext* CD3DClass::getDeviceContext()
 {
 	return m_deviceContext;
@@ -436,13 +439,11 @@ void CD3DClass::getProjectionMatrix(XMMATRIX& projectionMatrix)
 	return;
 }
 
-
 void CD3DClass::getWorldMatrix(XMMATRIX& worldMatrix)
 {
 	worldMatrix = m_worldMatrix;
 	return;
 }
-
 
 void CD3DClass::getOrthoMatrix(XMMATRIX& orthoMatrix)
 {
@@ -456,3 +457,9 @@ void CD3DClass::getVideoCardInfo(char* cardName, int& memory)
 	memory = m_videoCardMemory;
 	return;
 }
+
+//bool CD3DClass::renderScene()
+//{
+//	CMyScene* scene = m_SceneManager->getCurrentScene();
+//	return true;
+//}

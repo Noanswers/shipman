@@ -6,6 +6,7 @@
 
 #include <d3d11.h>
 #include <directxmath.h>
+#include "SceneManager.h"
 
 using namespace DirectX;
 
@@ -14,7 +15,7 @@ class CD3DClass
 public:
 	CD3DClass() = default;
 	~CD3DClass() = default;
-	CD3DClass(const CD3DClass&) = default;
+	CD3DClass(CD3DClass&) = default;
 	
 	bool initialize(int, int, bool, HWND, bool, float, float);
 	void shutdown();
@@ -29,9 +30,11 @@ public:
 	void getWorldMatrix(XMMATRIX&);
 	void getOrthoMatrix(XMMATRIX&);
 
-	void getVideoCardInfo(char*, int&);
-
+	void getVideoCardInfo(char* cardName, int& memory);
+	
 private:
+	CSceneManager* m_SceneManager = nullptr;
+
 	bool m_vsync_enabled;
 	int m_videoCardMemory;
 	char m_videoCardDescription[128];

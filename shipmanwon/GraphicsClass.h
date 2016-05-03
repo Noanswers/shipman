@@ -1,6 +1,10 @@
 #pragma once
 #include <windows.h>
 #include "d3dclass.h"
+#include "SceneManager.h"
+#include "cameraclass.h"
+#include "modelclass.h"
+#include "colorshaderclass.h"
 
 // GLOBALS
 const bool FULL_SCREEN = false;
@@ -22,7 +26,11 @@ public:
 
 private:
 	bool render();
-	CD3DClass* m_Direct3D = nullptr;
 
+	CSceneManager* SceneManager = new CSceneManager();
+	CD3DClass* m_Direct3D = nullptr;
+	CCameraClass* m_Camera = nullptr;
+	CModelClass* m_Model = nullptr;
+	CColorShaderClass* m_ColorShader = nullptr;
 };
 

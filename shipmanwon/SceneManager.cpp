@@ -4,6 +4,9 @@
 void CSceneManager::initialize()
 {
 	SceneStack.clear();
+
+	CMyScene* startScene = new CMyScene();
+	SceneStack.push_back(startScene);
 }
 
 bool CSceneManager::pushBack(CMyScene* scene)

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "config.h"
 #include "ColorShaderClass.h"
 
 bool CColorShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
@@ -6,7 +7,7 @@ bool CColorShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 	bool result;
 
 	// Initialize the vertex and pixel shaders.
-	result = InitializeShader(device, hwnd, L"../Release/color.vs", L"../Release/color.ps");
+	result = InitializeShader(device, hwnd, VS_Directory.c_str(), PS_Directory.c_str());
 	if (!result)
 	{
 		return false;
@@ -41,7 +42,7 @@ bool CColorShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCoun
 	return true;
 }
 
-bool CColorShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCHAR* psFilename)
+bool CColorShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, const WCHAR* vsFilename, const WCHAR* psFilename)
 {
 	HRESULT result;
 	ID3D10Blob* errorMessage;
@@ -195,7 +196,7 @@ void CColorShaderClass::ShutdownShader()
 	return;
 }
 
-void CColorShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, WCHAR* shaderFilename)
+void CColorShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hwnd, const WCHAR* shaderFilename)
 {
 	char* compileErrors;
 	unsigned long long bufferSize, i;

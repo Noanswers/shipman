@@ -38,14 +38,23 @@ bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	// Initialize the model object.
-	result = m_Model->Initialize(m_Direct3D->getDevice());
+//	Initialize the model object.
+	//result = m_Model->Initialize(m_Direct3D->getDevice());
+	//if (!result)
+	//{
+	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
+	//	return false;
+	//}
+
+//	문제 발생
+	
+	CMyScene* scene = CSceneManager::GetInstance()->getCurrentScene();
+	result = scene->initScene(m_Direct3D->getDevice());
 	if (!result)
 	{
-		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
-
+	
 	// Create the color shader object.
 	m_ColorShader = new CColorShaderClass;
 	if (!m_ColorShader)
@@ -119,7 +128,6 @@ bool CGraphicsClass::render()
 	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
 	bool result;
 
-
 	// 랜더 타겟 뷰와 뎁스 스탠실 뷰를 클리어 합니다.
 	m_Direct3D->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -133,14 +141,11 @@ bool CGraphicsClass::render()
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	// 이 부분이 실제로 그리는 부분입니다.
-
 	// 이 부분에서 DeviceContext를 받아와서 Scene을 render 해주면 됩니다.
-	m_Model->Render(m_Direct3D->getDeviceContext());
+	//m_Model->Render(m_Direct3D->getDeviceContext());
 	
-/*
-	CMyScene* Scene = CMySceneManager::GetInstance()->getCurrentScene();
-	Scene->render(m_Direct3D->getDeviceContext());
-*/
+	CMyScene* currentScene = CSceneManager::GetInstance()->getCurrentScene();
+	currentScene->renderScene(m_Direct3D->getDeviceContext());
 
 	// Render the model using the color shader.
 

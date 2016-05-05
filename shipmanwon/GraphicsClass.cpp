@@ -120,7 +120,7 @@ bool CGraphicsClass::render()
 	bool result;
 
 
-	// Clear the buffers to begin the scene.
+	// 랜더 타겟 뷰와 뎁스 스탠실 뷰를 클리어 합니다.
 	m_Direct3D->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// Generate the view matrix based on the camera's position.
@@ -132,16 +132,25 @@ bool CGraphicsClass::render()
 	m_Direct3D->getProjectionMatrix(projectionMatrix);
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	// 이 부분이 실제로 그리는 부분입니다.
+
+	// 이 부분에서 DeviceContext를 받아와서 Scene을 render 해주면 됩니다.
 	m_Model->Render(m_Direct3D->getDeviceContext());
+	
+/*
+	CMyScene* Scene = CMySceneManager::GetInstance()->getCurrentScene();
+	Scene->render(m_Direct3D->getDeviceContext());
+*/
 
 	// Render the model using the color shader.
+
 	result = m_ColorShader->Render(m_Direct3D->getDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)
 	{
 		return false;
 	}
 
-	// Present the rendered scene to the screen.
+	// 백 버퍼와 프론트 버퍼를 교체해줍니다.
 	m_Direct3D->endScene();
 
 	return true;

@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "MyScene.h"
 
-CMyScene::CMyScene()
+void CMyScene::renderScene(ID3D11DeviceContext* deviceContext)
 {
-}
-
-CMyScene::~CMyScene()
-{
+	for (auto& iter : LayerVector)
+	{
+		iter.renderLayer(deviceContext);
+	}
 }

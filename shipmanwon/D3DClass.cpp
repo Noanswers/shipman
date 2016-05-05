@@ -387,15 +387,13 @@ void CD3DClass::shutdown()
 	return;
 }
 
+/*
+	renderTargetView를 clear
+	depthStencilView를 clear
+*/
 void CD3DClass::beginScene(float red, float green, float blue, float alpha)
 {
-	float color[4];
-
-	// Setup the color to clear the buffer to.
-	color[0] = red;
-	color[1] = green;
-	color[2] = blue;
-	color[3] = alpha;
+	float	color[4] = { 0.4f, 0.0f, 0.0f, 1.0f }; //red, green, blue, alpha
 
 	// Clear the back buffer.
 	m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);
@@ -406,6 +404,10 @@ void CD3DClass::beginScene(float red, float green, float blue, float alpha)
 	return;
 }
 
+/*
+	swapChain을 present(0,0) 하여
+	백버퍼와 프론트 버퍼 교체
+*/
 void CD3DClass::endScene()
 {
 	// Present the back buffer to the screen since rendering is complete.

@@ -1,12 +1,10 @@
 #include "stdafx.h"
 #include "MyLayer.h"
 
-
-CMyLayer::CMyLayer()
+void CMyLayer::renderLayer(ID3D11DeviceContext* deviceContext)
 {
-}
-
-
-CMyLayer::~CMyLayer()
-{
+	for (auto& iter : ObjectVector)
+	{
+		iter.renderObject(deviceContext);
+	}
 }

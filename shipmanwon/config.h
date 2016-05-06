@@ -7,15 +7,16 @@
 #include <Poco/Path.h>
 //////////////////////////////////////////////////////////////////////////
 
-std::wstring makeVS_Directory()
+std::wstring makeVS_Directory(std::string fileDir)
 {
 //	Get .exe file name
 	char buffer[MAX_PATH];
 	GetModuleFileNameA(NULL, buffer, MAX_PATH);
+
 //	Make VSPath
 	auto currentPath = Poco::Path(buffer).makeParent();
 	auto VSPath = currentPath.popDirectory();
-	VSPath = VSPath.popDirectory().append("Release\\color.vs");
+	VSPath = VSPath.popDirectory().append(fileDir);
 
 //	return type set
 	std::string temp = VSPath.toString();
@@ -24,6 +25,5 @@ std::wstring makeVS_Directory()
 	return temp2;
 }
 
-
-const std::wstring VS_Directory = makeVS_Directory();
-const std::wstring PS_Directory = L"C:/Users/Çö¿ì/Documents/Visual Studio 2015/Projects/shipman/x64/Release/color.ps";
+const std::wstring VS_Directory = makeVS_Directory("x64\\Release\\color.vs");
+const std::wstring PS_Directory = makeVS_Directory("x64\\Release\\color.ps");

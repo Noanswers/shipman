@@ -147,7 +147,6 @@
     <ClInclude Include="D3DClass.h" />
     <ClInclude Include="GraphicsClass.h" />
     <ClInclude Include="InputClass.h" />
-    <ClInclude Include="ModelClass.h" />
     <ClInclude Include="MyLayer.h" />
     <ClInclude Include="MyObject.h" />
     <ClInclude Include="MyScene.h" />
@@ -166,7 +165,6 @@
     <ClCompile Include="D3DClass.cpp" />
     <ClCompile Include="GraphicsClass.cpp" />
     <ClCompile Include="InputClass.cpp" />
-    <ClCompile Include="ModelClass.cpp" />
     <ClCompile Include="MyLayer.cpp" />
     <ClCompile Include="MyObject.cpp" />
     <ClCompile Include="MyScene.cpp" />

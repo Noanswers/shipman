@@ -11,7 +11,6 @@ public:
 	{
 		CMyObject* tmpObject = new CMyObject();
 		ObjectVector.push_back(tmpObject);
-		//tmpObject->initialize();
 	}
 	CMyLayer(const CMyLayer&) = default;
 	~CMyLayer()

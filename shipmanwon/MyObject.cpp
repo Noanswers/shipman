@@ -29,6 +29,11 @@ void CMyObject::renderObject(ID3D11DeviceContext* deviceContext)
 	return;
 }
 
+int CMyObject::getIndexCount()
+{
+	return m_indexCount;
+}
+
 
 
 /*

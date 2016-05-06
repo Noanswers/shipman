@@ -25,8 +25,8 @@ private:
 	void shutdownBuffers();
 	void renderBuffers(ID3D11DeviceContext*);
 
-	ID3D11Buffer* m_vertexBuffer;
-	ID3D11Buffer* m_indexBuffer;
+	ID3D11Buffer* m_vertexBuffer = nullptr;
+	ID3D11Buffer* m_indexBuffer = nullptr;
 	
 	int m_vertexCount;
 	int m_indexCount;

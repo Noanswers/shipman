@@ -3,7 +3,6 @@
 #include "d3dclass.h"
 #include "SceneManager.h"
 #include "cameraclass.h"
-#include "modelclass.h"
 #include "colorshaderclass.h"
 
 // GLOBALS
@@ -30,7 +29,7 @@ private:
 	CSceneManager* SceneManager = new CSceneManager();
 	CD3DClass* m_Direct3D = nullptr;
 	CCameraClass* m_Camera = nullptr;
-	CModelClass* m_Model = nullptr;
+	//CModelClass* m_Model = nullptr;
 	CColorShaderClass* m_ColorShader = nullptr;
 };
 

@@ -30,30 +30,6 @@ bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	// Set the initial position of the camera.
 	m_Camera->SetPosition(0.0f, 0.0f, -5.0f);
-
-	// Create the model object.
-	m_Model = new CModelClass;
-	if (!m_Model)
-	{
-		return false;
-	}
-
-//	Initialize the model object.
-	//result = m_Model->Initialize(m_Direct3D->getDevice());
-	//if (!result)
-	//{
-	//	MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
-	//	return false;
-	//}
-
-//	문제 발생
-	
-	CMyScene* scene = CSceneManager::GetInstance()->getCurrentScene();
-	result = scene->initScene(m_Direct3D->getDevice());
-	if (!result)
-	{
-		return false;
-	}
 	
 	// Create the color shader object.
 	m_ColorShader = new CColorShaderClass;
@@ -81,14 +57,6 @@ void CGraphicsClass::shutdown()
 		m_ColorShader->Shutdown();
 		delete m_ColorShader;
 		m_ColorShader = 0;
-	}
-
-	// Release the model object.
-	if (m_Model)
-	{
-		m_Model->Shutdown();
-		delete m_Model;
-		m_Model = 0;
 	}
 
 	// Release the camera object.
@@ -139,17 +107,26 @@ bool CGraphicsClass::render()
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->getProjectionMatrix(projectionMatrix);
 
-	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
-	// 이 부분이 실제로 그리는 부분입니다.
-	// 이 부분에서 DeviceContext를 받아와서 Scene을 render 해주면 됩니다.
-	//m_Model->Render(m_Direct3D->getDeviceContext());
-	
+	/*
+		매번 랜더링하기 전에 init이 된 object가 없는지 확인하고, 
+		initialize가 되지 않은 경우 초기화 진행
+
+		그 후, 랜더링 작업
+	*/
+
+	CMyScene* scene = CSceneManager::GetInstance()->getCurrentScene();
+	result = scene->initScene(m_Direct3D->getDevice());
+	if (!result)
+	{
+		return false;
+	}
+
 	CMyScene* currentScene = CSceneManager::GetInstance()->getCurrentScene();
 	currentScene->renderScene(m_Direct3D->getDeviceContext());
 
 	// Render the model using the color shader.
 
-	result = m_ColorShader->Render(m_Direct3D->getDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix);
+	result = m_ColorShader->Render(m_Direct3D->getDeviceContext(), 3, worldMatrix, viewMatrix, projectionMatrix);
 	if (!result)
 	{
 		return false;

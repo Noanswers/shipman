@@ -138,9 +138,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Jsfumato\Documents\shipman\shipmanwon\lib\poco\Foundation\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Jsfumato\Documents\shipman\shipmanwon\lib\poco\lib;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>C:\Users\Jsfumato\Documents\shipman\shipmanwon\lib\poco\bin;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(solutiondir)shipmanwon\lib\poco\Foundation\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(solutiondir)shipmanwon\lib\poco\lib;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(solutiondir)shipmanwon\lib\poco\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='asdf|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -159,9 +159,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <ExecutablePath>C:\Users\Jsfumato\Documents\shipman\shipmanwon\lib\poco\bin;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>C:\Users\Jsfumato\Documents\shipman\shipmanwon\lib\poco\Foundation\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Jsfumato\Documents\shipman\shipmanwon\lib\poco\lib;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(solutiondir)shipmanwon\lib\poco\bin;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(solutiondir)shipmanwon\lib\poco\Foundation\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(solutiondir)shipmanwon\lib\poco\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -215,7 +215,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>PocoFoundationd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Jsfumato\Documents\shipman\shipmanwon\lib\poco\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(solutiondir)shipmanwon\lib\poco\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='asdf|x64'">
@@ -273,7 +273,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Jsfumato\Documents\shipman\shipmanwon\lib\poco\Foundation\include\Poco;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -281,7 +282,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>PocoFoundation.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Jsfumato\Documents\shipman\shipmanwon\lib\poco\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(solutiondir)shipmanwon\lib\poco\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

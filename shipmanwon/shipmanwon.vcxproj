@@ -138,7 +138,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(solutiondir)shipmanwon\lib\poco\Foundation\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(solutiondir)shipmanwon\lib\poco\Foundation\include;$(solutiondir)shipmanwon\lib\fbx\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(solutiondir)shipmanwon\lib\poco\lib;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(solutiondir)shipmanwon\lib\poco\bin;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
@@ -160,7 +160,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <ExecutablePath>$(solutiondir)shipmanwon\lib\poco\bin;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(solutiondir)shipmanwon\lib\poco\Foundation\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(solutiondir)shipmanwon\lib\poco\Foundation\include;$(solutiondir)shipmanwon\lib\fbx\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(solutiondir)shipmanwon\lib\poco\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -214,8 +214,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>PocoFoundationd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(solutiondir)shipmanwon\lib\poco\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>PocoFoundationd.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(solutiondir)shipmanwon\lib\poco\lib;$(solutiondir)shipmanwon\lib\fbx\lib\vs2015\x64\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='asdf|x64'">
@@ -281,8 +281,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>PocoFoundation.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(solutiondir)shipmanwon\lib\poco\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>PocoFoundation.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(solutiondir)shipmanwon\lib\poco\lib;$(solutiondir)shipmanwon\lib\fbx\lib\vs2015\x64\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CameraClass.h"
+#include "fbxsdk.h"
 
 void CCameraClass::SetPosition(float x, float y, float z)
 {

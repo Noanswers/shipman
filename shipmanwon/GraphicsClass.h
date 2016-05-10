@@ -26,7 +26,7 @@ public:
 private:
 	bool render(HWND hWnd);
 
-	CSceneManager* SceneManager = new CSceneManager();
+	CSceneManager* SceneManager = nullptr;
 	CD3DClass* m_Direct3D = nullptr;
 	CCameraClass* m_Camera = nullptr;
 	CColorShaderClass* m_ColorShader = nullptr;

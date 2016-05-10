@@ -33,3 +33,8 @@ bool CMyLayer::initLayer(ID3D11Device* device, HWND hWnd)
 	}
 	return true;
 }
+
+int CMyLayer::getObjectsSize()
+{
+	return ObjectVector.size();
+}

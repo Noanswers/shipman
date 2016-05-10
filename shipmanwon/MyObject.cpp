@@ -20,6 +20,8 @@ void CMyObject::shutdown()
 {
 	// Shutdown the vertex and index buffers.
 	shutdownBuffers();
+	ObjectShader->Shutdown();
+	ObjectShader = nullptr;
 
 	return;
 }
@@ -39,6 +41,23 @@ int CMyObject::getIndexCount()
 	return m_indexCount;
 }
 
+void CMyObject::setPosition(int x, int y, int z)
+{
+	xPos = x;
+	yPos = y;
+	zPos = z;
+}
+
+void CMyObject::adjustPosition(VertexType* vertices)
+{
+	for (int i = 0; i < m_indexCount; ++i)
+	{
+		m_vertices[i].position.x += xPos;
+		m_vertices[i].position.y += yPos;
+		m_vertices[i].position.z += zPos;
+	}
+}
+
 
 
 /*
@@ -53,18 +72,19 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 	D3D11_SUBRESOURCE_DATA vertexData;
 	D3D11_SUBRESOURCE_DATA indexData;
 	
-	// Set the number of vertices in the vertex array.
-	m_vertexCount = 3;
-
 	// Set the number of indices in the index array.
 	m_indexCount = 3;
+	m_vertexCount = 3;
 
 	// Create the vertex array.
-	VertexType* vertices = new VertexType[m_vertexCount];
-	if (!vertices)
-	{
-		return false;
-	}
+	VertexType vertices[3];
+	vertices[0] = { DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) };
+	vertices[1] = { DirectX::XMFLOAT3( 0.0f,  1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) };
+	vertices[2] = { DirectX::XMFLOAT3( 1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) };
+	
+	VertexType* m_vertice = vertices;
+	/*VertexType* newVertice = vertices;
+	adjustPosition(newVertice);*/
 
 	// Create the index array.
 	unsigned long* indices = new unsigned long[m_indexCount];
@@ -74,14 +94,14 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 	}
 
 	// Load the vertex array with data.
-	vertices[0].position = DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
-	vertices[0].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	//vertices[0].position = DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
+	//vertices[0].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 
-	vertices[1].position = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);  // Top middle.
-	vertices[1].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	//vertices[1].position =	DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);  // Top middle.
+	//vertices[1].color =		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 
-	vertices[2].position = DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
-	vertices[2].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	//vertices[2].position = DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
+	//vertices[2].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 
 	// Load the index array with data.
 	indices[0] = 0;  // Bottom left.
@@ -129,9 +149,6 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 	}
 
 	// Release the arrays now that the vertex and index buffers have been created and loaded.
-	delete[] vertices;
-	vertices = 0;
-
 	delete[] indices;
 	indices = 0;
 

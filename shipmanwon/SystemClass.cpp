@@ -20,10 +20,21 @@ bool CSystemClass::initialize()
 
 	// GameManager를 생성합니다.
 	GameManager = CGameManager::GetInstance();
-	if (!GameManager)
+	if (GameManager == nullptr)
 	{
 		return false;
 	}
+
+	SceneManager = CSceneManager::GetInstance();
+	if (SceneManager == nullptr)
+	{
+		return false;
+	}
+
+	CMyScene* startScene = new CMyScene();
+
+	SceneManager->pushBack(startScene);
+	CMyScene* scene = SceneManager->getCurrentScene();
 
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
 	Input = new CInputClass;
@@ -31,7 +42,7 @@ bool CSystemClass::initialize()
 	{
 		return false;
 	}
-
+	
 	// Initialize the input object.
 	Input->initialize();
 

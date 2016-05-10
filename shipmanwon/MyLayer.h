@@ -7,11 +7,7 @@
 class CMyLayer
 {
 public:
-	CMyLayer()
-	{
-		CMyObject* tmpObject = new CMyObject();
-		ObjectVector.push_back(tmpObject);
-	}
+	CMyLayer() = default;
 	CMyLayer(const CMyLayer&) = default;
 	~CMyLayer()
 	{
@@ -22,6 +18,7 @@ public:
 
 	bool pushBack(CMyObject* object);
 	bool renderLayer(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
+	int	getObjectsSize();
 
 private:
 	std::vector<CMyObject*> ObjectVector;

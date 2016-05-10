@@ -4,19 +4,28 @@
 bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
 {
 	bool result = false;
-	for (auto& iter : LayerVector)
+	for (auto& iter : LayerList)
 	{
-		result = iter->renderLayer(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
+		CMyLayer* layer = std::get<CMyLayer*>(iter);
+		result = layer->renderLayer(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
 	}
 	return result;
 }
 
-bool CMyScene::pushBack(CMyLayer* layer)
+bool CMyScene::pushBack(CMyObject* object, int layerNum)
 {
-	size_t preSize = LayerVector.size();
-	LayerVector.push_back(layer);
+	bool isExist = checkLayerExist(layerNum);
+	if (isExist == false)
+	{
+		LayerList.emplace_back(std::make_tuple(layerNum, new CMyLayer()));
+	}
 
-	size_t currentSize = LayerVector.size();
+	CMyLayer* layer = getLayerByNum(layerNum);
+	
+	size_t preSize = layer->getObjectsSize();
+	layer->pushBack(object);
+	size_t currentSize = layer->getObjectsSize();
+
 	if (currentSize == (preSize + 1))
 		return true;
 
@@ -25,11 +34,36 @@ bool CMyScene::pushBack(CMyLayer* layer)
 
 bool CMyScene::initScene(ID3D11Device* device, HWND hWnd)
 {
-	for (auto& iter : LayerVector)
+	for (auto& iter : LayerList)
 	{
-		bool result = iter->initLayer(device, hWnd);
+		CMyLayer* layer = std::get<CMyLayer*>(iter);
+		
+		bool result = layer->initLayer(device, hWnd);
 		if (result == false)
 			return false;
 	}
 	return true;
+}
+
+bool CMyScene::checkLayerExist(int layerNum)
+{
+	bool result = false;
+	for (auto& layer : LayerList)
+	{
+		if (layerNum == std::get<0>(layer))
+			result = true;
+	}
+	return result;
+}
+
+CMyLayer* CMyScene::getLayerByNum(int layerNum)
+{
+	CMyLayer* result = nullptr;
+	
+	for (auto& layer : LayerList)
+	{
+		if (layerNum == std::get<0>(layer))
+			result = std::get<CMyLayer*>(layer);
+	}
+	return result;
 }

@@ -9,6 +9,9 @@
 #include "InputClass.h"
 #include "GraphicsClass.h"
 #include "SceneManager.h"
+#include "MyScene.h"
+#include "MyLayer.h"
+#include "MyObject.h"
 #include "GameManager.h"
 
 class CSystemClass

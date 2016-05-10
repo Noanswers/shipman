@@ -22,6 +22,7 @@ protected:
 		delete m_instance;
 		m_instance = nullptr;
 	}
+	CSingleton() = default;
 
 private:
 	static T* m_instance;

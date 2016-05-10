@@ -21,10 +21,10 @@ public:
 
 	bool initialize(int, int, HWND);
 	void shutdown();
-	bool frame();
+	bool frame(HWND hWnd);
 
 private:
-	bool render();
+	bool render(HWND hWnd);
 
 	CSceneManager* SceneManager = new CSceneManager();
 	CD3DClass* m_Direct3D = nullptr;

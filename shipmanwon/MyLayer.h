@@ -18,10 +18,10 @@ public:
 
 	}
 
-	bool initLayer(ID3D11Device* device);
+	bool initLayer(ID3D11Device* device, HWND hWnd);
 
 	bool pushBack(CMyObject* object);
-	void renderLayer(ID3D11DeviceContext* deviceContext);
+	bool renderLayer(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
 
 private:
 	std::vector<CMyObject*> ObjectVector;

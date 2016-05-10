@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "MyLayer.h"
 
-void CMyLayer::renderLayer(ID3D11DeviceContext* deviceContext)
+bool CMyLayer::renderLayer(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
 {
+	bool result = false;
 	for (auto& iter : ObjectVector)
 	{
-		iter->renderObject(deviceContext);
+		result = iter->renderObject(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
 	}
+	return result;
 }
 
 bool CMyLayer::pushBack(CMyObject* object)
@@ -21,11 +23,11 @@ bool CMyLayer::pushBack(CMyObject* object)
 	return false;
 }
 
-bool CMyLayer::initLayer(ID3D11Device* device)
+bool CMyLayer::initLayer(ID3D11Device* device, HWND hWnd)
 {
 	for (auto& iter : ObjectVector)
 	{
-		bool result = iter->initialize(device);
+		bool result = iter->initialize(device, hWnd);
 		if (result == false)
 			return false;
 	}

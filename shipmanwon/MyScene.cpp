@@ -1,12 +1,14 @@
 #include "stdafx.h"
 #include "MyScene.h"
 
-void CMyScene::renderScene(ID3D11DeviceContext* deviceContext)
+bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
 {
+	bool result = false;
 	for (auto& iter : LayerVector)
 	{
-		iter->renderLayer(deviceContext);
+		result = iter->renderLayer(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
 	}
+	return result;
 }
 
 bool CMyScene::pushBack(CMyLayer* layer)
@@ -21,11 +23,11 @@ bool CMyScene::pushBack(CMyLayer* layer)
 	return false;
 }
 
-bool CMyScene::initScene(ID3D11Device* device)
+bool CMyScene::initScene(ID3D11Device* device, HWND hWnd)
 {
 	for (auto& iter : LayerVector)
 	{
-		bool result = iter->initLayer(device);
+		bool result = iter->initLayer(device, hWnd);
 		if (result == false)
 			return false;
 	}

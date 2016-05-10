@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MyObject.h"
 
-bool CMyObject::initialize(ID3D11Device* device)
+bool CMyObject::initialize(ID3D11Device* device, HWND hWnd)
 {
 	if (IsInit == true)
 		return true;
@@ -9,6 +9,9 @@ bool CMyObject::initialize(ID3D11Device* device)
 	bool result = initializeBuffers(device);
 	if (result == true)
 		IsInit = true;
+
+	ObjectShader = new CColorShaderClass();
+	result = ObjectShader->Initialize(device, hWnd);
 
 	return result;
 }
@@ -21,12 +24,14 @@ void CMyObject::shutdown()
 	return;
 }
 
-void CMyObject::renderObject(ID3D11DeviceContext* deviceContext)
+bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
 {
+	bool result = false;
 	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	renderBuffers(deviceContext);
 
-	return;
+	result = ObjectShader->Render(deviceContext, m_indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	return result;
 }
 
 int CMyObject::getIndexCount()

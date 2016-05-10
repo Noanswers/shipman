@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include "ColorShaderClass.h"
 
 class CMyObject
 {
@@ -9,9 +10,9 @@ public:
 	CMyObject(const CMyObject&) = default;
 	~CMyObject() = default;
 
-	bool	initialize(ID3D11Device*);
+	bool	initialize(ID3D11Device* device, HWND hWnd);
 	void	shutdown();
-	void	renderObject(ID3D11DeviceContext* deviceContext);
+	bool	renderObject(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
 	int		getIndexCount();
 
 private:
@@ -32,5 +33,6 @@ private:
 	int m_indexCount;
 
 	bool	IsInit = false;
+	
+	CColorShaderClass* ObjectShader = nullptr;
 };
-

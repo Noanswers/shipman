@@ -15,10 +15,10 @@ public:
 	CMyScene(const CMyScene&) = delete;
 	~CMyScene() = default;
 
-	bool initScene(ID3D11Device* device);
+	bool initScene(ID3D11Device* device, HWND hWnd);
 
 	bool pushBack(CMyLayer* layer);
-	void renderScene(ID3D11DeviceContext* deviceContext);
+	bool renderScene(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
 
 private:
 	std::vector<CMyLayer*> LayerVector;

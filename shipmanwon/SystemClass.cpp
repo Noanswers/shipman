@@ -134,7 +134,7 @@ bool CSystemClass::frame()
 	}
 
 	// Do the frame processing for the graphics object.
-	result = Graphics->frame();
+	result = Graphics->frame(m_hwnd);
 	if (!result)
 	{
 		return false;

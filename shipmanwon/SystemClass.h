@@ -9,6 +9,7 @@
 #include "InputClass.h"
 #include "GraphicsClass.h"
 #include "SceneManager.h"
+#include "GameManager.h"
 
 class CSystemClass
 {
@@ -33,6 +34,8 @@ private:
 //	variables
 	CGraphicsClass* Graphics;
 	CInputClass* Input;
+	CGameManager* GameManager;
+	CSceneManager* SceneManager;
 
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;

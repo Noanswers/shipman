@@ -29,7 +29,6 @@ private:
 	CSceneManager* SceneManager = new CSceneManager();
 	CD3DClass* m_Direct3D = nullptr;
 	CCameraClass* m_Camera = nullptr;
-	//CModelClass* m_Model = nullptr;
 	CColorShaderClass* m_ColorShader = nullptr;
 };
 

@@ -22,15 +22,19 @@ bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Create the camera object.
-	m_Camera = new CCameraClass;
+	m_Camera = new CCameraClass();
 	if (!m_Camera)
 	{
 		return false;
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(0.0f, 0.0f, -5.0f);
+	/*m_Camera->SetPosition(10.0f, -10.0f, -10.0f);
+	m_Camera->SetRotation(-45.0f, -45.0f, 45.0f);*/
 	
+	m_Camera->SetPosition(0.0f, 0.0f, -10.0f);
+	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
+
 	// Create the color shader object.
 	m_ColorShader = new CColorShaderClass;
 	if (!m_ColorShader)

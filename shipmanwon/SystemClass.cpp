@@ -18,6 +18,13 @@ bool CSystemClass::initialize()
 	// Initialize the windows api.
 	initializeWindows(screenWidth, screenHeight);
 
+	// GameManager를 생성합니다.
+	GameManager = CGameManager::GetInstance();
+	if (!GameManager)
+	{
+		return false;
+	}
+
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
 	Input = new CInputClass;
 	if (!Input)
@@ -52,15 +59,20 @@ void CSystemClass::shutdown()
 	{
 		Graphics->shutdown();
 		delete Graphics;
-		Graphics = 0;
+		Graphics = nullptr;
 	}
 
 	// Release the input object.
 	if (Input)
 	{
 		delete Input;
-		Input = 0;
+		Input = nullptr;
 	}
+
+	/*if (GameManager)
+	{
+		GameManager->DestorySingleton();
+	}*/
 
 	// Shutdown the window.
 	shutdownWindows();
@@ -72,7 +84,6 @@ void CSystemClass::run()
 {
 	MSG msg;
 	bool done, result;
-
 
 	// Initialize the message structure.
 	ZeroMemory(&msg, sizeof(MSG));
@@ -95,7 +106,7 @@ void CSystemClass::run()
 		}
 		else
 		{
-			// Otherwise do the frame processing.
+			// Otherwise do the frame processing. ( Input + Graphic + logic )
 			result = frame();
 			if (!result)
 			{
@@ -110,11 +121,14 @@ void CSystemClass::run()
 
 bool CSystemClass::frame()
 {
-	bool result;
-
-
 	// Check if the user pressed escape and wants to exit the application.
 	if (Input->isKeyDown(VK_ESCAPE))
+	{
+		return false;
+	}
+
+	bool result = GameManager->frame();
+	if (!result)
 	{
 		return false;
 	}

@@ -29,8 +29,8 @@ bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(0.0f, 0.0f, -5.0f);
-	m_Camera->SetRotation(0.0f, 0.0f, 45.0f);
+	m_Camera->SetPosition(0.0f, 0.0f, -10.0f);
+	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
 
 	// Create the color shader object.
 	m_ColorShader = new CColorShaderClass;
@@ -57,14 +57,14 @@ void CGraphicsClass::shutdown()
 	{
 		m_ColorShader->Shutdown();
 		delete m_ColorShader;
-		m_ColorShader = 0;
+		m_ColorShader = nullptr;
 	}
 
 	// Release the camera object.
 	if (m_Camera)
 	{
 		delete m_Camera;
-		m_Camera = 0;
+		m_Camera = nullptr;
 	}
 
 	// Release the Direct3D object.
@@ -72,7 +72,7 @@ void CGraphicsClass::shutdown()
 	{
 		m_Direct3D->shutdown();
 		delete m_Direct3D;
-		m_Direct3D = 0;
+		m_Direct3D = nullptr;
 	}
 
 	return;

@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #include <DirectXMath.h>
+#include <dxgi.h>
 
 class CMyObject
 {
@@ -13,6 +14,11 @@ public:
 	void	shutdown();
 	void	renderObject(ID3D11DeviceContext* deviceContext);
 	int		getIndexCount();
+	
+	//////////////////////////////////////////////////////////////////////////
+	//¸®¼Ò½º È¹µæÀ» À§ÇÑ º¯¼ö
+	ID3D11ShaderResourceView*	m_TextureRV = nullptr;
+	ID3D11SamplerState*			m_SamplerLinear = nullptr;
 
 private:
 	struct VertexType
@@ -27,7 +33,7 @@ private:
 
 	ID3D11Buffer* m_vertexBuffer = nullptr;
 	ID3D11Buffer* m_indexBuffer = nullptr;
-	
+
 	int m_vertexCount;
 	int m_indexCount;
 

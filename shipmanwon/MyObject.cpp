@@ -9,7 +9,7 @@ bool CMyObject::initialize(ID3D11Device* device)
 	bool result = initializeBuffers(device);
 	if (result == true)
 		IsInit = true;
-
+	
 	return result;
 }
 
@@ -33,8 +33,6 @@ int CMyObject::getIndexCount()
 {
 	return m_indexCount;
 }
-
-
 
 /*
 	=== [ private ] ===========================================================================
@@ -70,16 +68,16 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 
 	// Load the vertex array with data.
 	vertices[0].position = DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
-	vertices[0].color = DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+	vertices[0].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	vertices[1].position = DirectX::XMFLOAT3(-1.0f, 1.0f, 0.0f);  // Top left.
-	vertices[1].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[1].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	vertices[2].position = DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
-	vertices[2].color = DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f);
+	vertices[2].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	vertices[3].position = DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f);  // Top right.
-	vertices[3].color = DirectX::XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f);
+	vertices[3].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// Load the index array with data.
 	indices[0] = 0;  // Bottom left.
@@ -166,6 +164,10 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 	// Set vertex buffer stride and offset.
 	stride = sizeof(VertexType);
 	offset = 0;
+
+	// Set the texture 
+	deviceContext->PSSetShaderResources(0, 1, &m_TextureRV);
+	deviceContext->PSSetSamplers(0, 1, &m_SamplerLinear);
 
 	// Set the vertex buffer to active in the input assembler so it can be rendered.
 	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);

@@ -32,7 +32,9 @@ bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, XMMATRIX worldM
 	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	renderBuffers(deviceContext);
 
-	result = ObjectShader->Render(deviceContext, m_indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	//result = ObjectShader->Render(deviceContext, m_indexCount, worldMatrix, viewMatrix, projectionMatrix);
+	result = ObjectShader->Render(deviceContext, m_indexCount, ObjectWorld , viewMatrix, projectionMatrix);
+
 	return result;
 }
 
@@ -41,10 +43,27 @@ int CMyObject::getIndexCount()
 	return m_indexCount;
 }
 
-void CMyObject::setPosition(float x, float y, float z)
+void CMyObject::setTranslate(float x, float y, float z)
 {
-	DirectX::XMMATRIX mat = DirectX::XMMatrixTranslation(x, y, z);
+	ObjectTranslate = DirectX::XMMatrixTranslation(x, y, z);
 
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+}
+
+void CMyObject::setRotate(float x, float y, float z)
+{
+	ObjectRotate = DirectX::XMMatrixRotationX(x);
+	ObjectRotate *= DirectX::XMMatrixRotationY(y);
+	ObjectRotate *= DirectX::XMMatrixRotationZ(z);
+
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+}
+
+void CMyObject::setScale(float x, float y, float z)
+{
+	ObjectScale = DirectX::XMMatrixScaling(x, y, z);
+
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
 
@@ -133,7 +152,8 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 	stride = sizeof(VertexType);
 	offset = 0;
 
-	// Set the vertex buffer to active in the input assembler so it can be rendered.
+	// 생성된 버퍼의 정점들을 실제로 파이프라인으로 공급하려면 버퍼를 장치의 한 입력 슬롯에 묶어야 함
+	// 1번째 인자 : 
 	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 
 	// Set the index buffer to active in the input assembler so it can be rendered.

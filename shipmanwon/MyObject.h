@@ -15,7 +15,11 @@ public:
 	void	shutdown();
 	bool	renderObject(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
 	int		getIndexCount();
-	void	setPosition(float x, float y, float z);
+
+
+	void	setRotate(float x, float y, float z);
+	void	setScale(float x, float y, float z);
+	void	setTranslate(float x, float y, float z);
 
 private:
 	struct VertexType
@@ -48,12 +52,18 @@ private:
 		0, 1, 2, 2, 1, 3
 	};
 
-	//VertexType* m_vertices = nullptr;
-
 	ID3D11Buffer* m_vertexBuffer = nullptr;
 	ID3D11Buffer* m_indexBuffer = nullptr;
 
 	bool	IsInit = false;
 	
 	CColorShaderClass* ObjectShader = nullptr;
+
+	DirectX::XMMATRIX ObjectScale = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX ObjectRotate = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX ObjectTranslate = DirectX::XMMatrixIdentity();
+
+	DirectX::XMMATRIX ObjectWorld = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX ObjectView = DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX ObjectProjection = DirectX::XMMatrixIdentity();
 };

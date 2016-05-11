@@ -32,19 +32,20 @@ private:
 	void shutdownBuffers();
 	void renderBuffers(ID3D11DeviceContext*);
 
-	int m_indexCount = 3;
-	int m_vertexCount = 3;
+	int m_indexCount = 4;
+	int m_vertexCount = 6;
 
-	VertexType vertices[3] = 
+	VertexType vertices[4] = 
 	{
-		{ DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.0f,  1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) }
+		{ DirectX::XMFLOAT3(-6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.0f, 4.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.0f, -4.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) }
 	};
 
-	unsigned long indices[3] =
+	unsigned long indices[6] =
 	{
-		0, 1, 2
+		0, 1, 2, 2, 1, 3
 	};
 
 	//VertexType* m_vertices = nullptr;

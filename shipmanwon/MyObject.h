@@ -32,8 +32,8 @@ private:
 	void shutdownBuffers();
 	void renderBuffers(ID3D11DeviceContext*);
 
-	int m_indexCount = 4;
-	int m_vertexCount = 6;
+	int m_vertexCount = 4;
+	int m_indexCount = 6;
 
 	VertexType vertices[4] = 
 	{

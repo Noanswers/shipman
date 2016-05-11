@@ -389,7 +389,7 @@ void CD3DClass::shutdown()
 
 /*
 	renderTargetView¸¦ clear
-	depthStencilView¸¦ clear
+	depthStencilView¸¦ clear ( depth = 1, stencil = 0 )
 */
 void CD3DClass::beginScene(float red, float green, float blue, float alpha)
 {

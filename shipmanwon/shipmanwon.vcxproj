@@ -298,6 +298,7 @@
     <ClInclude Include="MyLayer.h" />
     <ClInclude Include="MyObject.h" />
     <ClInclude Include="MyScene.h" />
+    <ClInclude Include="MyTime.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="shipmanwon.h" />
@@ -317,6 +318,7 @@
     <ClCompile Include="MyLayer.cpp" />
     <ClCompile Include="MyObject.cpp" />
     <ClCompile Include="MyScene.cpp" />
+    <ClCompile Include="MyTime.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="shipmanwon.cpp" />
     <ClCompile Include="stdafx.cpp">

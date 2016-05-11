@@ -78,6 +78,9 @@
     <ClInclude Include="ColorShaderClass.h">
       <Filter>소스 파일\object</Filter>
     </ClInclude>
+    <ClInclude Include="MyTime.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -118,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="ColorShaderClass.cpp">
       <Filter>소스 파일\object</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTime.cpp">
+      <Filter>소스 파일\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

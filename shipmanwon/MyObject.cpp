@@ -41,23 +41,11 @@ int CMyObject::getIndexCount()
 	return m_indexCount;
 }
 
-void CMyObject::setPosition(int x, int y, int z)
+void CMyObject::setPosition(float x, float y, float z)
 {
-	xPos = x;
-	yPos = y;
-	zPos = z;
-}
+	DirectX::XMMATRIX mat = DirectX::XMMatrixTranslation(x, y, z);
 
-void CMyObject::adjustPosition(VertexType* vertices)
-{
-	for (int i = 0; i < m_indexCount; ++i)
-	{
-		m_vertices[i].position.x += xPos;
-		m_vertices[i].position.y += yPos;
-		m_vertices[i].position.z += zPos;
-	}
 }
-
 
 
 /*
@@ -71,43 +59,7 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 
 	D3D11_SUBRESOURCE_DATA vertexData;
 	D3D11_SUBRESOURCE_DATA indexData;
-	
-	// Set the number of indices in the index array.
-	m_indexCount = 3;
-	m_vertexCount = 3;
-
-	// Create the vertex array.
-	VertexType vertices[3];
-	vertices[0] = { DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) };
-	vertices[1] = { DirectX::XMFLOAT3( 0.0f,  1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) };
-	vertices[2] = { DirectX::XMFLOAT3( 1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) };
-	
-	VertexType* m_vertice = vertices;
-	/*VertexType* newVertice = vertices;
-	adjustPosition(newVertice);*/
-
-	// Create the index array.
-	unsigned long* indices = new unsigned long[m_indexCount];
-	if (!indices)
-	{
-		return false;
-	}
-
-	// Load the vertex array with data.
-	//vertices[0].position = DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
-	//vertices[0].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
-
-	//vertices[1].position =	DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);  // Top middle.
-	//vertices[1].color =		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
-
-	//vertices[2].position = DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
-	//vertices[2].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
-
-	// Load the index array with data.
-	indices[0] = 0;  // Bottom left.
-	indices[1] = 1;  // Top middle.
-	indices[2] = 2;  // Bottom right.
-
+			
 	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
@@ -127,7 +79,7 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 	{
 		return false;
 	}
-
+	
 	// Set up the description of the static index buffer.
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
@@ -149,8 +101,6 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 	}
 
 	// Release the arrays now that the vertex and index buffers have been created and loaded.
-	delete[] indices;
-	indices = 0;
 
 	return true;
 }

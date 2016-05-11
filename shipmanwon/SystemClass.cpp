@@ -14,6 +14,8 @@ bool CSystemClass::initialize()
 	int screenWidth = 0;
 	int screenHeight = 0;
 	bool result;
+
+	MyTime = new CMyTime();
 	
 	// Initialize the windows api.
 	initializeWindows(screenWidth, screenHeight);
@@ -95,6 +97,8 @@ void CSystemClass::run()
 {
 	MSG msg;
 	bool done, result;
+	
+	MyTime->Init();
 
 	// Initialize the message structure.
 	ZeroMemory(&msg, sizeof(MSG));
@@ -103,6 +107,11 @@ void CSystemClass::run()
 	done = false;
 	while (!done)
 	{
+		MyTime->ProcessTime();
+		float delta = MyTime->GetElapsedTime();
+		static float deltaTime = 0;
+		deltaTime += delta;
+
 		// Handle the windows messages.
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{

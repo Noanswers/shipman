@@ -15,7 +15,7 @@ public:
 	void	shutdown();
 	bool	renderObject(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
 	int		getIndexCount();
-	void	setPosition(int x, int y, int z);
+	void	setPosition(float x, float y, float z);
 
 private:
 	struct VertexType
@@ -32,18 +32,27 @@ private:
 	void shutdownBuffers();
 	void renderBuffers(ID3D11DeviceContext*);
 
-	//std::array<VertexType, 10> m_vertices;
-	VertexType* m_vertices = nullptr;
+	int m_indexCount = 3;
+	int m_vertexCount = 3;
+
+	VertexType vertices[3] = 
+	{
+		{ DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.0f,  1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) }
+	};
+
+	unsigned long indices[3] =
+	{
+		0, 1, 2
+	};
+
+	//VertexType* m_vertices = nullptr;
 
 	ID3D11Buffer* m_vertexBuffer = nullptr;
 	ID3D11Buffer* m_indexBuffer = nullptr;
-	
-	int m_vertexCount;
-	int m_indexCount;
 
 	bool	IsInit = false;
 	
 	CColorShaderClass* ObjectShader = nullptr;
-
-	void adjustPosition(VertexType* vertices);
 };

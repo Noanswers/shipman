@@ -13,7 +13,6 @@ public:
 	{
 		CMyObject* object1 = new CMyObject();
 		pushBack(object1, 10);
-
 	};
 	CMyScene(const CMyScene&) = delete;
 	~CMyScene() = default;

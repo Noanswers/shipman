@@ -73,14 +73,15 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 	D3D11_SUBRESOURCE_DATA indexData;
 	
 	// Set the number of indices in the index array.
-	m_indexCount = 3;
-	m_vertexCount = 3;
+	m_vertexCount = 4;
+	m_indexCount = 6;
 
 	// Create the vertex array.
-	VertexType vertices[3];
-	vertices[0] = { DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) };
-	vertices[1] = { DirectX::XMFLOAT3( 0.0f,  1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) };
-	vertices[2] = { DirectX::XMFLOAT3( 1.0f, -1.0f, 0.0f), DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) };
+	VertexType vertices[4];
+	vertices[0] = { DirectX::XMFLOAT3(-6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) };
+	vertices[1] = { DirectX::XMFLOAT3( 0.0f, 4.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) };
+	vertices[2] = { DirectX::XMFLOAT3( 0.0f, -4.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) };
+	vertices[3] = { DirectX::XMFLOAT3( 6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) };
 	
 	VertexType* m_vertice = vertices;
 	/*VertexType* newVertice = vertices;
@@ -107,6 +108,10 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 	indices[0] = 0;  // Bottom left.
 	indices[1] = 1;  // Top middle.
 	indices[2] = 2;  // Bottom right.
+	indices[3] = 2;
+	indices[4] = 1;
+	indices[5] = 3;
+
 
 	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -191,6 +196,8 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	deviceContext->DrawIndexed(m_indexCount, 0, 0);
 
 	return;
 }

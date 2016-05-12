@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MyObject.h"
 
-bool CMyObject::initialize(ID3D11Device* device)
+bool CMyObject::initialize(ID3D11Device* device, HWND hWnd)
 {
 	if (IsInit == true)
 		return true;
@@ -9,7 +9,10 @@ bool CMyObject::initialize(ID3D11Device* device)
 	bool result = initializeBuffers(device);
 	if (result == true)
 		IsInit = true;
-	
+
+	ObjectShader = new CColorShaderClass();
+	result = ObjectShader->Initialize(device, hWnd);
+
 	return result;
 }
 
@@ -17,21 +20,63 @@ void CMyObject::shutdown()
 {
 	// Shutdown the vertex and index buffers.
 	shutdownBuffers();
+	ObjectShader->Shutdown();
+	ObjectShader = nullptr;
 
 	return;
 }
 
-void CMyObject::renderObject(ID3D11DeviceContext* deviceContext)
+bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
 {
+	bool result = false;
 	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	renderBuffers(deviceContext);
 
-	return;
+	result = ObjectShader->Render(deviceContext, m_indexCount, ObjectWorld , viewMatrix, projectionMatrix);
+
+	return result;
 }
 
 int CMyObject::getIndexCount()
 {
 	return m_indexCount;
+}
+
+void CMyObject::setTranslate(float x, float y, float z)
+{
+	ObjectTranslate = DirectX::XMMatrixTranslation(x, y, z);
+
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+}
+
+void CMyObject::setRotate(float x, float y, float z)
+{
+	ObjectRotate = DirectX::XMMatrixRotationX(x);
+	ObjectRotate *= DirectX::XMMatrixRotationY(y);
+	ObjectRotate *= DirectX::XMMatrixRotationZ(z);
+
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+}
+
+void CMyObject::setScale(float x, float y, float z)
+{
+	ObjectScale = DirectX::XMMatrixScaling(x, y, z);
+
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+}
+
+void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
+{
+	for (int i = 0; i < m_vertexCount; ++i)
+	{
+		vertices[i].color = DirectX::XMFLOAT4(red, green, blue, alpha);
+	}
+	
+	// 임시 코드
+	if (temp_device == nullptr)
+		return;
+
+	initializeBuffers(temp_device);
 }
 
 /*
@@ -40,52 +85,13 @@ int CMyObject::getIndexCount()
 
 bool CMyObject::initializeBuffers(ID3D11Device* device)
 {
+	temp_device = device;
+
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	D3D11_BUFFER_DESC indexBufferDesc;
 
 	D3D11_SUBRESOURCE_DATA vertexData;
 	D3D11_SUBRESOURCE_DATA indexData;
-	
-	// Set the number of vertices in the vertex array.
-	m_vertexCount = 4;
-
-	// Set the number of indices in the index array.
-	m_indexCount = 6;
-
-	// Create the vertex array.
-	VertexType* vertices = new VertexType[m_vertexCount];
-	if (!vertices)
-	{
-		return false;
-	}
-
-	// Create the index array.
-	unsigned long* indices = new unsigned long[m_indexCount];
-	if (!indices)
-	{
-		return false;
-	}
-
-	// Load the vertex array with data.
-	vertices[0].position = DirectX::XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
-	vertices[0].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	vertices[1].position = DirectX::XMFLOAT3(-1.0f, 1.0f, 0.0f);  // Top left.
-	vertices[1].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	vertices[2].position = DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
-	vertices[2].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	vertices[3].position = DirectX::XMFLOAT3(1.0f, 1.0f, 0.0f);  // Top right.
-	vertices[3].color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-
-	// Load the index array with data.
-	indices[0] = 0;  // Bottom left.
-	indices[1] = 1;  // Top left.
-	indices[2] = 2;  // Bottom right.
-	indices[3] = 2;  // Top left.
-	indices[4] = 1;  // Bottom right.
-	indices[5] = 3;  // Top right.
 
 	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -106,7 +112,7 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 	{
 		return false;
 	}
-
+	
 	// Set up the description of the static index buffer.
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
@@ -128,11 +134,6 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 	}
 
 	// Release the arrays now that the vertex and index buffers have been created and loaded.
-	delete[] vertices;
-	vertices = nullptr;
-
-	delete[] indices;
-	indices = nullptr;
 
 	return true;
 }
@@ -169,7 +170,9 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 	deviceContext->PSSetShaderResources(0, 1, &m_TextureRV);
 	deviceContext->PSSetSamplers(0, 1, &m_SamplerLinear);
 
-	// Set the vertex buffer to active in the input assembler so it can be rendered.
+	// 생성된 버퍼의 정점들을 실제로 파이프라인으로 공급하려면 버퍼를 장치의 한 입력 슬롯에 묶어야 함
+	// 1번째 인자 : 
+
 	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
 
 	// Set the index buffer to active in the input assembler so it can be rendered.
@@ -178,8 +181,7 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	//draw
-	deviceContext->DrawIndexed(6, 0, 0);
+	deviceContext->DrawIndexed(m_indexCount, 0, 0);
 
 	return;
 }

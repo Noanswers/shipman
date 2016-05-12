@@ -21,15 +21,14 @@ public:
 
 	bool initialize(int, int, HWND);
 	void shutdown();
-	bool frame();
+	bool frame(HWND hWnd);
 
 private:
-	bool render();
+	bool render(HWND hWnd);
 
-	CSceneManager* SceneManager = new CSceneManager();
+	CSceneManager* SceneManager = nullptr;
 	CD3DClass* m_Direct3D = nullptr;
 	CCameraClass* m_Camera = nullptr;
-	//CModelClass* m_Model = nullptr;
 	CColorShaderClass* m_ColorShader = nullptr;
 };
 

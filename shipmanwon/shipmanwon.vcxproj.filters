@@ -16,6 +16,15 @@
     <Filter Include="소스 파일\object">
       <UniqueIdentifier>{584f00e6-3cd3-4188-9ab5-066771145d96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Manager">
+      <UniqueIdentifier>{48e56204-4740-4546-ab7a-4f850c667039}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\System">
+      <UniqueIdentifier>{ae6bf07f-ce06-4371-895b-85e826a28f74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{223167be-d174-4306-a59a-bf94725c61ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -33,9 +42,6 @@
     <ClInclude Include="shipmanwon.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SystemClass.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="InputClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -45,23 +51,11 @@
     <ClInclude Include="D3DClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="MyObject.h">
-      <Filter>소스 파일\object</Filter>
-    </ClInclude>
-    <ClInclude Include="MyScene.h">
       <Filter>소스 파일\object</Filter>
     </ClInclude>
     <ClInclude Include="MyLayer.h">
       <Filter>소스 파일\object</Filter>
-    </ClInclude>
-    <ClInclude Include="Singleton.h">
-      <Filter>소스 파일\object</Filter>
-    </ClInclude>
-    <ClInclude Include="ColorShaderClass.h">
-      <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="CameraClass.h">
       <Filter>헤더 파일</Filter>
@@ -69,15 +63,39 @@
     <ClInclude Include="config.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemClass.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Singleton.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorShaderClass.h">
+      <Filter>소스 파일\object</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTime.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="MyScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="StartScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="shipmanwon.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="SystemClass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="InputClass.cpp">
@@ -89,23 +107,38 @@
     <ClCompile Include="D3DClass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="MyObject.cpp">
-      <Filter>소스 파일\object</Filter>
-    </ClCompile>
-    <ClCompile Include="MyScene.cpp">
       <Filter>소스 파일\object</Filter>
     </ClCompile>
     <ClCompile Include="MyLayer.cpp">
       <Filter>소스 파일\object</Filter>
     </ClCompile>
-    <ClCompile Include="ColorShaderClass.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="CameraClass.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManager.cpp">
+      <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemClass.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorShaderClass.cpp">
+      <Filter>소스 파일\object</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTime.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="MyScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="StartScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

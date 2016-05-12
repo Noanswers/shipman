@@ -9,6 +9,11 @@
 #include "InputClass.h"
 #include "GraphicsClass.h"
 #include "SceneManager.h"
+#include "MyScene.h"
+#include "MyLayer.h"
+#include "MyObject.h"
+#include "GameManager.h"
+#include "MyTime.h"
 
 class CSystemClass
 {
@@ -29,10 +34,13 @@ private:
 	void initializeWindows(int& screenWidth, int& screenHeight);
 	void shutdownWindows();
 
-private:
 //	variables
 	CGraphicsClass* Graphics;
-	CInputClass* Input;
+	CInputClass*	Input;
+	CMyTime*		MyTime;
+
+	CGameManager*	GameManager;
+	CSceneManager*	SceneManager;
 
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;

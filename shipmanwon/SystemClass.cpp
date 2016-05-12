@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SystemClass.h"
-
+#include "StartScene.h"
+#include "GameScene.h"
 
 CSystemClass::CSystemClass()
 {
@@ -14,17 +15,36 @@ bool CSystemClass::initialize()
 	int screenWidth = 0;
 	int screenHeight = 0;
 	bool result;
+
+	MyTime = new CMyTime();
 	
 	// Initialize the windows api.
 	initializeWindows(screenWidth, screenHeight);
 
+	// GameManager를 생성합니다.
+	GameManager = CGameManager::GetInstance();
+	if (GameManager == nullptr)
+	{
+		return false;
+	}
+
+	SceneManager = CSceneManager::GetInstance();
+	if (SceneManager == nullptr)
+	{
+		return false;
+	}
+
+	SceneManager->initialize();
+	CMyScene* scene = SceneManager->getCurrentScene();
+	scene->initialize();
+	
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
 	Input = new CInputClass;
 	if (!Input)
 	{
 		return false;
 	}
-
+	
 	// Initialize the input object.
 	Input->initialize();
 
@@ -52,15 +72,20 @@ void CSystemClass::shutdown()
 	{
 		Graphics->shutdown();
 		delete Graphics;
-		Graphics = 0;
+		Graphics = nullptr;
 	}
 
 	// Release the input object.
 	if (Input)
 	{
 		delete Input;
-		Input = 0;
+		Input = nullptr;
 	}
+
+	/*if (GameManager)
+	{
+		GameManager->DestorySingleton();
+	}*/
 
 	// Shutdown the window.
 	shutdownWindows();
@@ -72,7 +97,8 @@ void CSystemClass::run()
 {
 	MSG msg;
 	bool done, result;
-
+	
+	MyTime->Init();
 
 	// Initialize the message structure.
 	ZeroMemory(&msg, sizeof(MSG));
@@ -81,6 +107,11 @@ void CSystemClass::run()
 	done = false;
 	while (!done)
 	{
+		MyTime->ProcessTime();
+		float delta = MyTime->GetElapsedTime();
+		static float deltaTime = 0;
+		deltaTime += delta;
+
 		// Handle the windows messages.
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -95,7 +126,7 @@ void CSystemClass::run()
 		}
 		else
 		{
-			// Otherwise do the frame processing.
+			// Otherwise do the frame processing. ( Input + Graphic + logic )
 			result = frame();
 			if (!result)
 			{
@@ -110,17 +141,40 @@ void CSystemClass::run()
 
 bool CSystemClass::frame()
 {
-	bool result;
-
-
 	// Check if the user pressed escape and wants to exit the application.
 	if (Input->isKeyDown(VK_ESCAPE))
 	{
 		return false;
 	}
 
+	if (Input->isKeyDown(VK_UP))
+	{
+		CMyScene* scene = SceneManager->getCurrentScene();
+	}
+
+	if (Input->isKeyDown(VK_LEFT))
+	{
+		if (SceneManager->getStackSize() > 1)
+		{
+			SceneManager->popBack();
+		}
+	}
+
+	if (Input->isKeyDown(VK_RIGHT))
+	{
+		CGameScene* game = new CGameScene();
+		game->initialize();
+		SceneManager->pushBack(game);
+	}
+
+	bool result = GameManager->frame();
+	if (!result)
+	{
+		return false;
+	}
+
 	// Do the frame processing for the graphics object.
-	result = Graphics->frame();
+	result = Graphics->frame(m_hwnd);
 	if (!result)
 	{
 		return false;

@@ -6,9 +6,6 @@
 bool CD3DClass::initialize(int screenWidth, int screenHeight, bool vsync, HWND hwnd, bool fullscreen,
 	float screenDepth, float screenNear)
 {
-	m_SceneManager = CSceneManager::GetInstance();
-	m_SceneManager->initialize();
-
 	HRESULT result;
 	IDXGIFactory* factory;
 	IDXGIAdapter* adapter;
@@ -389,11 +386,11 @@ void CD3DClass::shutdown()
 
 /*
 	renderTargetView¸¦ clear
-	depthStencilView¸¦ clear
+	depthStencilView¸¦ clear ( depth = 1, stencil = 0 )
 */
 void CD3DClass::beginScene(float red, float green, float blue, float alpha)
 {
-	float	color[4] = { 0.4f, 0.0f, 0.0f, 1.0f }; //red, green, blue, alpha
+	float	color[4] = { red, green, blue, alpha };
 
 	// Clear the back buffer.
 	m_deviceContext->ClearRenderTargetView(m_renderTargetView, color);

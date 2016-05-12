@@ -32,7 +32,6 @@ bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, XMMATRIX worldM
 	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	renderBuffers(deviceContext);
 
-	//result = ObjectShader->Render(deviceContext, m_indexCount, worldMatrix, viewMatrix, projectionMatrix);
 	result = ObjectShader->Render(deviceContext, m_indexCount, ObjectWorld , viewMatrix, projectionMatrix);
 
 	return result;
@@ -47,7 +46,7 @@ void CMyObject::setTranslate(float x, float y, float z)
 {
 	ObjectTranslate = DirectX::XMMatrixTranslation(x, y, z);
 
-	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+# = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
 void CMyObject::setRotate(float x, float y, float z)
@@ -66,6 +65,20 @@ void CMyObject::setScale(float x, float y, float z)
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
+void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
+{
+	for (int i = 0; i < m_vertexCount; ++i)
+	{
+		vertices[i].color = DirectX::XMFLOAT4(red, green, blue, alpha);
+	}
+	
+	// 임시 코드
+	if (temp_device == nullptr)
+		return;
+
+	initializeBuffers(temp_device);
+}
+
 
 /*
 	=== [ private ] ===========================================================================
@@ -73,6 +86,8 @@ void CMyObject::setScale(float x, float y, float z)
 
 bool CMyObject::initializeBuffers(ID3D11Device* device)
 {
+	temp_device = device;
+
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	D3D11_BUFFER_DESC indexBufferDesc;
 

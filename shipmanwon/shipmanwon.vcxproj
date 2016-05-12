@@ -293,6 +293,7 @@
     <ClInclude Include="ColorShaderClass.h" />
     <ClInclude Include="D3DClass.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="GraphicsClass.h" />
     <ClInclude Include="InputClass.h" />
     <ClInclude Include="MyLayer.h" />
@@ -303,6 +304,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="shipmanwon.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="StartScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SystemClass.h" />
     <ClInclude Include="targetver.h" />
@@ -313,6 +315,7 @@
     <ClCompile Include="ColorShaderClass.cpp" />
     <ClCompile Include="D3DClass.cpp" />
     <ClCompile Include="GameManager.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GraphicsClass.cpp" />
     <ClCompile Include="InputClass.cpp" />
     <ClCompile Include="MyLayer.cpp" />
@@ -321,6 +324,7 @@
     <ClCompile Include="MyTime.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="shipmanwon.cpp" />
+    <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='asdf|Win32'">Create</PrecompiledHeader>

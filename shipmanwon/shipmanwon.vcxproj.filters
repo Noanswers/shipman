@@ -22,6 +22,9 @@
     <Filter Include="소스 파일\System">
       <UniqueIdentifier>{ae6bf07f-ce06-4371-895b-85e826a28f74}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{223167be-d174-4306-a59a-bf94725c61ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -51,9 +54,6 @@
     <ClInclude Include="MyObject.h">
       <Filter>소스 파일\object</Filter>
     </ClInclude>
-    <ClInclude Include="MyScene.h">
-      <Filter>소스 파일\object</Filter>
-    </ClInclude>
     <ClInclude Include="MyLayer.h">
       <Filter>소스 파일\object</Filter>
     </ClInclude>
@@ -81,6 +81,15 @@
     <ClInclude Include="MyTime.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
+    <ClInclude Include="MyScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="StartScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -99,9 +108,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MyObject.cpp">
-      <Filter>소스 파일\object</Filter>
-    </ClCompile>
-    <ClCompile Include="MyScene.cpp">
       <Filter>소스 파일\object</Filter>
     </ClCompile>
     <ClCompile Include="MyLayer.cpp">
@@ -124,6 +130,15 @@
     </ClCompile>
     <ClCompile Include="MyTime.cpp">
       <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="MyScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="StartScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

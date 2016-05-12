@@ -20,6 +20,7 @@ public:
 	void	setRotate(float x, float y, float z);
 	void	setScale(float x, float y, float z);
 	void	setTranslate(float x, float y, float z);
+	void	setColorRGBA(float red, float green, float blue, float alpha);
 
 private:
 	struct VertexType
@@ -28,9 +29,7 @@ private:
 		DirectX::XMFLOAT4 color;
 	};
 
-	float xPos = 0;
-	float yPos = 0;
-	float zPos = 0;
+	ID3D11Device* temp_device = nullptr;
 
 	bool initializeBuffers(ID3D11Device*);
 	void shutdownBuffers();

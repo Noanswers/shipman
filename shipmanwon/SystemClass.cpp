@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SystemClass.h"
-
+#include "StartScene.h"
 
 CSystemClass::CSystemClass()
 {
@@ -33,10 +33,10 @@ bool CSystemClass::initialize()
 		return false;
 	}
 
-	CMyScene* startScene = new CMyScene();
+	CStartScene* startScene = new CStartScene();
+	//startScene->initialize();
 
 	SceneManager->pushBack(startScene);
-	CMyScene* scene = SceneManager->getCurrentScene();
 
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
 	Input = new CInputClass;

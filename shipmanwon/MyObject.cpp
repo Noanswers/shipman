@@ -46,7 +46,7 @@ void CMyObject::setTranslate(float x, float y, float z)
 {
 	ObjectTranslate = DirectX::XMMatrixTranslation(x, y, z);
 
-# = ObjectScale * ObjectRotate * ObjectTranslate;
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
 void CMyObject::setRotate(float x, float y, float z)

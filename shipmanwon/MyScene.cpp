@@ -1,6 +1,11 @@
 #include "stdafx.h"
 #include "MyScene.h"
 
+void CMyScene::initialize()
+{
+
+}
+
 bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
 {
 	bool result = false;
@@ -10,6 +15,22 @@ bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, XMMATRIX worldMat
 		result = layer->renderLayer(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
 	}
 	return result;
+}
+
+void CMyScene::getSceneColor(float colorSet[4]) const
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		colorSet[i] = SceneColor[i];
+	}
+}
+
+void CMyScene::setSceneColor(const float red, const float green, const float blue, const float alpha)
+{
+	SceneColor[0] = red;
+	SceneColor[1] = green;
+	SceneColor[2] = blue;
+	SceneColor[3] = alpha;
 }
 
 bool CMyScene::pushBack(CMyObject* object, int layerNum)

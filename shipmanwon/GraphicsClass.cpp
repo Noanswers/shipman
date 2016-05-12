@@ -101,7 +101,13 @@ bool CGraphicsClass::render(HWND hWnd)
 	bool result;
 
 	// ·£´õ Å¸°Ù ºä¿Í µª½º ½ºÅÄ½Ç ºä¸¦ Å¬¸®¾î ÇÕ´Ï´Ù.
-	m_Direct3D->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	float color[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+
+	CMyScene* scene = CSceneManager::GetInstance()->getCurrentScene();
+	scene->getSceneColor(color);
+
+	//m_Direct3D->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	m_Direct3D->beginScene(color[0], color[1], color[2], color[3]);
 
 	// Generate the view matrix based on the camera's position.
 	m_Camera->Render();
@@ -118,7 +124,6 @@ bool CGraphicsClass::render(HWND hWnd)
 		±× ÈÄ, ·£´õ¸µ ÀÛ¾÷
 	*/
 
-	CMyScene* scene = CSceneManager::GetInstance()->getCurrentScene();
 	result = scene->initScene(m_Direct3D->getDevice(), hWnd);
 	if (!result)
 	{

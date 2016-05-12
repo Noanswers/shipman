@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "SceneManager.h"
+#include "StartScene.h"
 
 void CSceneManager::initialize()
 {
 	SceneStack.clear();
 
-	CMyScene* startScene = new CMyScene();
+	CStartScene* startScene = new CStartScene();
 	SceneStack.push_back(startScene);
 }
 
@@ -20,10 +21,26 @@ bool CSceneManager::pushBack(CMyScene* scene)
 	return false;
 }
 
+bool CSceneManager::popBack()
+{
+	size_t preSize = SceneStack.size();
+	SceneStack.pop_back();
+
+	size_t currentSize = SceneStack.size();
+	if (currentSize == (preSize - 1))
+		return true;
+	return false;
+}
+
 CMyScene* CSceneManager::getCurrentScene()
 {
 	if (SceneStack.empty())
 		return nullptr;
 
 	return SceneStack.back();
+}
+
+int CSceneManager::getStackSize()
+{
+	return static_cast<int>(SceneStack.size());
 }

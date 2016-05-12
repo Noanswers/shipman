@@ -8,6 +8,7 @@ public:
 	{
 
 	};
-	~CGameScene();
+
+	void initialize() override;
 };
 

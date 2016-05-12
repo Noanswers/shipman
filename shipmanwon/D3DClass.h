@@ -6,7 +6,6 @@
 
 #include <d3d11.h>
 #include <directxmath.h>
-#include "SceneManager.h"
 
 using namespace DirectX;
 
@@ -33,8 +32,6 @@ public:
 	void getVideoCardInfo(char* cardName, int& memory);
 	
 private:
-	CSceneManager* m_SceneManager = nullptr;
-
 	bool m_vsync_enabled;
 	int m_videoCardMemory;
 	char m_videoCardDescription[128];

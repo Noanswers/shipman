@@ -4,10 +4,8 @@
 class CStartScene : public CMyScene
 {
 public:
-	CStartScene() : CMyScene()
-	{
-		
-	};
-	void initialize();
+	CStartScene() : CMyScene() {};
+
+	void initialize() override;
 };
 

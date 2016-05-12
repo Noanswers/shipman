@@ -15,7 +15,10 @@ public:
 
 	void initialize();
 	bool pushBack(CMyScene* scene);
+	bool popBack();
 	CMyScene* getCurrentScene();
+
+	int getStackSize();
 
 private:
 	std::vector<CMyScene*> SceneStack;

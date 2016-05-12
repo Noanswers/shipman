@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SystemClass.h"
 #include "StartScene.h"
+#include "GameScene.h"
 
 CSystemClass::CSystemClass()
 {
@@ -33,11 +34,10 @@ bool CSystemClass::initialize()
 		return false;
 	}
 
-	CStartScene* startScene = new CStartScene();
-	//startScene->initialize();
-
-	SceneManager->pushBack(startScene);
-
+	SceneManager->initialize();
+	CMyScene* scene = SceneManager->getCurrentScene();
+	scene->initialize();
+	
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
 	Input = new CInputClass;
 	if (!Input)
@@ -145,6 +145,26 @@ bool CSystemClass::frame()
 	if (Input->isKeyDown(VK_ESCAPE))
 	{
 		return false;
+	}
+
+	if (Input->isKeyDown(VK_UP))
+	{
+		CMyScene* scene = SceneManager->getCurrentScene();
+	}
+
+	if (Input->isKeyDown(VK_LEFT))
+	{
+		if (SceneManager->getStackSize() > 1)
+		{
+			SceneManager->popBack();
+		}
+	}
+
+	if (Input->isKeyDown(VK_RIGHT))
+	{
+		CGameScene* game = new CGameScene();
+		game->initialize();
+		SceneManager->pushBack(game);
 	}
 
 	bool result = GameManager->frame();

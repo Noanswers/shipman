@@ -9,20 +9,24 @@ class CMyObject
 public:
 	CMyObject() = default;
 	CMyObject(const CMyObject&) = default;
-	~CMyObject() = default;
+	
+	virtual ~CMyObject() = default;
 
-	bool	initialize(ID3D11Device* device, HWND hWnd);
-	void	shutdown();
-	bool	renderObject(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
+	virtual bool	initialize(ID3D11Device* device, HWND hWnd);
+	virtual void	shutdown();
+	virtual bool	renderObject(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
+	
+	
 	int		getIndexCount();
-
 
 	void	setRotate(float x, float y, float z);
 	void	setScale(float x, float y, float z);
 	void	setTranslate(float x, float y, float z);
 	void	setColorRGBA(float red, float green, float blue, float alpha);
 
-private:
+protected:
+	virtual void renderBuffers(ID3D11DeviceContext*);
+
 	struct VertexType
 	{
 		DirectX::XMFLOAT3 position;
@@ -30,10 +34,11 @@ private:
 	};
 
 	ID3D11Device* temp_device = nullptr;
+	ID3D11ShaderResourceView*	g_pTextureRV = nullptr;
 
-	bool initializeBuffers(ID3D11Device*);
+	virtual bool initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount);
+	//bool initializeBuffers(ID3D11Device*);
 	void shutdownBuffers();
-	void renderBuffers(ID3D11DeviceContext*);
 
 	int m_vertexCount = 4;
 	int m_indexCount = 6;

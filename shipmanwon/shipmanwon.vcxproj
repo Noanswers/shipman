@@ -300,10 +300,12 @@
     <ClInclude Include="MyObject.h" />
     <ClInclude Include="MyScene.h" />
     <ClInclude Include="MyTime.h" />
+    <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="shipmanwon.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="StageObject.h" />
     <ClInclude Include="StartScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SystemClass.h" />
@@ -322,8 +324,10 @@
     <ClCompile Include="MyObject.cpp" />
     <ClCompile Include="MyScene.cpp" />
     <ClCompile Include="MyTime.cpp" />
+    <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="shipmanwon.cpp" />
+    <ClCompile Include="StageObject.cpp" />
     <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

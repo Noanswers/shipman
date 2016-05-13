@@ -6,7 +6,8 @@ bool CMyObject::initialize(ID3D11Device* device, HWND hWnd)
 	if (IsInit == true)
 		return true;
 
-	bool result = initializeBuffers(device);
+	//bool result = initializeBuffers(device);
+	bool result = initializeBuffers(device, vertices, indices, m_vertexCount, m_indexCount);
 	if (result == true)
 		IsInit = true;
 
@@ -76,7 +77,8 @@ void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
 	if (temp_device == nullptr)
 		return;
 
-	initializeBuffers(temp_device);
+	//initializeBuffers(temp_device);
+	initializeBuffers(temp_device, vertices, indices, m_vertexCount, m_indexCount);
 }
 
 
@@ -84,7 +86,8 @@ void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
 	=== [ private ] ===========================================================================
 */
 
-bool CMyObject::initializeBuffers(ID3D11Device* device)
+//bool CMyObject::initializeBuffers(ID3D11Device* device)
+bool CMyObject::initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount)
 {
 	temp_device = device;
 

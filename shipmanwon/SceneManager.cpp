@@ -7,6 +7,7 @@ void CSceneManager::initialize()
 	SceneStack.clear();
 
 	CStartScene* startScene = new CStartScene();
+
 	SceneStack.push_back(startScene);
 }
 

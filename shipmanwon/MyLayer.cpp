@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MyLayer.h"
 
-bool CMyLayer::renderLayer(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
+bool CMyLayer::renderLayer(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
 {
 	bool result = false;
 	for (auto& iter : ObjectVector)

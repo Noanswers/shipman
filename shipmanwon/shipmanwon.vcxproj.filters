@@ -78,9 +78,6 @@
     <ClInclude Include="Singleton.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="ColorShaderClass.h">
-      <Filter>소스 파일\object</Filter>
-    </ClInclude>
     <ClInclude Include="MyTime.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
@@ -133,9 +130,6 @@
     </ClCompile>
     <ClCompile Include="SystemClass.cpp">
       <Filter>소스 파일\System</Filter>
-    </ClCompile>
-    <ClCompile Include="ColorShaderClass.cpp">
-      <Filter>소스 파일\object</Filter>
     </ClCompile>
     <ClCompile Include="MyTime.cpp">
       <Filter>소스 파일\System</Filter>

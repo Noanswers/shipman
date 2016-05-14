@@ -33,36 +33,13 @@ bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 
 	//m_Camera->SetPosition(10.0f, -10.0f, -10.0f);
 	//m_Camera->SetRotation(-45.0f, -45.0f, 45.0f);
-
-	
-	// Create the color shader object.
-	m_ColorShader = new CColorShaderClass;
-	if (!m_ColorShader)
-	{
-		return false;
-	}
-
-	// Initialize the color shader object.
-	result = m_ColorShader->Initialize(m_Direct3D->getDevice(), hwnd);
-	if (!result)
-	{
-		MessageBox(hwnd, L"Could not initialize the color shader object.", L"Error", MB_OK);
-		return false;
-	}
+	createConstantBuffer();
 
 	return true;
 }
 
 void CGraphicsClass::shutdown()
 {
-	// Release the color shader object.
-	if (m_ColorShader)
-	{
-		m_ColorShader->Shutdown();
-		delete m_ColorShader;
-		m_ColorShader = 0;
-	}
-
 	// Release the camera object.
 	if (m_Camera)
 	{
@@ -77,6 +54,7 @@ void CGraphicsClass::shutdown()
 		delete m_Direct3D;
 		m_Direct3D = 0;
 	}
+	if (m_pConstantBuffer) m_pConstantBuffer->Release();
 
 	return;
 }
@@ -117,6 +95,8 @@ bool CGraphicsClass::render(HWND hWnd)
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->getProjectionMatrix(projectionMatrix);
 
+	calculateMatrixForCB();
+
 	/*
 		매번 랜더링하기 전에 init이 된 object가 없는지 확인하고, 
 		initialize가 되지 않은 경우 초기화 진행
@@ -146,4 +126,39 @@ bool CGraphicsClass::render(HWND hWnd)
 	m_Direct3D->endScene();
 
 	return true;
+}
+
+void CGraphicsClass::createConstantBuffer()
+{
+	D3D11_BUFFER_DESC 	cbd;
+	ZeroMemory(&cbd, sizeof(cbd));
+	cbd.Usage = D3D11_USAGE_DEFAULT;
+	cbd.ByteWidth = sizeof(ConstantBuffer);
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd.CPUAccessFlags = 0;
+	m_Direct3D->getDevice()->CreateBuffer(&cbd, NULL, &m_pConstantBuffer);
+}
+
+void CGraphicsClass::calculateMatrixForCB()
+{
+	DirectX::XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+
+	m_Direct3D->getWorldMatrix(worldMatrix);
+	m_Camera->GetViewMatrix(viewMatrix);
+	m_Direct3D->getProjectionMatrix(projectionMatrix);
+
+	ID3D11DeviceContext* deviceContext = m_Direct3D->getDeviceContext();
+	// 박스를 회전시키기 위한 연산.    위치, 크기를 변경하고자 한다면 SRT를 기억할 것.      
+
+	XMMATRIX wvp = worldMatrix * viewMatrix * projectionMatrix;
+	ConstantBuffer       cb;
+
+	cb.wvp = XMMatrixTranspose(wvp);
+	cb.world = XMMatrixTranspose(worldMatrix);
+	cb.lightDir = lightDirection;
+	cb.lightColor = lightColor;
+
+	deviceContext->UpdateSubresource(m_pConstantBuffer, 0, 0, &cb, 0, 0); // update data
+	deviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);// set constant buffer.
+	deviceContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);// set constant buffer to PS.
 }

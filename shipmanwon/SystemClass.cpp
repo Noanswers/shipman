@@ -149,7 +149,7 @@ bool CSystemClass::frame()
 
 	if (Input->isKeyDown(VK_UP))
 	{
-		CMyScene* scene = SceneManager->getCurrentScene();
+		//CMyScene* scene = SceneManager->getCurrentScene();
 	}
 
 	if (Input->isKeyDown(VK_LEFT))

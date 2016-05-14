@@ -25,6 +25,9 @@
     <Filter Include="소스 파일\Scene">
       <UniqueIdentifier>{223167be-d174-4306-a59a-bf94725c61ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\object\subClass">
+      <UniqueIdentifier>{f797e0f3-2aa3-4e9e-8bf8-9a69520ce6a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -75,9 +78,6 @@
     <ClInclude Include="Singleton.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="ColorShaderClass.h">
-      <Filter>소스 파일\object</Filter>
-    </ClInclude>
     <ClInclude Include="MyTime.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
@@ -89,6 +89,12 @@
     </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerObject.h">
+      <Filter>소스 파일\object\subClass</Filter>
+    </ClInclude>
+    <ClInclude Include="StageObject.h">
+      <Filter>소스 파일\object\subClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -125,9 +131,6 @@
     <ClCompile Include="SystemClass.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
-    <ClCompile Include="ColorShaderClass.cpp">
-      <Filter>소스 파일\object</Filter>
-    </ClCompile>
     <ClCompile Include="MyTime.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
@@ -139,6 +142,12 @@
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
       <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerObject.cpp">
+      <Filter>소스 파일\object\subClass</Filter>
+    </ClCompile>
+    <ClCompile Include="StageObject.cpp">
+      <Filter>소스 파일\object\subClass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

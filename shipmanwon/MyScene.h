@@ -17,7 +17,7 @@ public:
 	bool initScene(ID3D11Device* device, HWND hWnd);
 
 	bool pushBack(CMyObject* object, int layerNum);
-	bool renderScene(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix);
+	bool renderScene(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix);
 
 	void getSceneColor(float colorSet[4]) const;
 	void setSceneColor(const float red, const float green, const float blue, const float alpha);

@@ -6,7 +6,7 @@ void CMyScene::initialize()
 
 }
 
-bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, XMMATRIX projectionMatrix)
+bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
 {
 	bool result = false;
 	for (auto& iter : LayerList)

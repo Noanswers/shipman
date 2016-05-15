@@ -41,13 +41,13 @@ protected:
 	ID3D11ShaderResourceView*	g_pTextureRV = nullptr;
 	ID3D11SamplerState*			g_pSamplerLinear = nullptr;
 
-	HRESULT loadTexture();
-	void createShader();
+	virtual HRESULT loadTexture();
+	virtual void createShader();
 
 	virtual void renderBuffers(ID3D11DeviceContext*);
 	virtual bool initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount);
 
-	void shutdownBuffers();
+	virtual void shutdownBuffers();
 
 	int m_vertexCount = 4;
 	int m_indexCount = 6;

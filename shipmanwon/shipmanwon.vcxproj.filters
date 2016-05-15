@@ -63,9 +63,6 @@
     <ClInclude Include="CameraClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
@@ -95,6 +92,9 @@
     </ClInclude>
     <ClInclude Include="StageObject.h">
       <Filter>소스 파일\object\subClass</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="StageObject.cpp">
       <Filter>소스 파일\object\subClass</Filter>
+    </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>헤더 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

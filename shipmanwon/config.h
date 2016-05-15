@@ -6,38 +6,19 @@
 //Poco lib header
 #include <Poco/Path.h>
 //////////////////////////////////////////////////////////////////////////
-namespace config
+
+static struct config
 {
-	WCHAR* GetNonConstWstr(const std::wstring& ws)
-	{
-		//return non-constant copy of s.c_str()
-		static std::vector<wchar_t> var;
-		var.assign(ws.begin(), ws.end());
-		var.push_back('\0');
-		return &var[0];
-	}
-}
+	WCHAR* getNonConstWstr(const std::wstring& ws);
+	static std::wstring makeDirectory(std::string fileDir);
 
-std::wstring makeDirectory(std::string fileDir)
-{
-//	Get .exe file name
-	char buffer[MAX_PATH];
-	GetModuleFileNameA(NULL, buffer, MAX_PATH);
+	//const std::wstring VS_Directory;
+	//const std::wstring PS_Directory;
+	//const std::wstring FxFile;
+	//const std::wstring textureDefault;
+};
 
-//	Make VSPath
-	auto currentPath = Poco::Path(buffer).makeParent();
-	auto VSPath = currentPath.popDirectory();
-	VSPath = VSPath.popDirectory().append(fileDir);
-
-//	return type set
-	std::string temp = VSPath.toString();
-	std::wstring temp2(temp.begin(), temp.end());
-
-	return temp2;
-}
-
-const std::wstring VS_Directory = makeDirectory("shipmanwon\\color.vs");
-const std::wstring PS_Directory = makeDirectory("shipmanwon\\color.ps");
-
-const std::wstring FxFile = makeDirectory("shipmanwon\\texture\\stage.fx");
-const std::wstring textureDefault = makeDirectory("shipmanwon\\texture\\default.jpg");
+static const std::wstring VS_Directory = config::makeDirectory("shipmanwon\\color.vs");
+static const std::wstring PS_Directory = config::makeDirectory("shipmanwon\\color.ps");
+static const std::wstring FxFile = config::makeDirectory("shipmanwon\\texture\\stage.fx");
+static const std::wstring textureDefault = config::makeDirectory("shipmanwon\\texture\\default.jpg");

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "StageObject.h"
+#include "config.h"
 
 bool CStageObject::initialize(ID3D11Device* device, HWND hWnd)
 {

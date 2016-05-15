@@ -14,7 +14,7 @@ public:
 
 	virtual bool	initialize(ID3D11Device* device, HWND hWnd);
 	virtual void	shutdown();
-	virtual bool	renderObject(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix);
+	virtual bool	renderObject(ID3D11DeviceContext* deviceContext);
 	
 	int		getIndexCount();
 
@@ -23,6 +23,7 @@ public:
 	void	setTranslate(float x, float y, float z);
 	void	setColorRGBA(float red, float green, float blue, float alpha);
 
+	DirectX::XMMATRIX getWorldMatrix();
 protected:
 
 	std::wstring textureFilename = std::wstring();

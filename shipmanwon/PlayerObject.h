@@ -11,12 +11,12 @@ public:
 
 	bool	initialize(ID3D11Device* device, HWND hWnd) override;
 	void	shutdown() override;
-	bool	renderObject(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix) override;
+	bool	renderObject(ID3D11DeviceContext* deviceContext) override;
 
 	//void	CStageObject::renderBuffers(ID3D11DeviceContext* deviceContext) override;
-	void createCylinder(void);
-	void createTopCap(void);
-	void createBottomCap(void);
+	void	createCylinder(void);
+	void	createTopCap(void);
+	void	createBottomCap(void);
 
 private:
 	std::wstring textureFilename = std::wstring();
@@ -35,26 +35,13 @@ private:
 	int m_vertexCount = 4;
 	int m_indexCount = 6;
 
-// 	VertexType vertices[4] =
-// 	{
-// 		{ DirectX::XMFLOAT3(-6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 0.0f) },
-// 		{ DirectX::XMFLOAT3(0.0f, 4.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 1.0f) },
-// 		{ DirectX::XMFLOAT3(0.0f, -4.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 0.0f) },
-// 		{ DirectX::XMFLOAT3(6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 1.0f) }
-// 	};
-
-// 	unsigned long indices[6] =
-// 	{
-// 		0, 1, 2, 2, 1, 3
-// 	};
-
 	//////////////////////////////////////////////////////////////////////////
 	//원기둥 그리는 변수들
-	float bottomRadius;
-	float topRadius;
-	float height;
-	UINT sliceCount;
-	UINT stackCount;
+	float bottomRadius = 2.0f;
+	float topRadius = 2.0f;
+	float height = 0.2f;
+	UINT sliceCount = 10;
+	UINT stackCount = 5;
 
 	std::vector<VertexType> cyVerticies;
 	std::vector<unsigned long> cyIndices;

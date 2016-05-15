@@ -29,7 +29,7 @@ void CStageObject::shutdown()
 	return;
 }
 
-bool CStageObject::renderObject(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
+bool CStageObject::renderObject(ID3D11DeviceContext* deviceContext)
 {
 	bool result = true;
 	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.

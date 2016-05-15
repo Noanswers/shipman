@@ -12,10 +12,9 @@ void CStartScene::initialize()
 
 	//CStageObject* stage2 = new CStageObject();
 	//CMyObject* stage2 = new CStageObject(); //test
-	CMyObject* object = new CPlayerObject();
+	
+	CPlayerObject* object = new CPlayerObject();
 
-	//pushBack(stage, 10);
-	//pushBack(stage2, 10);
 	pushBack(object, 10);
 
 	//object1->setTranslate(3.0f, 0.0f, 0.0f);

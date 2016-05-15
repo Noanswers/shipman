@@ -5,20 +5,25 @@
 
 bool CPlayerObject::initialize(ID3D11Device* device, HWND hWnd)
 {
+	if (temp_device != device)
+	{
+		temp_device = device;
+		IsInit = false;
+	}
+
 	if (textureFilename.empty() == true)
 		textureFilename = textureDefault;
 
 	if (IsInit == true)
 		return true;
 
-	//bool result = initializeBuffers(device);
-	bool result = initializeBuffers(device, vertices, indices, m_vertexCount, m_indexCount);
-	if (result == true)
-		IsInit = true;
-
 	loadTexture();
 	createShader();
 	createCylinder();
+
+	bool result = initializeBuffers(device, vertices, indices, m_vertexCount, m_indexCount);
+	if (result == true)
+		IsInit = true;
 
 	return result;
 }
@@ -31,7 +36,7 @@ void CPlayerObject::shutdown()
 	return;
 }
 
-bool CPlayerObject::renderObject(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
+bool CPlayerObject::renderObject(ID3D11DeviceContext* deviceContext)
 {
 	bool result = true;
 	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
@@ -152,7 +157,11 @@ void CPlayerObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 
 bool CPlayerObject::initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount)
 {
-	temp_device = device;
+	m_vertexCount = cyVerticies.size();
+	m_indexCount = cyIndices.size();
+
+	vertices = &cyVerticies[0];
+	indices = &cyIndices[0];
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	D3D11_BUFFER_DESC indexBufferDesc;
@@ -200,8 +209,6 @@ bool CPlayerObject::initializeBuffers(ID3D11Device* device, VertexType* vertices
 		return false;
 	}
 
-	// Release the arrays now that the vertex and index buffers have been created and loaded.
-
 	return true;
 }
 
@@ -221,10 +228,9 @@ void CPlayerObject::createCylinder()
 		float y = -0.5f*height + i*stackHeight;
 		float r = bottomRadius + i*radiusStep;
 
-
 		float dTheta = 2.0f * DirectX::XM_PI / sliceCount;
 
-		for (UINT j = 0; i <= sliceCount; ++j)
+		for (UINT j = 0; j <= sliceCount; ++j)
 		{
 			VertexType vertex;
 
@@ -235,6 +241,9 @@ void CPlayerObject::createCylinder()
 
 			vertex.tex.x = (float)j / sliceCount;
 			vertex.tex.y = 1.0f - (float)i / stackCount;
+
+			vertex.color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+			vertex.normal = vertex.position;
 
 			//verteex.TangentU 필요한지 확인할것
 			cyVerticies.push_back(vertex);

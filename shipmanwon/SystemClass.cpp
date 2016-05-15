@@ -157,6 +157,7 @@ bool CSystemClass::frame()
 		if (SceneManager->getStackSize() > 1)
 		{
 			SceneManager->popBack();
+			Input->keyUp(VK_LEFT);
 		}
 	}
 
@@ -165,6 +166,7 @@ bool CSystemClass::frame()
 		CGameScene* game = new CGameScene();
 		game->initialize();
 		SceneManager->pushBack(game);
+		Input->keyUp(VK_RIGHT);
 	}
 
 	bool result = GameManager->frame();

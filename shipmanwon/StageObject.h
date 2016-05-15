@@ -10,7 +10,7 @@ public:
 	
 	bool	initialize(ID3D11Device* device, HWND hWnd) override;
 	void	shutdown() override;
-	bool	renderObject(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix) override;
+	bool	renderObject(ID3D11DeviceContext* deviceContext) override;
 
 	//void	CStageObject::renderBuffers(ID3D11DeviceContext* deviceContext) override;
 

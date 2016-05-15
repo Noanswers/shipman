@@ -17,7 +17,7 @@ public:
 	bool initLayer(ID3D11Device* device, HWND hWnd);
 
 	bool pushBack(CMyObject* object);
-	bool renderLayer(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix);
+	bool renderLayer(ID3D11DeviceContext* deviceContext);
 	int	getObjectsSize();
 
 private:

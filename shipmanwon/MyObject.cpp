@@ -29,7 +29,7 @@ void CMyObject::shutdown()
 	return;
 }
 
-bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
+bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext)
 {
 	bool result = true;
 	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
@@ -41,6 +41,11 @@ bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, DirectX::XMMATR
 int CMyObject::getIndexCount()
 {
 	return m_indexCount;
+}
+
+DirectX::XMMATRIX CMyObject::getWorldMatrix()
+{
+	return ObjectWorld;
 }
 
 void CMyObject::setTranslate(float x, float y, float z)

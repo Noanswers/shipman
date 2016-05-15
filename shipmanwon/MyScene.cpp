@@ -6,6 +6,15 @@ void CMyScene::initialize()
 
 }
 
+void CMyScene::update()
+{
+	for (auto& iter : LayerList)
+	{
+		CMyLayer* layer = std::get<CMyLayer*>(iter);
+		layer->update();
+	}
+}
+
 bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
 {
 	bool result = false;

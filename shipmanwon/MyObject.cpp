@@ -29,6 +29,12 @@ void CMyObject::shutdown()
 	return;
 }
 
+void CMyObject::update()
+{
+
+
+}
+
 bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
 {
 	bool result = true;

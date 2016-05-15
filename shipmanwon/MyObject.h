@@ -23,6 +23,8 @@ public:
 	void	setTranslate(float x, float y, float z);
 	void	setColorRGBA(float red, float green, float blue, float alpha);
 
+	virtual void	update();
+
 protected:
 
 	std::wstring textureFilename = std::wstring();

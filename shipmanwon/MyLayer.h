@@ -20,6 +20,9 @@ public:
 	bool renderLayer(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix);
 	int	getObjectsSize();
 
+	void update();
+
+
 private:
 	std::vector<CMyObject*> ObjectVector;
 };

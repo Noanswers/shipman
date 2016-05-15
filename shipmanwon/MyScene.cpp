@@ -13,7 +13,11 @@ bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX
 	{
 		CMyLayer* layer = std::get<CMyLayer*>(iter);
 		result = layer->renderLayer(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
+	
+		if (!result)
+			return result;
 	}
+
 	return result;
 }
 

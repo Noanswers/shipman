@@ -7,7 +7,11 @@ bool CMyLayer::renderLayer(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX
 	for (auto& iter : ObjectVector)
 	{
 		result = iter->renderObject(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
+	
+		if (!result)
+			return result;
 	}
+
 	return result;
 }
 

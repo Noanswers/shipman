@@ -93,8 +93,7 @@ bool CGraphicsClass::render(HWND hWnd)
 		return false;
 	}
 
-	CMyScene* currentScene = CSceneManager::GetInstance()->getCurrentScene();
-	result = currentScene->renderScene(m_Direct3D->getDeviceContext());
+	result = renderCurrentScene();
 	if (!result)
 	{
 		return false;
@@ -128,7 +127,7 @@ void CGraphicsClass::calculateMatrixForCB()
 	ID3D11DeviceContext* deviceContext = m_Direct3D->getDeviceContext();
 	// 박스를 회전시키기 위한 연산.    위치, 크기를 변경하고자 한다면 SRT를 기억할 것.      
 
-	XMMATRIX wvp = worldMatrix * viewMatrix * projectionMatrix;
+	DirectX::XMMATRIX wvp = worldMatrix * viewMatrix * projectionMatrix;
 	ConstantBuffer       cb;
 
 	cb.wvp = XMMatrixTranspose(wvp);
@@ -141,49 +140,71 @@ void CGraphicsClass::calculateMatrixForCB()
 	deviceContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);// set constant buffer to PS.
 }
 
+bool CGraphicsClass::renderCurrentScene()
+{
+	CMyScene* currentScene = CSceneManager::GetInstance()->getCurrentScene();
+	
+	std::function<bool(ID3D11DeviceContext*, CMyObject*)> testFunc(std::bind(&CGraphicsClass::setShaderParameters, this, std::placeholders::_1, std::placeholders::_2));
+
+	bool result = currentScene->renderScene(m_Direct3D->getDeviceContext(), testFunc);
+	return result;
+}
+
 bool CGraphicsClass::setShaderParameters(ID3D11DeviceContext* deviceContext, CMyObject* object)
 {
 	if (m_pConstantBuffer == nullptr)
 		return false;
 
-	HRESULT result;
-	D3D11_MAPPED_SUBRESOURCE mappedResource;
-	ConstantBuffer* dataPtr;
-	unsigned int bufferNumber;
+	//HRESULT result;
+	//D3D11_MAPPED_SUBRESOURCE mappedResource;
+	//ConstantBuffer* dataPtr;
+	//unsigned int bufferNumber;
 
 	// Transpose the matrices to prepare them for the shader.
-	DirectX::XMMATRIX worldMatrix = XMMatrixTranspose(object->getWorldMatrix());
+	//DirectX::XMMATRIX worldMatrix = XMMatrixTranspose(object->getWorldMatrix());
+	DirectX::XMMATRIX worldMatrix = object->getWorldMatrix();
 	
 	DirectX::XMMATRIX viewMatrix = DirectX::XMMatrixIdentity();
 	m_Camera->GetViewMatrix(viewMatrix);
-	XMMatrixTranspose(viewMatrix);
+	//XMMatrixTranspose(viewMatrix);
 
 	DirectX::XMMATRIX projectionMatrix = DirectX::XMMatrixIdentity();
 	m_Direct3D->getProjectionMatrix(projectionMatrix);
-	XMMatrixTranspose(projectionMatrix);
+	//XMMatrixTranspose(projectionMatrix);
 
 	// Lock the constant buffer so it can be written to.
-	result = deviceContext->Map(m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	if (FAILED(result))
-	{
-		return false;
-	}
+	//result = deviceContext->Map(m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	//if (FAILED(result))
+	//{
+	//	return false;
+	//}
 
-	// Get a pointer to the data in the constant buffer.
-	dataPtr = (ConstantBuffer*)mappedResource.pData;
+	//// Get a pointer to the data in the constant buffer.
+	//dataPtr = (ConstantBuffer*)mappedResource.pData;
 
 	// Copy the matrices into the constant buffer.
-	dataPtr->world = worldMatrix;
-	dataPtr->wvp = worldMatrix * viewMatrix * projectionMatrix;
+	//dataPtr->world = worldMatrix;
+	//dataPtr->wvp = worldMatrix * viewMatrix * projectionMatrix;
 
-	// Unlock the constant buffer.
-	deviceContext->Unmap(m_pConstantBuffer, 0);
+	//// Unlock the constant buffer.
+	//deviceContext->Unmap(m_pConstantBuffer, 0);
 
 	// Set the position of the constant buffer in the vertex shader.
-	bufferNumber = 0;
+	//bufferNumber = 0;
 
 	// Finanly set the constant buffer in the vertex shader with the updated values.
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_pConstantBuffer);
+
+	DirectX::XMMATRIX wvp = worldMatrix * viewMatrix * projectionMatrix;
+	ConstantBuffer       cb;
+
+	cb.wvp = DirectX::XMMatrixTranspose(wvp);
+	cb.world = DirectX::XMMatrixTranspose(worldMatrix);
+	cb.lightDir = lightDirection;
+	cb.lightColor = lightColor;
+
+	deviceContext->UpdateSubresource(m_pConstantBuffer, 0, 0, &cb, 0, 0); // update data
+	deviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	deviceContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);// set constant buffer to PS.
 
 	return true;
 }

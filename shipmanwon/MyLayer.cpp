@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "MyLayer.h"
 
-bool CMyLayer::renderLayer(ID3D11DeviceContext* deviceContext)
+bool CMyLayer::renderLayer(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc)
 {
 	for (auto& iter : ObjectVector)
 	{
-		bool result = iter->renderObject(deviceContext);
+		bool result = iter->renderObject(deviceContext, setShaderfunc);
 	
 		if (!result)
 			return result;

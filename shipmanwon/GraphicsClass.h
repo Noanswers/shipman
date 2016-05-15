@@ -21,12 +21,15 @@ public:
 	bool initialize(int, int, HWND);
 	void shutdown();
 	bool frame(HWND hWnd);
+	bool setShaderParameters(ID3D11DeviceContext* deviceContext, CMyObject* object);
 
 private:
 	bool render(HWND hWnd);
+	bool renderCurrentScene();
+
 	void createConstantBuffer();
 	void calculateMatrixForCB();
-	bool setShaderParameters(ID3D11DeviceContext* deviceContext, CMyObject* object);
+
 
 	CSceneManager* SceneManager = nullptr;
 	CD3DClass* m_Direct3D = nullptr;

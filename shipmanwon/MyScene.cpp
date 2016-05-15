@@ -6,12 +6,12 @@ void CMyScene::initialize()
 
 }
 
-bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext)
+bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc)
 {
 	for (auto& iter : LayerList)
 	{
 		CMyLayer* layer = std::get<CMyLayer*>(iter);
-		bool result = layer->renderLayer(deviceContext);
+		bool result = layer->renderLayer(deviceContext, setShaderfunc);
 	
 		if (!result)
 			return result;

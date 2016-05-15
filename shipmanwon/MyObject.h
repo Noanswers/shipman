@@ -4,6 +4,7 @@
 #include <DirectXMath.h>
 #include <WICTextureLoader.h>
 #include <string>
+#include <functional>
 
 class CMyObject
 {
@@ -14,7 +15,7 @@ public:
 
 	virtual bool	initialize(ID3D11Device* device, HWND hWnd);
 	virtual void	shutdown();
-	virtual bool	renderObject(ID3D11DeviceContext* deviceContext);
+	virtual bool	renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc);
 	
 	int		getIndexCount();
 

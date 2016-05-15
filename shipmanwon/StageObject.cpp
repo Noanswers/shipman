@@ -29,10 +29,11 @@ void CStageObject::shutdown()
 	return;
 }
 
-bool CStageObject::renderObject(ID3D11DeviceContext* deviceContext)
+bool CStageObject::renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc)
 {
 	bool result = true;
-	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
+		
+	setShaderfunc(deviceContext, this);
 	renderBuffers(deviceContext);
 
 	return result;

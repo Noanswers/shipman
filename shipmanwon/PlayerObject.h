@@ -11,7 +11,7 @@ public:
 
 	bool	initialize(ID3D11Device* device, HWND hWnd) override;
 	void	shutdown() override;
-	bool	renderObject(ID3D11DeviceContext* deviceContext) override;
+	bool	renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc) override;
 
 	//void	CStageObject::renderBuffers(ID3D11DeviceContext* deviceContext) override;
 	void	createCylinder(void);

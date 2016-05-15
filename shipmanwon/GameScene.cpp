@@ -10,5 +10,4 @@ void CGameScene::initialize()
 	pushBack(stage, 10);
 
 	stage->setTranslate(3.0f, 0.0f, 0.0f);
-	//object1->setScale(0.5f, 0.5f, 0.5f);
 }

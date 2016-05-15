@@ -40,8 +40,8 @@ protected:
 	};
 
 	ID3D11Device*				temp_device = nullptr;
-	ID3D11ShaderResourceView*	g_pTextureRV = nullptr;
-	ID3D11SamplerState*			g_pSamplerLinear = nullptr;
+	ID3D11ShaderResourceView*	m_pTextureRV = nullptr;
+	ID3D11SamplerState*			m_pSamplerLinear = nullptr;
 
 	virtual HRESULT loadTexture();
 	virtual void createShader();
@@ -51,8 +51,8 @@ protected:
 
 	virtual void shutdownBuffers();
 
-	int m_vertexCount = 4;
-	int m_indexCount = 6;
+	int m_vertexCount;
+	int m_indexCount;
 
 	VertexType vertices[4] = 
 	{

@@ -6,7 +6,7 @@
 
 void CStartScene::initialize()
 {
-	setSceneColor(0.0f, 0.0f, 0.0f, 1.0f);
+	setSceneColor(0.2f, 0.0f, 0.0f, 1.0f);
 
 	//CMyObject* stage = new CMyObject();
 

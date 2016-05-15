@@ -48,12 +48,7 @@ bool CPlayerObject::renderObject(ID3D11DeviceContext* deviceContext, std::functi
 
 HRESULT CPlayerObject::loadTexture()
 {
-	HRESULT hr = DirectX::CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &g_pTextureRV, NULL);
-
-	/*HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
-	temp_device, L"Texture/images.jpg", NULL, NULL, &g_pTextureRV, NULL);*/
-
-	//텍스쳐를 생성한 D3D device, 텍스쳐 경로, 추가 이미지 정보(보통 NULL), 자원 적재 스레드 ( 보통 NULL) 생성된 이미지 뷰, 자원 적재 스레드가 NULL 이면 NULL
+	HRESULT hr = DirectX::CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &m_pTextureRV, NULL);
 
 	if (FAILED(hr))
 		return hr;
@@ -68,7 +63,7 @@ HRESULT CPlayerObject::loadTexture()
 	sampDesc.MinLOD = 0;
 	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	hr = temp_device->CreateSamplerState(&sampDesc, &g_pSamplerLinear);	// SamplerState 생성
+	hr = temp_device->CreateSamplerState(&sampDesc, &m_pSamplerLinear);	// SamplerState 생성
 	if (FAILED(hr))
 		return hr;
 
@@ -141,8 +136,8 @@ void CPlayerObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 	deviceContext->VSSetShader(m_pVertexShader, NULL, 0);
 	deviceContext->PSSetShader(m_pPixelShader, NULL, 0);
 	//텍스쳐!
-	deviceContext->PSSetShaderResources(0, 1, &g_pTextureRV);
-	deviceContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
+	deviceContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	deviceContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
 
 	// 생성된 버퍼의 정점들을 실제로 파이프라인으로 공급하려면 버퍼를 장치의 한 입력 슬롯에 묶어야 함
 	// 1번째 인자 : 
@@ -150,8 +145,7 @@ void CPlayerObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
-
-	deviceContext->DrawIndexed(m_indexCount, 0, 0);
+	deviceContext->DrawIndexed(cyIndices.size(), 0, 0);
 
 	return;
 }
@@ -226,7 +220,8 @@ void CPlayerObject::createCylinder()
 
 	for (UINT i = 0; i < ringCount; ++i)
 	{
-		float y = -0.5f*height + i*stackHeight;
+		float y = i*stackHeight;
+		//float y = -0.5f*height + i*stackHeight;
 		float r = bottomRadius + i*radiusStep;
 
 		float dTheta = 2.0f * DirectX::XM_PI / sliceCount;
@@ -277,7 +272,8 @@ void CPlayerObject::createTopCap()
 {
 	UINT baseIndex = (UINT)cyVerticies.size();
 
-	float y = 0.5f*height;
+	float y = height;
+	//float y = 0.5f*height;
 	float dTheta = 2.0f*DirectX::XM_PI / sliceCount;
 
 	for (UINT i = 0; i <= sliceCount; ++i)
@@ -286,16 +282,24 @@ void CPlayerObject::createTopCap()
 		float z = topRadius*sinf(i*dTheta);
 
 		//texture coordinate
-		float u = x / height + 0.5f;
-		float v = z / height + 0.5f;
+		float u = x / height;
+		float v = z / height;
 
-		cyVerticies.push_back( {DirectX::XMFLOAT3(x, y, z), DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 
-			DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(u, v) });
+		VertexType vertex;
+		vertex.position = DirectX::XMFLOAT3(x, y, z);
+		vertex.color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+		vertex.normal = DirectX::XMFLOAT3(0.0f, y, 0.0f);
+		vertex.tex = DirectX::XMFLOAT2(u, v);
+
+		cyVerticies.push_back(vertex);
+
+		/*cyVerticies.push_back( {DirectX::XMFLOAT3(x, y, z), DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), 
+			DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(u, v) });*/
 	}
 
 	//center of cap vertex
-	cyVerticies.push_back({ DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f), DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
-		DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(0.5f, 0.5f) });
+	cyVerticies.push_back({ DirectX::XMFLOAT3(0.0f, y, 0.0f), DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(0.5f, 0.5f) });
 
 	//center of cap index
 	UINT centerIndex = (UINT)cyVerticies.size() - 1;
@@ -312,7 +316,8 @@ void CPlayerObject::createBottomCap()
 {
 	UINT baseIndex = (UINT)cyVerticies.size();
 
-	float y = 0.5f*height;
+	float y = 0.0f;
+	//float y = -0.5f*height;
 	float dTheta = 2.0f*DirectX::XM_PI / sliceCount;
 
 	for (UINT i = 0; i <= sliceCount; ++i)
@@ -321,16 +326,24 @@ void CPlayerObject::createBottomCap()
 		float z = topRadius*sinf(i*dTheta);
 
 		//texture coordinate
-		float u = x / height + 0.5f;
-		float v = z / height + 0.5f;
+		float u = x / height;
+		float v = z / height;
 
-		cyVerticies.push_back({ DirectX::XMFLOAT3(x, y, z), DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
-			DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(u, v) });
+		VertexType vertex;
+		vertex.position = DirectX::XMFLOAT3(x, y, z);
+		vertex.color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+		vertex.normal = DirectX::XMFLOAT3(0.0f, y, 0.0f);
+		vertex.tex = DirectX::XMFLOAT2(u, v);
+
+		cyVerticies.push_back(vertex);
+
+		/*cyVerticies.push_back({ DirectX::XMFLOAT3(x, y, z), DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+			DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(u, v) });*/
 	}
 
 	//center of cap vertex
-	cyVerticies.push_back({ DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f), DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
-		DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(0.5f, 0.5f) });
+	cyVerticies.push_back({ DirectX::XMFLOAT3(0.0f, y, 0.0f), DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		DirectX::XMFLOAT3(0.0f, -1.0f, 0.0f), DirectX::XMFLOAT2(0.5f, 0.5f) });
 
 	//center of cap index
 	UINT centerIndex = (UINT)cyVerticies.size() - 1;

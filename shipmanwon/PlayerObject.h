@@ -11,7 +11,10 @@ public:
 
 	bool	initialize(ID3D11Device* device, HWND hWnd) override;
 	void	shutdown() override;
-	bool	renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc) override;
+	bool	renderObject(
+		ID3D11DeviceContext* deviceContext, 
+		std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc
+		) override;
 
 	//void	CStageObject::renderBuffers(ID3D11DeviceContext* deviceContext) override;
 	void	createCylinder(void);
@@ -23,8 +26,8 @@ private:
 	ID3D11Resource* Resource;
 
 	ID3D11Device*				temp_device = nullptr;
-	ID3D11ShaderResourceView*	g_pTextureRV = nullptr;
-	ID3D11SamplerState*			g_pSamplerLinear = nullptr;
+	ID3D11ShaderResourceView*	m_pTextureRV = nullptr;
+	ID3D11SamplerState*			m_pSamplerLinear = nullptr;
 
 	HRESULT loadTexture(); //override???
 	void createShader();
@@ -32,15 +35,12 @@ private:
 	void	renderBuffers(ID3D11DeviceContext* deviceContext) override;
 	bool	initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount);
 
-	int m_vertexCount = 4;
-	int m_indexCount = 6;
-
 	//////////////////////////////////////////////////////////////////////////
 	//원기둥 그리는 변수들
 	float bottomRadius = 2.0f;
 	float topRadius = 2.0f;
-	float height = 0.2f;
-	UINT sliceCount = 10;
+	float height = 2.0f;
+	UINT sliceCount = 100;
 	UINT stackCount = 5;
 
 	std::vector<VertexType> cyVerticies;

@@ -94,7 +94,7 @@ void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
 
 HRESULT CMyObject::loadTexture()
 {
-	HRESULT hr = DirectX::CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &g_pTextureRV, NULL);
+	HRESULT hr = DirectX::CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &m_pTextureRV, NULL);
 
 	/*HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
 		temp_device, L"Texture/images.jpg", NULL, NULL, &g_pTextureRV, NULL);*/
@@ -114,7 +114,7 @@ HRESULT CMyObject::loadTexture()
 	sampDesc.MinLOD = 0;
 	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	hr = temp_device->CreateSamplerState(&sampDesc, &g_pSamplerLinear);	// SamplerState 생성
+	hr = temp_device->CreateSamplerState(&sampDesc, &m_pSamplerLinear);	// SamplerState 생성
 	if (FAILED(hr))
 		return hr;
 
@@ -262,8 +262,8 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 	deviceContext->VSSetShader(m_pVertexShader, NULL, 0);
 	deviceContext->PSSetShader(m_pPixelShader, NULL, 0);
 	//텍스쳐!
-	deviceContext->PSSetShaderResources(0, 1, &g_pTextureRV);
-	deviceContext->PSSetSamplers(0, 1, &g_pSamplerLinear);
+	deviceContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	deviceContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
 
 	// 생성된 버퍼의 정점들을 실제로 파이프라인으로 공급하려면 버퍼를 장치의 한 입력 슬롯에 묶어야 함
 	// 1번째 인자 : 

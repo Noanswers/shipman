@@ -21,7 +21,7 @@ bool CMyObject::initialize(ID3D11Device* device, HWND hWnd)
 	return result;
 }
 
-void CMyObject::shutdown()
+void CMyObject::shutdown()  
 {
 	// Shutdown the vertex and index buffers.
 	shutdownBuffers();

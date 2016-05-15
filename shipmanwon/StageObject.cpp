@@ -3,6 +3,9 @@
 
 bool CStageObject::initialize(ID3D11Device* device, HWND hWnd)
 {
+	if (textureFilename.empty() == true)
+		textureFilename = textureDefault;
+
 	if (IsInit == true)
 		return true;
 

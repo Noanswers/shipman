@@ -37,7 +37,7 @@ private:
 
 //	variables
 	CGraphicsClass* Graphics;
-	CInputClass*	Input;
+	//CInputClass*	Input;
 	CMyTime*		MyTime;
 
 	CGameManager*	GameManager;

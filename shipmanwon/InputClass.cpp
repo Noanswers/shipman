@@ -38,9 +38,8 @@ bool CInputClass::isKeyDown(unsigned int key)
 
 void CInputClass::downkeyUnset(unsigned int unset)
 {
-	for (auto i = downkey.begin(); i != downkey.end())
+	for (auto i = downkey.begin(); i != downkey.end(); i++)
 		if ((*i) == unset)
 			i = downkey.erase(i);
-		else
-			++i;
+		
 }

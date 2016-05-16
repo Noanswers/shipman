@@ -45,9 +45,6 @@
     <ClInclude Include="shipmanwon.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="InputClass.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GraphicsClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -96,15 +93,15 @@
     <ClInclude Include="StageObject.h">
       <Filter>소스 파일\object\subClass</Filter>
     </ClInclude>
+    <ClInclude Include="InputClass.h">
+      <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="shipmanwon.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="InputClass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="GraphicsClass.cpp">
@@ -148,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="StageObject.cpp">
       <Filter>소스 파일\object\subClass</Filter>
+    </ClCompile>
+    <ClCompile Include="InputClass.cpp">
+      <Filter>소스 파일\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

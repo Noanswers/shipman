@@ -1,7 +1,8 @@
 #pragma once
 #include <vector>
+#include "Singleton.h"
 
-class CInputClass
+class CInputClass : public CSingleton<CInputClass>
 {
 public:
 	CInputClass()					= default;

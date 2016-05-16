@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 class CInputClass
 {
@@ -14,7 +15,18 @@ public:
 
 	bool isKeyDown(unsigned int);
 
+	void downkeySet(unsigned int set)
+	{downkey.push_back(set);}
+
+	void downkeyUnset(unsigned int unset);
+	
+	
+	
+
 private:
 	bool Keys[256];
+	std::vector<unsigned int> downkey;
+
+
 };
 

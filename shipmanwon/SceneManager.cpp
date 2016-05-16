@@ -45,3 +45,10 @@ int CSceneManager::getStackSize()
 {
 	return static_cast<int>(SceneStack.size());
 }
+
+void CSceneManager::update()
+{
+	CMyScene* currentScene = getCurrentScene();
+	
+
+}

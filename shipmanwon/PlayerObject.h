@@ -20,6 +20,7 @@ public:
 	void	createCylinder(void);
 	void	createTopCap(void);
 	void	createBottomCap(void);
+	void	update() override;
 
 private:
 	std::wstring textureFilename = std::wstring();
@@ -34,6 +35,8 @@ private:
 
 	void	renderBuffers(ID3D11DeviceContext* deviceContext) override;
 	bool	initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount);
+	
+
 
 	//////////////////////////////////////////////////////////////////////////
 	//원기둥 그리는 변수들
@@ -42,6 +45,11 @@ private:
 	float height = 2.0f;
 	UINT sliceCount = 100;
 	UINT stackCount = 5;
+	
+
+	////////////////플레이어 정보
+	float speed = 0.5f;
+
 
 	std::vector<VertexType> cyVerticies;
 	std::vector<unsigned long> cyIndices;

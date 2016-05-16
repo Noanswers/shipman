@@ -136,7 +136,7 @@ void CSystemClass::run()
 bool CSystemClass::frame()
 {
 	// Check if the user pressed escape and wants to exit the application.
-	if (CInputClass::GetInstance()->isKeyDown(VK_ESCAPE))
+	/*if (CInputClass::GetInstance()->isKeyDown(VK_ESCAPE))
 	{
 		return false;
 	}
@@ -161,7 +161,7 @@ bool CSystemClass::frame()
 		game->initialize();
 		SceneManager->pushBack(game);
 		CInputClass::GetInstance()->keyUp(VK_RIGHT);
-	}
+	}*/
 
 	bool result = GameManager->frame();
 	if (!result)

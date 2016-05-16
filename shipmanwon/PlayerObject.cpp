@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayerObject.h"
 #include "config.h"
+#include "InputClass.h"
 #include <directxmath.h>
 
 bool CPlayerObject::initialize(ID3D11Device* device, HWND hWnd)
@@ -354,4 +355,14 @@ void CPlayerObject::createBottomCap()
 		cyIndices.push_back(baseIndex + i);
 		cyIndices.push_back(baseIndex + i + 1);
 	}
+}
+
+void CPlayerObject::update()
+{
+	if (CInputClass::GetInstance()->isKeyDown(VK_LEFT))
+		setTranslate(vertices->position.x -= speed, vertices->position.y, vertices->position.z);
+	
+	if (CInputClass::GetInstance()->isKeyDown(VK_RIGHT))
+		setTranslate(vertices->position.x += speed, vertices->position.y, vertices->position.z);
+
 }

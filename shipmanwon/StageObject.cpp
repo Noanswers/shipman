@@ -105,6 +105,7 @@ void CStageObject::createShader()
 		pVSBlob->GetBufferPointer(),
 		pVSBlob->GetBufferSize(),
 		&m_pVertexLayout);
+	
 
 	pVSBlob->Release();
 

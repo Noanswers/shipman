@@ -2,6 +2,7 @@
 #include "SystemClass.h"
 #include "StartScene.h"
 #include "GameScene.h"
+#include "Log.h"
 
 CSystemClass::CSystemClass()
 {
@@ -42,6 +43,12 @@ bool CSystemClass::initialize()
 	// Initialize the input object.
 	CInputClass::GetInstance()->initialize();
 
+	//Log initialize
+
+	CLog* log = new CLog;
+	log->initialize();
+	log->SendErrorLogMessage("test\n");
+	log->SendErrorLogMessage("test2\n");
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	Graphics = new CGraphicsClass;
 	if (!Graphics)

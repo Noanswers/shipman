@@ -8,5 +8,11 @@ void CGameManager::initialize()
 
 bool CGameManager::frame()
 {
+	update();
 	return true;
+}
+
+void CGameManager::update()
+{
+
 }

@@ -15,6 +15,7 @@ public:
 
 	void initialize();
 	bool frame();
+	void update();
 
 private:
 };

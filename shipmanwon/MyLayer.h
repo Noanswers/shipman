@@ -20,6 +20,7 @@ public:
 	bool pushBack(CMyObject* object);
 	bool renderLayer(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc);
 	int	getObjectsSize();
+	void update();
 
 private:
 	std::vector<CMyObject*> ObjectVector;

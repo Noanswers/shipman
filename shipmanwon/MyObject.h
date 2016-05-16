@@ -16,7 +16,8 @@ public:
 	virtual bool	initialize(ID3D11Device* device, HWND hWnd);
 	virtual void	shutdown();
 	virtual bool	renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc);
-	
+	virtual void	update();
+
 	int		getIndexCount();
 
 	void	setRotate(float x, float y, float z);

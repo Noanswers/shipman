@@ -276,3 +276,8 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 
 	return;
 }
+
+void CMyObject::update()
+{
+
+}

@@ -6,6 +6,9 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <windows.h>
+#include <vector>
+#include <tuple>
+
 #include "InputClass.h"
 #include "GraphicsClass.h"
 #include "SceneManager.h"
@@ -14,7 +17,7 @@
 #include "MyObject.h"
 #include "GameManager.h"
 #include "MyTime.h"
-
+#include "PlayerData.h"
 
 class CSystemClass
 {
@@ -36,7 +39,10 @@ private:
 	void shutdownWindows();
 
 //	variables
+	std::vector<std::tuple<CPlayerData*, CPlayerObject*>> PlayerDataVector;
+
 	CGraphicsClass* Graphics;
+	CInputClass*	Input;
 	CMyTime*		MyTime;
 
 	CGameManager*	GameManager;

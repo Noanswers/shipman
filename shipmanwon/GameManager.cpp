@@ -9,7 +9,7 @@ void CGameManager::initialize()
 
 bool CGameManager::frame()
 {
-	update();
+	//update();
 	return true;
 }
 

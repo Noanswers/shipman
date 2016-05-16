@@ -359,19 +359,5 @@ void CPlayerObject::createBottomCap()
 
 void CPlayerObject::update()
 {
-	if (CInputClass::GetInstance()->isKeyDown(VK_LEFT))
-		setTranslate(vertices->position.x -= speed, vertices->position.y, vertices->position.z);
-	
-	if (CInputClass::GetInstance()->isKeyDown(VK_RIGHT))
-		setTranslate(vertices->position.x += speed, vertices->position.y, vertices->position.z);
 
-	if (CInputClass::GetInstance()->isKeyDown(VK_UP))
-		setTranslate(vertices->position.x, vertices->position.y, vertices->position.z += speed);
-
-	if (CInputClass::GetInstance()->isKeyDown(VK_DOWN))
-		setTranslate(vertices->position.x, vertices->position.y , vertices->position.z -= speed);
-
-	//DASH
-	if (CInputClass::GetInstance()->isKeyDown(VK_SPACE))
-		speed += 0.2f;
 }

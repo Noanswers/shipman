@@ -300,6 +300,7 @@
     <ClInclude Include="MyObject.h" />
     <ClInclude Include="MyScene.h" />
     <ClInclude Include="MyTime.h" />
+    <ClInclude Include="PlayerData.h" />
     <ClInclude Include="PlayerObject.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SceneManager.h" />
@@ -325,6 +326,7 @@
     <ClCompile Include="MyObject.cpp" />
     <ClCompile Include="MyScene.cpp" />
     <ClCompile Include="MyTime.cpp" />
+    <ClCompile Include="PlayerData.cpp" />
     <ClCompile Include="PlayerObject.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="shipmanwon.cpp" />

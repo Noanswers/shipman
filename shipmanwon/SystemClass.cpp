@@ -36,10 +36,31 @@ bool CSystemClass::initialize()
 
 	SceneManager->initialize();
 	CMyScene* scene = SceneManager->getCurrentScene();
+	
+	CPlayerObject* pObj1 = new CPlayerObject();
+	CPlayerObject* pObj2 = new CPlayerObject();
+
+	scene->pushBack(pObj1, 10);
+	scene->pushBack(pObj2, 10);
+	
+	//에러의 원흉
+	PlayerDataVector.push_back(std::make_tuple(new CPlayerData(), pObj1));
+	PlayerDataVector.push_back(std::make_tuple(new CPlayerData(), pObj2));
+
+	int i = 1;
+	for (auto& iter : PlayerDataVector)
+	{
+		std::get<CPlayerData*>(iter)->initialize();
+		std::get<CPlayerObject*>(iter)->setScale(0.5f, 0.2f, 0.5f);
+		std::get<CPlayerObject*>(iter)->setTranslate(3.0f*i, 0.0f, 0.0f);
+		i = -i;
+	}
+
 	scene->initialize();
 	
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
-	
+	Input = CInputClass::GetInstance();
+
 	// Initialize the input object.
 	CInputClass::GetInstance()->initialize();
 
@@ -77,10 +98,9 @@ void CSystemClass::shutdown()
 	}
 
 	// Release the input object.
-	/*if (Input)
+	if (Input)
 	{
-		delete Input;
-		Input = nullptr;
+		Input->DestorySingleton();
 	}
 
 	/*if (GameManager)
@@ -143,33 +163,34 @@ void CSystemClass::run()
 bool CSystemClass::frame()
 {
 	// Check if the user pressed escape and wants to exit the application.
-	/*if (CInputClass::GetInstance()->isKeyDown(VK_ESCAPE))
+	if (CInputClass::GetInstance()->isKeyDown(VK_ESCAPE))
 	{
 		return false;
 	}
 
-	if (CInputClass::GetInstance()->isKeyDown(VK_UP))
+	for (auto& iter : PlayerDataVector)
 	{
-		//CMyScene* scene = SceneManager->getCurrentScene();
-	}
+		CPlayerData* player = std::get<CPlayerData*>(iter);
+		KeySetting key = player->getPlayerKeySetting();
 
-	if (CInputClass::GetInstance()->isKeyDown(VK_LEFT))
-	{
-		if (SceneManager->getStackSize() > 1)
+		//여기서 플레이어마다 지정된 키가 눌렸을 때 특정 동작을 할당
+		if (Input->isKeyDown(key.up))
+			/*std::get<CPlayerObject*>(iter)->moveToward(1.0f, 0.0f, 0.0f);*/
+			std::get<CPlayerObject*>(iter)->moveForward();
+
+		if (Input->isKeyDown(key.right))
 		{
-			SceneManager->popBack();
-			CInputClass::GetInstance()->keyUp(VK_LEFT);
+			std::get<CPlayerObject*>(iter)->setRotate(0.0f, 0.2f, 0.0f);
+			//Input->keyUp(key.right);
+		}
+
+		if (Input->isKeyDown(key.left))
+		{
+			std::get<CPlayerObject*>(iter)->setRotate(0.0f, -1.0f, 0.0f);
+			//Input->keyUp(key.left);
 		}
 	}
-
-	if (CInputClass::GetInstance()->isKeyDown(VK_RIGHT))
-	{
-		CGameScene* game = new CGameScene();
-		game->initialize();
-		SceneManager->pushBack(game);
-		CInputClass::GetInstance()->keyUp(VK_RIGHT);
-	}*/
-
+	
 	bool result = GameManager->frame();
 	if (!result)
 	{

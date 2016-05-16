@@ -20,14 +20,20 @@ public:
 
 	int		getIndexCount();
 
+	void	moveToward(float x, float y, float z);
+	void	moveForward();
+
 	void	setRotate(float x, float y, float z);
 	void	setScale(float x, float y, float z);
 	void	setTranslate(float x, float y, float z);
 	void	setColorRGBA(float red, float green, float blue, float alpha);
 
 	DirectX::XMMATRIX getWorldMatrix();
-protected:
 
+protected:
+	DirectX::XMFLOAT3 ForwardVector = { 1.0f, 0.0f, 0.0f };
+
+	float speed = 0.1f;
 	std::wstring textureFilename = std::wstring();
 	ID3D11Resource* Resource;
 

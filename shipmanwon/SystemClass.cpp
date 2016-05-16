@@ -5,7 +5,6 @@
 
 CSystemClass::CSystemClass()
 {
-	Input = nullptr;
 	Graphics = nullptr;
 }
 
@@ -39,14 +38,9 @@ bool CSystemClass::initialize()
 	scene->initialize();
 	
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
-	Input = new CInputClass;
-	if (!Input)
-	{
-		return false;
-	}
 	
 	// Initialize the input object.
-	Input->initialize();
+	CInputClass::GetInstance()->initialize();
 
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	Graphics = new CGraphicsClass;
@@ -76,7 +70,7 @@ void CSystemClass::shutdown()
 	}
 
 	// Release the input object.
-	if (Input)
+	/*if (Input)
 	{
 		delete Input;
 		Input = nullptr;
@@ -142,31 +136,31 @@ void CSystemClass::run()
 bool CSystemClass::frame()
 {
 	// Check if the user pressed escape and wants to exit the application.
-	if (Input->isKeyDown(VK_ESCAPE))
+	if (CInputClass::GetInstance()->isKeyDown(VK_ESCAPE))
 	{
 		return false;
 	}
 
-	if (Input->isKeyDown(VK_UP))
+	if (CInputClass::GetInstance()->isKeyDown(VK_UP))
 	{
 		//CMyScene* scene = SceneManager->getCurrentScene();
 	}
 
-	if (Input->isKeyDown(VK_LEFT))
+	if (CInputClass::GetInstance()->isKeyDown(VK_LEFT))
 	{
 		if (SceneManager->getStackSize() > 1)
 		{
 			SceneManager->popBack();
-			Input->keyUp(VK_LEFT);
+			CInputClass::GetInstance()->keyUp(VK_LEFT);
 		}
 	}
 
-	if (Input->isKeyDown(VK_RIGHT))
+	if (CInputClass::GetInstance()->isKeyDown(VK_RIGHT))
 	{
 		CGameScene* game = new CGameScene();
 		game->initialize();
 		SceneManager->pushBack(game);
-		Input->keyUp(VK_RIGHT);
+		CInputClass::GetInstance()->keyUp(VK_RIGHT);
 	}
 
 	bool result = GameManager->frame();
@@ -193,7 +187,7 @@ LRESULT CALLBACK CSystemClass::messageHandler(HWND hwnd, UINT umsg, WPARAM wpara
 	case WM_KEYDOWN:
 	{
 		// If a key is pressed send it to the input object so it can record that state.
-		Input->keyDown((unsigned int)wparam);
+		CInputClass::GetInstance()->keyDown((unsigned int)wparam);
 		return 0;
 	}
 
@@ -201,7 +195,7 @@ LRESULT CALLBACK CSystemClass::messageHandler(HWND hwnd, UINT umsg, WPARAM wpara
 	case WM_KEYUP:
 	{
 		// If a key is released then send it to the input object so it can unset the state for that key.
-		Input->keyUp((unsigned int)wparam);
+		CInputClass::GetInstance()->keyUp((unsigned int)wparam);
 		return 0;
 	}
 

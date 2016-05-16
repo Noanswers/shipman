@@ -78,9 +78,20 @@ void CMyObject::setTranslate(float x, float y, float z)
 
 void CMyObject::setRotate(float x, float y, float z)
 {
+
+// 	x /= DirectX::XM_2PI;
+// 	y /= DirectX::XM_2PI;
+// 	z /= DirectX::XM_2PI;
+
 	//ForwardVector.x = (ForwardVector.x == 0 ? cosf(y) : ForwardVector.x*cosf(y));
-	////ForwardVector.y = (cosf(x) * cosf(z));
+	//ForwardVector.y = (cosf(x) * cosf(z));
 	//ForwardVector.z = (ForwardVector.z == 0 ? sinf(y) : ForwardVector.z*sinf(y));
+
+// 	float tempX = ForwardVector.x;
+// 	float tempZ = ForwardVector.z;
+
+	ForwardVector.x = ForwardVector.x*cosf(y) - ForwardVector.z*sinf(y);
+	ForwardVector.z = ForwardVector.x*sinf(y) - ForwardVector.z*cosf(y);
 
 	x /= DirectX::XM_2PI;
 	y /= DirectX::XM_2PI;

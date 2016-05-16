@@ -173,13 +173,13 @@ bool CSystemClass::frame()
 
 		if (Input->isKeyDown(key.right))
 		{
-			std::get<CPlayerObject*>(iter)->setRotate(0.0f, 0.2f, 0.0f);
+			std::get<CPlayerObject*>(iter)->setRotate(0.0f, 0.7f, 0.0f);
 			//Input->keyUp(key.right);
 		}
 
 		if (Input->isKeyDown(key.left))
 		{
-			std::get<CPlayerObject*>(iter)->setRotate(0.0f, -1.0f, 0.0f);
+			std::get<CPlayerObject*>(iter)->setRotate(0.0f, -0.7f, 0.0f);
 			//Input->keyUp(key.left);
 		}
 	}

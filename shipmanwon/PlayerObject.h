@@ -35,20 +35,19 @@ private:
 
 	void	renderBuffers(ID3D11DeviceContext* deviceContext) override;
 	bool	initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount);
-	
 
 
 	//////////////////////////////////////////////////////////////////////////
 	//원기둥 그리는 변수들
-	float bottomRadius = 2.0f;
-	float topRadius = 2.0f;
-	float height = 2.0f;
+	float bottomRadius = 0.8f;
+	float topRadius = 0.8f;
+	float height = 0.8f;
 	UINT sliceCount = 100;
 	UINT stackCount = 5;
 	
 
 	////////////////플레이어 정보
-	float speed = 0.5f;
+	float speed = 0.01f;
 
 
 	std::vector<VertexType> cyVerticies;

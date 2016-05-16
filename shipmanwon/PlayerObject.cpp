@@ -307,8 +307,8 @@ void CPlayerObject::createTopCap()
 	for (UINT i = 0; i < sliceCount; ++i)
 	{
 		cyIndices.push_back(centerIndex);
-		cyIndices.push_back(baseIndex + i + 1);
 		cyIndices.push_back(baseIndex + i);
+		cyIndices.push_back(baseIndex + i + 1);
 	}
 }
 
@@ -332,7 +332,7 @@ void CPlayerObject::createBottomCap()
 		VertexType vertex;
 		vertex.position = DirectX::XMFLOAT3(x, y, z);
 		vertex.color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-		vertex.normal = DirectX::XMFLOAT3(0.0f, y, 0.0f);
+		vertex.normal = DirectX::XMFLOAT3(0.0f, -1.0f, 0.0f);
 		vertex.tex = DirectX::XMFLOAT2(u, v);
 
 		cyVerticies.push_back(vertex);
@@ -351,7 +351,7 @@ void CPlayerObject::createBottomCap()
 	for (UINT i = 0; i < sliceCount; ++i)
 	{
 		cyIndices.push_back(centerIndex);
-		cyIndices.push_back(baseIndex + i + 1);
 		cyIndices.push_back(baseIndex + i);
+		cyIndices.push_back(baseIndex + i + 1);
 	}
 }

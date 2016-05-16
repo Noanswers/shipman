@@ -33,7 +33,7 @@ public:
 protected:
 	DirectX::XMFLOAT3 ForwardVector = { 1.0f, 0.0f, 0.0f };
 
-	float speed = 0.1f;
+	float speed = 0.05f;
 	std::wstring textureFilename = std::wstring();
 	ID3D11Resource* Resource;
 

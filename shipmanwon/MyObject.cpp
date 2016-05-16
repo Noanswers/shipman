@@ -91,7 +91,7 @@ void CMyObject::setRotate(float x, float y, float z)
 // 	float tempZ = ForwardVector.z;
 
 	ForwardVector.x = ForwardVector.x*cosf(y) - ForwardVector.z*sinf(y);
-	ForwardVector.z = ForwardVector.x*sinf(y) - ForwardVector.z*cosf(y);
+	ForwardVector.z = ForwardVector.x*sinf(y) + ForwardVector.z*cosf(y);
 
 	x /= DirectX::XM_2PI;
 	y /= DirectX::XM_2PI;

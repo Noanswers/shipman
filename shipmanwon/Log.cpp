@@ -23,7 +23,7 @@ void CLog::SendErrorLogMessage(const std::string msg)
 	fileLogger.getChannel()->setProperty(Poco::FileChannel::PROP_ROTATION, "daily");
 	// 5일간보존
 	fileLogger.getChannel()->setProperty(Poco::FileChannel::PROP_PURGEAGE, "5days");
-	fileLogger.error(msg);
+//	fileLogger.error(msg);
 
 	//시간 지정
 	//FileLogger.setProperty(Poco::FileChannel::PROP_TIMES, "local");

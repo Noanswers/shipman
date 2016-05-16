@@ -16,6 +16,7 @@ void CStartScene::initialize()
 	CPlayerObject* object = new CPlayerObject();
 
 	pushBack(object, 10);
+	object->setScale(0.5f, 0.2f, 0.5f);
 
 	//object1->setTranslate(3.0f, 0.0f, 0.0f);
 	//object1->setScale(0.5f, 0.5f, 0.5f);

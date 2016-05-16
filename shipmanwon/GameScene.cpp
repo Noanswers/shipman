@@ -9,5 +9,5 @@ void CGameScene::initialize()
 	CStageObject* stage = new CStageObject();
 	pushBack(stage, 10);
 
-	stage->setTranslate(3.0f, 0.0f, 0.0f);
+	//stage->setTranslate(3.0f, 0.0f, 0.0f);
 }

@@ -26,8 +26,11 @@ bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(0.0f, -9.0f, -6.0f);
-	m_Camera->SetRotation(-60.0f, 0.0f, 0.0f);
+	/*m_Camera->SetPosition(0.0f, -9.0f, -6.0f);
+	m_Camera->SetRotation(-60.0f, 0.0f, 0.0f);*/
+
+	m_Camera->SetPosition(0.0f, 9.0f, -6.0f);
+	m_Camera->SetRotation(60.0f, 0.0f, 0.0f);
 
 	createConstantBuffer();
 

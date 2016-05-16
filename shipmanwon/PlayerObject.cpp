@@ -307,8 +307,8 @@ void CPlayerObject::createTopCap()
 	for (UINT i = 0; i < sliceCount; ++i)
 	{
 		cyIndices.push_back(centerIndex);
-		cyIndices.push_back(baseIndex + i);
 		cyIndices.push_back(baseIndex + i + 1);
+		cyIndices.push_back(baseIndex + i);
 	}
 }
 

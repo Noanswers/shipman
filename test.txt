@@ -1,0 +1,3 @@
+# Log file created/rotated Monday, 16 May 16 11:16:42 GMT
+에러발생
+This is a warning

@@ -1,4 +1,6 @@
 #include "stdafx.h"
+//#define _XM_NO_INTRINSICS_ 
+
 #include "MyObject.h"
 #include "config.h"
 
@@ -56,6 +58,8 @@ void CMyObject::moveToward(float x, float y, float z)
 	};
 	ObjectTranslate += temp * speed;
 
+	setCurrentPosition(x/sum*speed, y/sum*speed, z/sum*speed);
+	
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
@@ -64,13 +68,24 @@ void CMyObject::moveForward()
 	moveToward(ForwardVector.x, ForwardVector.y, ForwardVector.z);
 }
 
+
 DirectX::XMMATRIX CMyObject::getWorldMatrix()
 {
 	return ObjectWorld;
 }
 
+
+void CMyObject::setCurrentPosition(float x, float y, float z)
+{
+	currentPosition.x += x;
+	currentPosition.y += y;
+	currentPosition.z += z;
+
+}
 void CMyObject::setTranslate(float x, float y, float z)
 {
+	setCurrentPosition(x, y, z);
+
 	ObjectTranslate = DirectX::XMMatrixTranslation(x, y, z);
 
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
@@ -90,13 +105,36 @@ void CMyObject::setRotate(float x, float y, float z)
 // 	float tempX = ForwardVector.x;
 // 	float tempZ = ForwardVector.z;
 
-	ForwardVector.x = ForwardVector.x*cosf(y) - ForwardVector.z*sinf(y);
-	ForwardVector.z = ForwardVector.x*sinf(y) + ForwardVector.z*cosf(y);
+	
+
+	//float curCos = cosf(ForwardTheta.y);
+	//float curSin = sinf(ForwardTheta.y);
+
+	DirectX::XMMATRIX mat = {
+		ForwardVector.x, 0.0f, 0.0f, 0.0f,
+		0.0f, ForwardVector.y, 0.0f, 0.0f,
+		0.0f, 0.0f, ForwardVector.z, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+
+	mat *= DirectX::XMMatrixRotationX(x);
+	mat *= DirectX::XMMatrixRotationY(y);
+	mat *= DirectX::XMMatrixRotationZ(z);
+	//mat.r[1];
+
+	
+	//ForwardVector.x = mat.m[0][0];
+	//ForwardVector.y = mat.m[1][1];
+	//ForwardVector.z = mat.m[2][2];
+
+	/*ForwardVector.x = curCos*cosf(y) - curSin*sinf(y);
+	ForwardVector.z = curSin*cosf(y) + curCos*sinf(y);*/
+
+	//ForwardTheta.y += y;
 
 	x /= DirectX::XM_2PI;
 	y /= DirectX::XM_2PI;
 	z /= DirectX::XM_2PI;
-
 	DirectX::XMMATRIX temp = DirectX::XMMatrixIdentity();
 	temp = DirectX::XMMatrixRotationX(x);
 	temp *= DirectX::XMMatrixRotationY(y);
@@ -321,4 +359,9 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 void CMyObject::update()
 {
 
+}
+
+float CMyObject::CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b)
+{
+	return sqrt(pow((a.x - b.x), 2) + pow((a.y - b.y), 2) + pow((a.z - b.z), 2));
 }

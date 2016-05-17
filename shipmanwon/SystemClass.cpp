@@ -55,6 +55,8 @@ bool CSystemClass::initialize()
 		std::get<CPlayerObject*>(iter)->setTranslate(3.0f*i, 0.0f, 0.0f);
 		i = -i;
 	}
+
+
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyUp(VK_W);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyLeft(VK_A);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyRight(VK_D);
@@ -171,15 +173,18 @@ bool CSystemClass::frame()
 		return false;
 	}
 
+	std::vector<CPlayerObject*> playerVector;
 	for (auto& iter : PlayerDataVector)
 	{
 		CPlayerData* player = std::get<CPlayerData*>(iter);
 		KeySetting key = player->getPlayerKeySetting();
 
+		playerVector.push_back(std::get<CPlayerObject*>(iter));
+
 		//여기서 플레이어마다 지정된 키가 눌렸을 때 특정 동작을 할당
 		if (Input->isKeyDown(key.up))
-			/*std::get<CPlayerObject*>(iter)->moveToward(1.0f, 0.0f, 0.0f);*/
-			std::get<CPlayerObject*>(iter)->moveForward();
+			std::get<CPlayerObject*>(iter)->moveToward(-1.0f, 0.0f, 0.0f);
+			//std::get<CPlayerObject*>(iter)->moveForward();
 
 		if (Input->isKeyDown(key.right))
 		{
@@ -192,7 +197,13 @@ bool CSystemClass::frame()
 			std::get<CPlayerObject*>(iter)->setRotate(0.0f, -0.7f, 0.0f);
 			//Input->keyUp(key.left);
 		}
+
+
+		//if (std::get<CPlayerObject*>(iter)->isCollisionPlayer(std::get<CPlayerObject*>(iter)))
+			//while (1);
 	}
+
+	GameManager->collisionCheck(playerVector);
 	
 	bool result = GameManager->frame();
 	if (!result)

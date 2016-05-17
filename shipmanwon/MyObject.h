@@ -1,4 +1,5 @@
 #pragma once
+
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
@@ -30,7 +31,17 @@ public:
 
 	DirectX::XMMATRIX getWorldMatrix();
 
+	DirectX::XMFLOAT3 getCurrentPosition ()
+	{return currentPosition;}
+
+	void	setCurrentPosition(float x, float y, float z);
+
+	float CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b);
+
 protected:
+
+	DirectX::XMFLOAT3 currentPosition = { 0.0f,0.0f,0.0f };
+
 	DirectX::XMFLOAT3 ForwardVector = { 1.0f, 0.0f, 0.0f };
 
 	float speed = 0.05f;

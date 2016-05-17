@@ -21,7 +21,12 @@ public:
 	void	createTopCap(void);
 	void	createBottomCap(void);
 	void	update() override;
-
+	float	getRadious() 
+	{
+		return bottomRadius;
+	}
+	bool	isCollisionPlayer(CPlayerObject * enemy);
+	
 private:
 	std::wstring textureFilename = std::wstring();
 	ID3D11Resource* Resource;
@@ -35,7 +40,7 @@ private:
 
 	void	renderBuffers(ID3D11DeviceContext* deviceContext) override;
 	bool	initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount);
-
+	
 
 	//////////////////////////////////////////////////////////////////////////
 	//원기둥 그리는 변수들

@@ -3,7 +3,7 @@
 #include "Poco/ConsoleChannel.h"
 
 Poco::Logger& CLog::fileLogger = Poco::Logger::create("FileLogger",
-	new Poco::FileChannel("C:\\Users\\ino\\Documents\\shipman_with\\test.log"), Poco::Message::PRIO_INFORMATION);
+	new Poco::FileChannel("test.log"), Poco::Message::PRIO_INFORMATION);
 
 void CLog::initialize()
 {

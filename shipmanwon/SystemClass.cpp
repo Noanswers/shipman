@@ -55,7 +55,9 @@ bool CSystemClass::initialize()
 		std::get<CPlayerObject*>(iter)->setTranslate(3.0f*i, 0.0f, 0.0f);
 		i = -i;
 	}
-
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyUp(VK_W);
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyLeft(VK_A);
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyRight(VK_D);
 	scene->initialize();
 	
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.

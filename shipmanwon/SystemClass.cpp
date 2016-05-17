@@ -70,6 +70,7 @@ bool CSystemClass::initialize()
 	log->initialize();
 	log->SendErrorLogMessage("test\n");
 	log->SendErrorLogMessage("test2\n");
+
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	Graphics = new CGraphicsClass;
 	if (!Graphics)

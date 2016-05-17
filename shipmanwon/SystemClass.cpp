@@ -99,7 +99,7 @@ void CSystemClass::shutdown()
 	}
 
 	// Release the input object.
-	if (Input)
+	/*if (Input)
 	{
 		Input->DestorySingleton();
 	}

@@ -55,8 +55,9 @@ bool CSystemClass::initialize()
 		std::get<CPlayerObject*>(iter)->setTranslate(3.0f*i, 0.0f, 0.0f);
 		i = -i;
 	}
-
-	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyUp(VK_DOWN);
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyUp(VK_W);
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyLeft(VK_A);
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyRight(VK_D);
 
 	scene->initialize();
 	
@@ -72,6 +73,7 @@ bool CSystemClass::initialize()
 	log->initialize();
 	log->SendErrorLogMessage("test\n");
 	log->SendErrorLogMessage("test2\n");
+
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	Graphics = new CGraphicsClass;
 	if (!Graphics)
@@ -100,7 +102,7 @@ void CSystemClass::shutdown()
 	}
 
 	// Release the input object.
-	if (Input)
+	/*if (Input)
 	{
 		Input->DestorySingleton();
 	}

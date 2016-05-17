@@ -30,7 +30,7 @@ public:
 private:
 	std::wstring textureFilename = std::wstring();
 	ID3D11Resource* Resource;
-
+	
 	ID3D11Device*				temp_device = nullptr;
 	ID3D11ShaderResourceView*	m_pTextureRV = nullptr;
 	ID3D11SamplerState*			m_pSamplerLinear = nullptr;

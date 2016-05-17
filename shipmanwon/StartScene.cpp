@@ -8,6 +8,8 @@ void CStartScene::initialize()
 {
 	setSceneColor(0.2f, 0.0f, 0.0f, 1.0f);
 
+
+	
 	/*CPlayerObject* object = new CPlayerObject();
 
 	pushBack(object, 10);

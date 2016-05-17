@@ -39,5 +39,5 @@ void CGameManager::collisionCheck(std::vector<CPlayerObject*> playerVector)
 
 void CGameManager::doCollision(CPlayerObject* player)
 {
-	while (1);
+	player->setTranslate(-1, 0, -1);
 }

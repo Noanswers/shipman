@@ -52,16 +52,23 @@ void CMyObject::moveToward(float x, float y, float z)
 		0.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f,
-		x / sum, y / sum, z / sum, 0.0f
+		x, y, z, 0.0f
 	};
-	ObjectTranslate += temp * speed;
+	ObjectTranslate += ((temp/sum) * speed);
 
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
 void CMyObject::moveForward()
 {
-	moveToward(ForwardVector.x, ForwardVector.y, ForwardVector.z);
+	float vecX, vecY, vecZ;
+	DirectX::XMVector3Normalize(frontVector);
+
+	DirectX::XMVectorGetByIndexPtr(&vecX, frontVector, 0);
+	DirectX::XMVectorGetByIndexPtr(&vecY, frontVector, 1);
+	DirectX::XMVectorGetByIndexPtr(&vecZ, frontVector, 2);
+	
+	moveToward(vecX, vecY, vecZ);
 }
 
 DirectX::XMMATRIX CMyObject::getWorldMatrix()
@@ -78,24 +85,36 @@ void CMyObject::setTranslate(float x, float y, float z)
 
 void CMyObject::setRotate(float x, float y, float z)
 {
-
-// 	x /= DirectX::XM_2PI;
-// 	y /= DirectX::XM_2PI;
-// 	z /= DirectX::XM_2PI;
-
-	//ForwardVector.x = (ForwardVector.x == 0 ? cosf(y) : ForwardVector.x*cosf(y));
-	//ForwardVector.y = (cosf(x) * cosf(z));
-	//ForwardVector.z = (ForwardVector.z == 0 ? sinf(y) : ForwardVector.z*sinf(y));
-
-// 	float tempX = ForwardVector.x;
-// 	float tempZ = ForwardVector.z;
-
-	ForwardVector.x = ForwardVector.x*cosf(y) - ForwardVector.z*sinf(y);
-	ForwardVector.z = ForwardVector.x*sinf(y) + ForwardVector.z*cosf(y);
-
 	x /= DirectX::XM_2PI;
 	y /= DirectX::XM_2PI;
 	z /= DirectX::XM_2PI;
+
+	/*float curCos = cosf(ForwardTheta.y);
+	float curSin = sinf(ForwardTheta.y);*/
+	
+	/*DirectX::XMMATRIX mat = {
+		ForwardVector.x, 0.0f, 0.0f, 0.0f,
+		0.0f, ForwardVector.y, 0.0f, 0.0f,
+		0.0f, 0.0f, ForwardVector.z, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+
+	mat *= DirectX::XMMatrixRotationX(x);
+	mat *= DirectX::XMMatrixRotationY(y);
+	mat *= DirectX::XMMatrixRotationZ(z);*/
+
+	//frontVector = DirectX::XMVectorRotateRight(frontVector, 0);
+	DirectX::XMVECTOR rotate = DirectX::XMQuaternionIdentity();
+	frontVector = DirectX::XMVector3Rotate(frontVector, rotate);
+	/*DirectX::XMVectorGetByIndexPtr(&ForwardVector.x, mat.r[0], 0);
+	DirectX::XMVectorGetByIndexPtr(&ForwardVector.y, mat.r[0], 1);
+	DirectX::XMVectorGetByIndexPtr(&ForwardVector.z, mat.r[0], 2);*/
+
+	//ForwardVector.x = mat.r[0]
+	/*ForwardVector.x = curCos*cosf(y) - curSin*sinf(y);
+	ForwardVector.z = curSin*cosf(y) + curCos*sinf(y);*/
+
+	//ForwardTheta.y += y;
 
 	DirectX::XMMATRIX temp = DirectX::XMMatrixIdentity();
 	temp = DirectX::XMMatrixRotationX(x);

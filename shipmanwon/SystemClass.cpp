@@ -56,6 +56,8 @@ bool CSystemClass::initialize()
 		i = -i;
 	}
 
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyUp(VK_DOWN);
+
 	scene->initialize();
 	
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
@@ -175,20 +177,13 @@ bool CSystemClass::frame()
 
 		//여기서 플레이어마다 지정된 키가 눌렸을 때 특정 동작을 할당
 		if (Input->isKeyDown(key.up))
-			/*std::get<CPlayerObject*>(iter)->moveToward(1.0f, 0.0f, 0.0f);*/
 			std::get<CPlayerObject*>(iter)->moveForward();
 
 		if (Input->isKeyDown(key.right))
-		{
-			std::get<CPlayerObject*>(iter)->setRotate(0.0f, 0.7f, 0.0f);
-			//Input->keyUp(key.right);
-		}
+			std::get<CPlayerObject*>(iter)->setRotate(0.0f, 1.0f, 0.0f);
 
 		if (Input->isKeyDown(key.left))
-		{
-			std::get<CPlayerObject*>(iter)->setRotate(0.0f, -0.7f, 0.0f);
-			//Input->keyUp(key.left);
-		}
+			std::get<CPlayerObject*>(iter)->setRotate(0.0f, -1.0f, 0.0f);
 	}
 	
 	bool result = GameManager->frame();

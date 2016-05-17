@@ -31,7 +31,9 @@ public:
 	DirectX::XMMATRIX getWorldMatrix();
 
 protected:
-	DirectX::XMFLOAT3 ForwardVector = { 1.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 ForwardTheta = { 0.0f, 0.0f, 0.0f };
+	DirectX::XMVECTOR frontVector = { 1.0f, 0.0f, 0.0f };
+	//DirectX::XMFLOAT3 ForwardVector = { 1.0f, 0.0f, 0.0f };
 
 	float speed = 0.05f;
 	std::wstring textureFilename = std::wstring();

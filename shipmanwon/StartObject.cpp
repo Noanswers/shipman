@@ -51,5 +51,34 @@ bool CStartObject::renderObject(ID3D11DeviceContext* deviceContext, std::functio
 
 void CStartObject::createTitleBox()
 {
+	stVerticies.clear();
+	stIndices.clear();
+
+
+
+}
+HRESULT CStartObject::loadTexture()
+{
+
+
+}
+
+void CStartObject::createShader()
+{
+
+}
+
+void CStartObject::createShader()
+{
+
+}
+
+void CStartObject::renderBuffers(ID3D11DeviceContext* deviceContext)
+{
+
+}
+
+bool CStartObject::initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount)
+{
 
 }

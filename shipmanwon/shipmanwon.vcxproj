@@ -296,6 +296,7 @@
     <ClInclude Include="GraphicsClass.h" />
     <ClInclude Include="InputClass.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="MyChrono.h" />
     <ClInclude Include="MyLayer.h" />
     <ClInclude Include="MyObject.h" />
     <ClInclude Include="MyScene.h" />
@@ -323,6 +324,7 @@
     <ClCompile Include="GraphicsClass.cpp" />
     <ClCompile Include="InputClass.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="MyChrono.cpp" />
     <ClCompile Include="MyLayer.cpp" />
     <ClCompile Include="MyObject.cpp" />
     <ClCompile Include="MyScene.cpp" />

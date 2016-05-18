@@ -3,6 +3,7 @@
 #include <d3d11.h>
 #include <tuple>
 #include <list>
+#include <vector>
 #include <functional>
 #include "MyObject.h"
 #include "MyLayer.h"
@@ -24,8 +25,13 @@ public:
 	void getSceneColor(float colorSet[4]) const;
 	void setSceneColor(const float red, const float green, const float blue, const float alpha);
 	
-private:
+	std::vector<CMyObject*> getObjectsByName(std::string objName);
+	virtual void doAction(float delta);
+
+protected:
 	std::list<std::tuple<int, CMyLayer*>> LayerList;
+	std::list<CMyObject*> ObjectList;
+
 	bool checkLayerExist(int layerNum);
 	CMyLayer* getLayerByNum(int layerNum);
 

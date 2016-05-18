@@ -17,15 +17,19 @@ public:
 
 	virtual bool	initialize(ID3D11Device* device, HWND hWnd);
 	virtual void	shutdown();
-	virtual bool	renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc);
 
+	bool	renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc);
 	int		getIndexCount();
 
 	void	moveToward(float x, float y, float z);
 	void	moveForward();
 	void	moveBackward();
+
+	void	accelerate();
+	
 	void	boost();
-	void	setboostSpeed();
+	void	setMaximumSpeed(float speed);
+	//void	setboostSpeed();
 	void	resetSpeed();
 
 	void	setRotate(float x, float y, float z);
@@ -39,18 +43,25 @@ public:
 	{return currentPosition;}
 
 	void	setCurrentPosition(float x, float y, float z);
+	std::string getObjectName() const;
+	void setObjectName(std::string objName);
 
-	float CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b);
+	float	CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b);
+	void	setTexture(std::wstring texName);
 
 protected:
+	void shutdownBuffers();
 
 	DirectX::XMFLOAT3 currentPosition = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 ForwardTheta = { 0.0f, 0.0f, 0.0f };
 	DirectX::XMFLOAT3 ForwardVector = { 1.0f, 0.0f, 0.0f };
 
-	float speed = 0.05f;
+	float SpeedDelta = 0.0f;
+	float CurrentSpeed = 0.0f;
+	float MaximumSpeed = 0.1f;
 
 	std::wstring textureFilename = std::wstring();
+	std::string	 ObjectName = std::string();
 	ID3D11Resource* Resource;
 
 	struct VertexType
@@ -70,29 +81,10 @@ protected:
 	void createShader();
 
 	void renderBuffers(ID3D11DeviceContext*);
-//	virtual bool initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount);
-	virtual bool initializeBuffers(ID3D11Device* device);
+	bool initializeBuffers(ID3D11Device* device);
 
-	virtual void shutdownBuffers();
-
-	/*int m_vertexCount;
-	int m_indexCount;
-*/
 	std::vector<VertexType> Verticies;
 	std::vector<unsigned long> Indices;
-
-	/*VertexType vertices[4] = 
-	{
-		{ DirectX::XMFLOAT3(-6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(0.0f, 4.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.0f, -4.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 0.0f) },
-		{ DirectX::XMFLOAT3(6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 1.0f) }
-	};
-
-	unsigned long indices[6] =
-	{
-		0, 1, 2, 2, 1, 3
-	};*/
 
 	ID3D11Buffer* m_vertexBuffer = nullptr;
 	ID3D11Buffer* m_indexBuffer = nullptr;

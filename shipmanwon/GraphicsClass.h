@@ -22,13 +22,23 @@ public:
 	void shutdown();
 	bool frame(HWND hWnd);
 	bool setShaderParameters(ID3D11DeviceContext* deviceContext, CMyObject* object);
+	
+//	임시 카메라 세팅
+	void setCameraStartScene();
+	//void setCameraGameScene();
+	void setCameraGameScene();
 
+	bool gameScene = false;
 private:
 	bool render(HWND hWnd);
 	bool renderCurrentScene();
 
 	void createConstantBuffer();
 	void calculateMatrixForCB();
+
+
+	int CurrentInterval = 0;
+	float CameraMoveInterval = 500;
 
 
 	CSceneManager* SceneManager = nullptr;
@@ -39,7 +49,7 @@ private:
 
 	XMFLOAT4 lightDirection =
 	{
-		XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)
+		XMFLOAT4(1.0f, -0.5f, 1.0f, 1.0f)
 	};
 
 	XMFLOAT4 lightColor =

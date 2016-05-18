@@ -4,7 +4,7 @@
 
 void CGameScene::initialize()
 {
-	setSceneColor(1.0f, 0.2f, 0.2f, 1.0f);
+	setSceneColor(0.6f, 1.0f, 0.6f, 1.0f);
 
 	CStageObject* stage = new CStageObject();
 	pushBack(stage, 10);

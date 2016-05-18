@@ -25,12 +25,14 @@ bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-	// Set the initial position of the camera.
-	/*m_Camera->SetPosition(0.0f, -9.0f, -6.0f);
-	m_Camera->SetRotation(-60.0f, 0.0f, 0.0f);*/
+	setCameraStartScene();
 
-	m_Camera->SetPosition(0.0f, 9.0f, -6.0f);
-	m_Camera->SetRotation(60.0f, 0.0f, 0.0f);
+	//// Set the initial position of the camera.
+	///*m_Camera->SetPosition(0.0f, -9.0f, -6.0f);
+	//m_Camera->SetRotation(-60.0f, 0.0f, 0.0f);*/
+
+	//m_Camera->SetPosition(0.0f, 9.0f, -6.0f);
+	//m_Camera->SetRotation(60.0f, 0.0f, 0.0f);
 
 	createConstantBuffer();
 
@@ -60,6 +62,9 @@ void CGraphicsClass::shutdown()
 
 bool CGraphicsClass::frame(HWND hWnd)
 {
+	if(gameScene == true && (CurrentInterval < CameraMoveInterval))
+		setCameraGameScene();
+
 	bool result = render(hWnd);
 	
 	return result;
@@ -211,3 +216,33 @@ bool CGraphicsClass::setShaderParameters(ID3D11DeviceContext* deviceContext, CMy
 
 	return true;
 }
+
+void CGraphicsClass::setCameraStartScene()
+{
+	m_Camera->SetPosition(0.0f, 0.0f, -12.0f);
+	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
+}
+
+void CGraphicsClass::setCameraGameScene()
+{
+	DirectX::XMFLOAT3 destPos = { 0.0f, 11.0f, -6.0f };
+	DirectX::XMFLOAT3 destRotate = { 60.0f, 0.0f, 0.0f };
+
+	DirectX::XMFLOAT3 pos = m_Camera->GetPosition();
+	DirectX::XMFLOAT3 rotate = m_Camera->GetRotation();
+
+	m_Camera->SetPosition(
+		pos.x + (destPos.x - pos.x)*CurrentInterval / CameraMoveInterval,
+		pos.y + (destPos.y - pos.y)*CurrentInterval / CameraMoveInterval,
+		pos.z + (destPos.z - pos.z)*CurrentInterval / CameraMoveInterval
+	);
+	m_Camera->SetRotation(
+		rotate.x + (destRotate.x - rotate.x)*CurrentInterval / CameraMoveInterval,
+		rotate.y + (destRotate.y - rotate.y)*CurrentInterval / CameraMoveInterval,
+		rotate.z + (destRotate.z - rotate.z)*CurrentInterval / CameraMoveInterval
+	);
+	++CurrentInterval;
+	/*m_Camera->SetPosition(0.0f, 9.0f, -6.0f);
+	m_Camera->SetRotation(60.0f, 0.0f, 0.0f);*/
+};
+	

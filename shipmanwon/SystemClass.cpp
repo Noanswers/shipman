@@ -4,11 +4,6 @@
 #include "GameScene.h"
 #include "Log.h"
 
-CSystemClass::CSystemClass()
-{
-	Graphics = nullptr;
-}
-
 bool CSystemClass::initialize()
 {
 	// Initialize the width and height of the screen to zero before sending the variables into the function.
@@ -21,34 +16,20 @@ bool CSystemClass::initialize()
 	// Initialize the windows api.
 	initializeWindows(screenWidth, screenHeight);
 
-	// GameManager를 생성합니다.
 	GameManager = CGameManager::GetInstance();
 	if (GameManager == nullptr)
-	{
 		return false;
-	}
 
 	SceneManager = CSceneManager::GetInstance();
 	if (SceneManager == nullptr)
-	{
 		return false;
-	}
 
 	SceneManager->initialize();
 	CMyScene* scene = SceneManager->getCurrentScene();
-	
-	
-	//CStartObject* pstartObj = new CStartObject();
-	//scene->pushBack(pstartObj, 10);
 	scene->initialize();
 
-	
-	
-	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
 	Input = CInputClass::GetInstance();
-
-	// Initialize the input object.
-	CInputClass::GetInstance()->initialize();
+	Input->initialize();
 
 	//Log initialize
 
@@ -60,16 +41,12 @@ bool CSystemClass::initialize()
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	Graphics = new CGraphicsClass;
 	if (!Graphics)
-	{
 		return false;
-	}
 
 	// Initialize the graphics object.
 	result = Graphics->initialize(screenWidth, screenHeight, m_hwnd);
 	if (!result)
-	{
 		return false;
-	}
 	
 	return true;
 }
@@ -115,10 +92,10 @@ void CSystemClass::run()
 	done = false;
 	while (!done)
 	{
-		MyTime->ProcessTime();
-		float delta = MyTime->GetElapsedTime();
-		static float deltaTime = 0;
-		deltaTime += delta;
+		//MyTime->ProcessTime();
+		//float delta = MyTime->GetElapsedTime();
+		//static float deltaTime = 0;
+		//deltaTime += delta;
 
 		// Handle the windows messages.
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -141,7 +118,6 @@ void CSystemClass::run()
 				done = true;
 			}
 		}
-
 	}
 
 	return;
@@ -162,20 +138,18 @@ void CSystemClass::gameSceneInit()
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyLeft(VK_A);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyRight(VK_D);
 	scene->initialize();
+
+	//!! 임시!! 빠른 수정 요망!!
+	Graphics->gameScene = true;
 }
 
 
 bool CSystemClass::frame()
 {
-	// Check if the user pressed escape and wants to exit the application.
-	if (CInputClass::GetInstance()->isKeyDown(VK_ESCAPE))
-	{
+	// 게임 종료 키입니다!
+	if (Input->isKeyDown(VK_ESCAPE))
 		return false;
-	}
 
-	//space button을 입력시 SCene이 넘어감
-	CMyScene* temp = SceneManager->getCurrentScene();
-	
 	//Space 입력시 Scene변경 (임시)
 	if ((uiCheck) && (Input->isKeyDown(VK_SPACE)))
 	{
@@ -183,27 +157,26 @@ bool CSystemClass::frame()
 		uiCheck = false;
 	}
 
+	// 플레이어의 입력을 받습니다
 	getPlayerInput();
+	SceneManager->getCurrentScene()->doAction(0.1f);
 
+	// 임시
 	std::vector<CPlayerObject*> playerVector;
 	for (auto& iter : PlayerDataVector)
 	{
+		std::get<CPlayerObject*>(iter)->moveForward();
 		playerVector.push_back(std::get<CPlayerObject*>(iter));
 	}
 	GameManager->collisionCheck(playerVector);
 	
 	bool result = GameManager->frame();
 	if (!result)
-	{
 		return false;
-	}
 
-	// Do the frame processing for the graphics object.
 	result = Graphics->frame(m_hwnd);
 	if (!result)
-	{
 		return false;
-	}
 
 	return true;
 }
@@ -371,7 +344,7 @@ void CSystemClass::getPlayerInput()
 		KeySetting key = player->getPlayerKeySetting();
 
 		if (Input->isKeyDown(key.up))
-			std::get<CPlayerObject*>(iter)->moveForward();
+			std::get<CPlayerObject*>(iter)->accelerate();
 
 		if (Input->isKeyDown(key.right))
 			std::get<CPlayerObject*>(iter)->setRotate(0.0f, 0.7f, 0.0f);

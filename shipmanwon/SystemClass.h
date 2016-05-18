@@ -23,7 +23,7 @@
 class CSystemClass
 {
 public:
-	CSystemClass();
+	CSystemClass() = default;
 	CSystemClass(const CSystemClass&) = delete;
 	~CSystemClass() = default;
 

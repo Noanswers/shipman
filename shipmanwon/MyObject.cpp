@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MyObject.h"
 #include "config.h"
+#include "MyChrono.h"
 
 bool CMyObject::initialize(ID3D11Device* device, HWND hWnd)
 {
@@ -55,9 +56,14 @@ void CMyObject::moveToward(float x, float y, float z)
 		0.0f, 0.0f, 0.0f, 0.0f,
 		x / sum, y / sum, z / sum, 0.0f
 	};
-	ObjectTranslate += temp * speed;
+	ObjectTranslate += temp * CurrentSpeed;
 
-	setCurrentPosition(x / sum*speed, y / sum*speed, z / sum*speed);
+	setCurrentPosition(x / sum*CurrentSpeed, y / sum*CurrentSpeed, z / sum*CurrentSpeed);
+
+	SpeedDelta -= 0.01f;
+	if (SpeedDelta < 0.0f)
+		SpeedDelta = 0.0f;
+	CurrentSpeed = MaximumSpeed * sinf(SpeedDelta);
 
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
@@ -86,23 +92,40 @@ void CMyObject::moveBackward()
 	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
 }	
 
-void CMyObject::boost()
+void CMyObject::accelerate()
 {
-	setboostSpeed();
-
-	moveForward();
-
-	resetSpeed();
+	if (CurrentSpeed < MaximumSpeed)
+	{
+		SpeedDelta += 0.02f;
+		if (SpeedDelta > DirectX::XM_PI / 2)
+			SpeedDelta = DirectX::XM_PI / 2;
+		CurrentSpeed = MaximumSpeed * sinf(SpeedDelta);
+	}
 }
 
-void CMyObject::setboostSpeed()
+void CMyObject::boost()
 {
-	speed = 1.0f;
+	//setboostSpeed();
+	setMaximumSpeed(2.5f);
+	accelerate();
+	//moveForward();
+
+	//일정 시간 후에 호출
+	
+	//std::function<void(void)> bind_resetSpeed(std::bind(&CMyObject::resetSpeed, this));
+	//CMyChrono::afterTime(1.0f, bind_resetSpeed);
+	//resetSpeed();
+}
+
+void CMyObject::setMaximumSpeed(float speed)
+{
+	MaximumSpeed = speed;
+	CurrentSpeed = speed * 3 / 4;
 }
 
 void CMyObject::resetSpeed()
 {
-	speed = 0.05f;
+	MaximumSpeed = 0.1f;
 }
 
 DirectX::XMMATRIX CMyObject::getWorldMatrix()
@@ -115,6 +138,16 @@ void CMyObject::setCurrentPosition(float x, float y, float z)
 	currentPosition.x += x;
 	currentPosition.y += y;
 	currentPosition.z += z;
+}
+
+std::string CMyObject::getObjectName() const
+{
+	return ObjectName;
+}
+
+void CMyObject::setObjectName(std::string objName)
+{
+	ObjectName = objName;
 }
 
 void CMyObject::setTranslate(float x, float y, float z)
@@ -180,9 +213,6 @@ void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
 HRESULT CMyObject::loadTexture()
 {
 	HRESULT hr = DirectX::CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &TextureRV, NULL);
-
-	/*HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
-		temp_device, L"Texture/images.jpg", NULL, NULL, &g_pTextureRV, NULL);*/
 
 	//텍스쳐를 생성한 D3D device, 텍스쳐 경로, 추가 이미지 정보(보통 NULL), 자원 적재 스레드 ( 보통 NULL) 생성된 이미지 뷰, 자원 적재 스레드가 NULL 이면 NULL
 
@@ -370,4 +400,10 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 float CMyObject::CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b)
 {
 	return sqrt(pow((a.x - b.x), 2) + pow((a.y- b.y), 2) + pow((a.z - b.z), 2));
+}
+
+void CMyObject::setTexture(std::wstring texName)
+{
+	textureFilename = texName;
+	loadTexture();
 }

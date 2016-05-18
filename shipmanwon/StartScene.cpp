@@ -15,6 +15,8 @@ void CStartScene::initialize()
 	//object->initialize();
 	pushBack(object, 10);
 	object->setTranslate(0, 0, 0);
+
+	
 	/*CPlayerObject* object = new CPlayerObject();
 
 	pushBack(object, 10);

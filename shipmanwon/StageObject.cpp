@@ -43,3 +43,32 @@ void CStageObject::createStage()
 	Indices.push_back(1);
 	Indices.push_back(3);
 }
+
+bool CStageObject::isGetOutStage(DirectX::XMFLOAT3 position)
+{
+	int count = 0;
+	int i;
+	double xinters;
+	int xq=0;
+	DirectX::XMFLOAT3 temp1 = Verticies[0].position;
+	for (i = 1; i <= 4; i++)
+	{
+		DirectX::XMFLOAT3 temp2 = Verticies[i % 4].position;
+		if(position.z > min(temp1.z, temp2.z))
+			if(position.z <= max(temp1.z, temp2.z))
+				if (position.x <= max(temp1.x, temp2.x))
+				{
+					if (temp1.z != temp2.z)
+					{
+						xq = (position.z - temp1.z) * (temp2.x - temp1.x) / (temp2.z - temp1.z) + temp1.x;
+						if (temp1.x == temp2.x || position.x <= xq)
+							count++;
+					}
+				}
+		temp1 = temp2;
+	}
+
+	if (count % 2 == 0)return false;
+
+	return true;
+}

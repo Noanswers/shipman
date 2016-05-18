@@ -2,6 +2,7 @@
 #include "Singleton.h"
 #include <vector>
 #include "PlayerObject.h"
+#include "StageObject.h"
 
 class CGameManager : public CSingleton<CGameManager>
 {
@@ -19,6 +20,11 @@ public:
 	bool frame();
 	void collisionCheck(std::vector<CPlayerObject*> playerVector);
 	void doCollision(CPlayerObject* player1, CPlayerObject* player2);
+
+	void getOutCheck(std::vector<CPlayerObject*> playerVector, CStageObject * stage);
+	void doGetOut(CPlayerObject* player);
+
 private:
 	bool test_checker = false;
+	bool getout_checker = false;
 };

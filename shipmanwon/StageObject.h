@@ -12,7 +12,12 @@ public:
 	bool	initialize(ID3D11Device* device, HWND hWnd) override;
 	void	shutdown() override;
 
+	bool isGetOutStage(DirectX::XMFLOAT3 position);
+
+
 private:
 	void createStage();
+
+	
 };
 

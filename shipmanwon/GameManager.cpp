@@ -28,9 +28,10 @@ void CGameManager::collisionCheck(std::vector<CPlayerObject*> playerVector)
 		if ((idx + 1) < numOfPlayer)
 			if (iter->isCollisionPlayer(playerVector[idx + 1]))
 			{
-				doCollision(playerVector[idx], playerVector[idx+1]);
+				doCollision(playerVector[idx], playerVector[idx + 1]);
 				test_checker = true;
 			}
+
 
 		else
 			break;
@@ -44,4 +45,33 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 {
 	player1->moveBackward();
 	player2->moveBackward();
+}
+
+void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageObject * stage)
+{
+	int numOfPlayer = 2;
+	int idx = 0;
+
+	for (auto& iter : playerVector)
+	{
+		if (getout_checker)
+		{
+			getout_checker = false;
+		}
+
+		if ((idx + 1) < numOfPlayer)
+			if (stage->isGetOutStage(iter->getCurrentPosition()))
+			{
+				doGetOut(iter);
+				getout_checker = true;
+			}
+			else
+				break;
+
+		idx++;
+	}
+}
+void CGameManager::doGetOut(CPlayerObject* player)
+{
+	player->setTranslate(1, 1, 1 );
 }

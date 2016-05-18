@@ -47,7 +47,7 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 	player2->moveBackward();
 }
 
-void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageObject * stage)
+void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageObject* stage)
 {
 	int numOfPlayer = 2;
 	int idx = 0;
@@ -73,5 +73,5 @@ void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageO
 }
 void CGameManager::doGetOut(CPlayerObject* player)
 {
-	player->setTranslate(1, 1, 1 );
+	while (1);
 }

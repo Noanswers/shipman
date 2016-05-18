@@ -154,6 +154,11 @@ void CSystemClass::gameSceneInit()
 	SceneManager->pushBack(gameScene);
 	
 	CMyScene* scene = SceneManager->getCurrentScene();
+	
+	//¼öÁ¤
+	CStageObject* stageobject = new CStageObject();
+	gameScene->pushBack(stageobject, 10);
+	stage = stageobject;
 
 	initPlayerData(scene, 2);
 
@@ -161,6 +166,7 @@ void CSystemClass::gameSceneInit()
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyDown(VK_S);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyLeft(VK_A);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyRight(VK_D);
+	
 	scene->initialize();
 }
 
@@ -190,8 +196,7 @@ bool CSystemClass::frame()
 	{
 		playerVector.push_back(std::get<CPlayerObject*>(iter));
 	}
-	GameManager->collisionCheck(playerVector);
-	
+
 	bool result = GameManager->frame();
 	if (!result)
 	{
@@ -204,7 +209,10 @@ bool CSystemClass::frame()
 	{
 		return false;
 	}
-
+	
+	GameManager->collisionCheck(playerVector);
+	GameManager->getOutCheck(playerVector, stage);
+	
 	return true;
 }
 

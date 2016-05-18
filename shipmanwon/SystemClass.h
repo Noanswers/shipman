@@ -19,6 +19,7 @@
 #include "MyTime.h"
 #include "PlayerData.h"
 #include "StartObject.h"
+#include "StageObject.h"
 
 class CSystemClass
 {
@@ -44,6 +45,9 @@ private:
 
 //	variables
 	std::vector<std::tuple<CPlayerData*, CPlayerObject*>> PlayerDataVector;
+
+	//¼öÁ¤
+	CStageObject* stage;
 
 	CGraphicsClass* Graphics;
 	CInputClass*	Input;

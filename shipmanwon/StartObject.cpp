@@ -74,7 +74,3 @@ void CStartObject::createObject()
 	Indices.insert(Indices.end(), a, a + 36);
 }
 
-bool CStartObject::isGetOutStage(DirectX::XMFLOAT3 position)
-{
-
-}

@@ -68,7 +68,7 @@ bool CStageObject::isGetOutStage(DirectX::XMFLOAT3 position)
 		temp1 = temp2;
 	}
 
-	if (count % 2 == 0)return false;
+	if (count % 2 == 0)return true;
 
-	return true;
+	return false;
 }

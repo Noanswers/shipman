@@ -99,6 +99,12 @@
     <ClInclude Include="PlayerData.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StartObject.h">
+      <Filter>소스 파일\object\subClass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -157,6 +163,12 @@
     </ClCompile>
     <ClCompile Include="PlayerData.cpp">
       <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StartObject.cpp">
+      <Filter>소스 파일\object\subClass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

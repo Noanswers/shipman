@@ -23,6 +23,7 @@ public:
 	void	moveToward(float x, float y, float z);
 	void	moveForward();
 	void	moveBackward();
+	void	boost();
 
 	void	setRotate(float x, float y, float z);
 	void	setScale(float x, float y, float z);

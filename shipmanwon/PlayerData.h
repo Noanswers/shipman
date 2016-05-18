@@ -9,6 +9,7 @@ struct KeySetting
 	unsigned int down;
 	unsigned int start;
 	unsigned int cancel;
+	unsigned int boost;
 };
 
 class CPlayerData

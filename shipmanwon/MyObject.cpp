@@ -86,6 +86,16 @@ void CMyObject::moveBackward()
 	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
 }	
 
+
+void CMyObject::boost()
+{
+	speed = 1.0f;
+
+	moveForward();
+
+	speed = 0.05f;
+}
+
 DirectX::XMMATRIX CMyObject::getWorldMatrix()
 {
 	return ObjectWorld;

@@ -25,6 +25,8 @@ public:
 	void	moveForward();
 	void	moveBackward();
 	void	boost();
+	void	setboostSpeed();
+	void	resetSpeed();
 
 	void	setRotate(float x, float y, float z);
 	void	setScale(float x, float y, float z);
@@ -47,6 +49,7 @@ protected:
 	DirectX::XMFLOAT3 ForwardVector = { 1.0f, 0.0f, 0.0f };
 
 	float speed = 0.05f;
+
 	std::wstring textureFilename = std::wstring();
 	ID3D11Resource* Resource;
 

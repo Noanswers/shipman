@@ -51,7 +51,7 @@ public:
 
 	void downkeyUnset(unsigned int unset);
 
-
+	
 private:
 	bool Keys[256];
 	std::vector<unsigned int> downkey;

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "InputClass.h"
+#include "PlayerData.h"
 
 void CInputClass::initialize()
 {
@@ -10,8 +11,6 @@ void CInputClass::initialize()
 	}
 
 	return;
-
-
 }
 
 void CInputClass::keyDown(unsigned int input)

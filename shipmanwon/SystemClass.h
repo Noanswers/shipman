@@ -38,6 +38,10 @@ private:
 	void initializeWindows(int& screenWidth, int& screenHeight);
 	void shutdownWindows();
 
+	void initPlayerData(CMyScene * scene, int playerNum);
+
+	void getPlayerInput();
+
 //	variables
 	std::vector<std::tuple<CPlayerData*, CPlayerObject*>> PlayerDataVector;
 

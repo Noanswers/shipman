@@ -37,7 +37,6 @@ public:
 	void setPlayerKeyCancel(unsigned int key);
 	
 private:
-	//CPlayerObject* MyPawn = nullptr;
 	KeySetting PlayerKey;	
 };
 

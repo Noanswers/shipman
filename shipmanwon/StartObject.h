@@ -38,7 +38,7 @@ private:
 
 	
 	int m_vertexCount = 8;
-	int m_indexCount = 8;
+	int m_indexCount = 36;
 
 	VertexType vertices[8] =
 	{
@@ -52,11 +52,31 @@ private:
 		{ DirectX::XMFLOAT3(-3.0f, 3.0f, 3.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 1.0f) }
 	};
 
-	unsigned long indices[8] =
-	{
-		0, 1, 2, 2, 1, 3, 2, 1
-	};
+	unsigned long indices[36] = {
+		// front face
+		0, 1, 2,
+		0, 2, 3,
 
+		// back face
+		4, 6, 5,
+		4, 7, 6,
+
+		// left face
+		4, 5, 1,
+		4, 1, 0,
+
+		// right face
+		3, 2, 6,
+		3, 6, 7,
+
+		// top face
+		1, 5, 6,
+		1, 6, 2,
+
+		// bottom face
+		4, 0, 3,
+		4, 3, 7
+	};
 
 
 

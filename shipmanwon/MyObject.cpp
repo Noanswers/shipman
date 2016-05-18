@@ -68,12 +68,29 @@ void CMyObject::moveToward(float x, float y, float z)
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
+void CMyObject::moveToward(float x, float y, float z, float now_speed)
+{
+	float sum = abs(x) + abs(y) + abs(z);
+
+	DirectX::XMMATRIX temp = {
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		x / sum, y / sum, z / sum, 0.0f
+	};
+	ObjectTranslate += temp * now_speed;
+
+	setCurrentPosition(x / sum*now_speed, y / sum*now_speed, z / sum*now_speed);
+
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+}
+
 void CMyObject::moveForward()
 {
 	moveToward(ForwardVector.x, ForwardVector.y, ForwardVector.z);
 }
 
-void CMyObject::moveBackward()
+void CMyObject::moveBackward() //test function. made by scintil
 {
 	//moveToward(-ForwardVector.x, ForwardVector.y, -ForwardVector.z);
 	//moveToward(-ForwardVector.x, ForwardVector.y, -ForwardVector.z);
@@ -126,6 +143,16 @@ void CMyObject::setMaximumSpeed(float speed)
 void CMyObject::resetSpeed()
 {
 	MaximumSpeed = 0.1f;
+}
+
+float CMyObject::getNowSpeed()
+{
+	return CurrentSpeed;
+}
+
+DirectX::XMFLOAT3 CMyObject::getForwardVector()
+{
+	return ForwardVector;
 }
 
 DirectX::XMMATRIX CMyObject::getWorldMatrix()
@@ -205,6 +232,10 @@ void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
 	initializeBuffers(temp_device);
 }
 
+void CMyObject::setForwardVector(float x, float y, float z)
+{
+	ForwardVector = { x, y, z };
+}
 
 /*
 	=== [ private ] ===========================================================================
@@ -399,7 +430,9 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 
 float CMyObject::CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b)
 {
-	return sqrt(pow((a.x - b.x), 2) + pow((a.y- b.y), 2) + pow((a.z - b.z), 2));
+	//scintil
+	//계산의 정확도를 위해서 pow나 ^2를 쓰지 않고 2번 곱함
+	return sqrt((a.x - b.x)*(a.x - b.x) + ((a.y - b.y)*(a.y - b.y)) + ((a.z - b.z)*(a.z - b.z)));
 }
 
 void CMyObject::setTexture(std::wstring texName)

@@ -22,6 +22,7 @@ public:
 	int		getIndexCount();
 
 	void	moveToward(float x, float y, float z);
+	void	moveToward(float x, float y, float z, float now_speed);
 	void	moveForward();
 	void	moveBackward();
 
@@ -31,11 +32,14 @@ public:
 	void	setMaximumSpeed(float speed);
 	//void	setboostSpeed();
 	void	resetSpeed();
+	float	getNowSpeed();
+	DirectX::XMFLOAT3	getForwardVector();
 
 	void	setRotate(float x, float y, float z);
 	void	setScale(float x, float y, float z);
 	void	setTranslate(float x, float y, float z);
 	void	setColorRGBA(float red, float green, float blue, float alpha);
+	void	setForwardVector(float x, float y, float z);
 
 	DirectX::XMMATRIX getWorldMatrix();
 

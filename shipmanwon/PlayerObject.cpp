@@ -208,6 +208,16 @@ bool CPlayerObject::initializeBuffers(ID3D11Device* device, VertexType* vertices
 	return true;
 }
 
+bool CPlayerObject::isCollisionPlayer(CPlayerObject* enemy)
+{
+	DirectX::XMFLOAT3 en_curPos = enemy->currentPosition;
+
+	if ( CalcDistanceTwoPoint(en_curPos, currentPosition) <= (bottomRadius + enemy->getRadious()) )
+		return true;
+
+	return false;
+}
+
 void CPlayerObject::createCylinder()
 {
 	cyVerticies.clear();
@@ -355,9 +365,4 @@ void CPlayerObject::createBottomCap()
 		cyIndices.push_back(baseIndex + i);
 		cyIndices.push_back(baseIndex + i + 1);
 	}
-}
-
-void CPlayerObject::update()
-{
-
 }

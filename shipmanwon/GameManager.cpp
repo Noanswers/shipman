@@ -13,8 +13,35 @@ bool CGameManager::frame()
 	return true;
 }
 
-void CGameManager::update()
+void CGameManager::collisionCheck(std::vector<CPlayerObject*> playerVector)
 {
-	CMyScene* currentScene = CSceneManager::GetInstance()->getCurrentScene();
-	currentScene->update();
+	int numOfPlayer = 2;
+	int idx = 0;
+
+	for (auto& iter : playerVector)
+	{
+		if (test_checker)
+		{
+			test_checker = false;
+		}
+
+		if ((idx + 1) < numOfPlayer)
+			if (iter->isCollisionPlayer(playerVector[idx + 1]))
+			{
+				doCollision(playerVector[idx], playerVector[idx+1]);
+				test_checker = true;
+			}
+
+		else
+			break;
+
+		idx++;
+	}
+
+}
+
+void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
+{
+	player1->moveBackward();
+	player2->moveBackward();
 }

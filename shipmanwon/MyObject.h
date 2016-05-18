@@ -1,4 +1,5 @@
 #pragma once
+
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
@@ -16,12 +17,12 @@ public:
 	virtual bool	initialize(ID3D11Device* device, HWND hWnd);
 	virtual void	shutdown();
 	virtual bool	renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc);
-	virtual void	update();
 
 	int		getIndexCount();
 
 	void	moveToward(float x, float y, float z);
 	void	moveForward();
+	void	moveBackward();
 
 	void	setRotate(float x, float y, float z);
 	void	setScale(float x, float y, float z);
@@ -30,10 +31,18 @@ public:
 
 	DirectX::XMMATRIX getWorldMatrix();
 
+	DirectX::XMFLOAT3 getCurrentPosition ()
+	{return currentPosition;}
+
+	void	setCurrentPosition(float x, float y, float z);
+
+	float CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b);
+
 protected:
+
+	DirectX::XMFLOAT3 currentPosition = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 ForwardTheta = { 0.0f, 0.0f, 0.0f };
-	DirectX::XMVECTOR frontVector = { 1.0f, 0.0f, 0.0f };
-	//DirectX::XMFLOAT3 ForwardVector = { 1.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 ForwardVector = { 1.0f, 0.0f, 0.0f };
 
 	float speed = 0.05f;
 	std::wstring textureFilename = std::wstring();

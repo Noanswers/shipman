@@ -18,17 +18,6 @@ bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, std::function<boo
 	}
 }
 
-
-void CMyScene::update()
-{
-	for (auto& iter : LayerList)
-	{
-		CMyLayer* layer = std::get<CMyLayer*>(iter);
-		layer->update();
-
-	}
-}
-
 void CMyScene::getSceneColor(float colorSet[4]) const
 {
 	for (int i = 0; i < 4; ++i)

@@ -39,14 +39,3 @@ int CMyLayer::getObjectsSize()
 {
 	return ObjectVector.size();
 }
-
-void CMyLayer::update()
-{
-	if (ObjectVector.size() < 1)
-		return;
-
-	for (auto& iter : ObjectVector)
-	{
-		iter->update();
-	}
-}

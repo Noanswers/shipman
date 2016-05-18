@@ -24,8 +24,6 @@ public:
 	void getSceneColor(float colorSet[4]) const;
 	void setSceneColor(const float red, const float green, const float blue, const float alpha);
 	
-	void update();
-
 private:
 	std::list<std::tuple<int, CMyLayer*>> LayerList;
 	bool checkLayerExist(int layerNum);

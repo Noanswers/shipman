@@ -202,24 +202,25 @@ bool CSystemClass::frame()
 
 		//여기서 플레이어마다 지정된 키가 눌렸을 때 특정 동작을 할당
 		if (Input->isKeyDown(key.up))
-			std::get<CPlayerObject*>(iter)->moveToward(-1.0f, 0.0f, 0.0f);
-			//std::get<CPlayerObject*>(iter)->moveForward();
+		{
+			std::get<CPlayerObject*>(iter)->moveForward();
+		}
 
 		if (Input->isKeyDown(key.right))
 		{
 			std::get<CPlayerObject*>(iter)->setRotate(0.0f, 0.7f, 0.0f);
-			//Input->keyUp(key.right);
 		}
 
 		if (Input->isKeyDown(key.left))
 		{
 			std::get<CPlayerObject*>(iter)->setRotate(0.0f, -0.7f, 0.0f);
-			//Input->keyUp(key.left);
 		}
 
+		if (Input->isKeyDown(key.))
+		{	
+			std::get<CPlayerObject*>(iter)->boost();
+		}
 
-		//if (std::get<CPlayerObject*>(iter)->isCollisionPlayer(std::get<CPlayerObject*>(iter)))
-			//while (1);
 	}
 
 	GameManager->collisionCheck(playerVector);

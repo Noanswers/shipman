@@ -21,6 +21,8 @@ public:
 	int getStackSize();
 	void update();
 
+	
+
 private:
 	std::vector<CMyScene*> SceneStack;
 };

@@ -1,6 +1,4 @@
 #include "stdafx.h"
-//#define _XM_NO_INTRINSICS_ 
-
 #include "MyObject.h"
 #include "config.h"
 
@@ -69,6 +67,25 @@ void CMyObject::moveForward()
 	moveToward(ForwardVector.x, ForwardVector.y, ForwardVector.z);
 }
 
+void CMyObject::moveBackward()
+{
+	//moveToward(-ForwardVector.x, ForwardVector.y, -ForwardVector.z);
+	//moveToward(-ForwardVector.x, ForwardVector.y, -ForwardVector.z);
+	moveToward(-30000*ForwardVector.x, ForwardVector.y, -30000*ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+}	
+
 DirectX::XMMATRIX CMyObject::getWorldMatrix()
 {
 	return ObjectWorld;
@@ -79,7 +96,6 @@ void CMyObject::setCurrentPosition(float x, float y, float z)
 	currentPosition.x += x;
 	currentPosition.y += y;
 	currentPosition.z += z;
-
 }
 
 void CMyObject::setTranslate(float x, float y, float z)
@@ -93,48 +109,16 @@ void CMyObject::setTranslate(float x, float y, float z)
 
 void CMyObject::setRotate(float x, float y, float z)
 {
-
-// 	x /= DirectX::XM_2PI;
-// 	y /= DirectX::XM_2PI;
-// 	z /= DirectX::XM_2PI;
-
-	//ForwardVector.x = (ForwardVector.x == 0 ? cosf(y) : ForwardVector.x*cosf(y));
-	//ForwardVector.y = (cosf(x) * cosf(z));
-	//ForwardVector.z = (ForwardVector.z == 0 ? sinf(y) : ForwardVector.z*sinf(y));
-
-// 	float tempX = ForwardVector.x;
-// 	float tempZ = ForwardVector.z;
-
-	
-
-	//float curCos = cosf(ForwardTheta.y);
-	//float curSin = sinf(ForwardTheta.y);
-
-	DirectX::XMMATRIX mat = {
-		ForwardVector.x, 0.0f, 0.0f, 0.0f,
-		0.0f, ForwardVector.y, 0.0f, 0.0f,
-		0.0f, 0.0f, ForwardVector.z, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
-
-	mat *= DirectX::XMMatrixRotationX(x);
-	mat *= DirectX::XMMatrixRotationY(y);
-	mat *= DirectX::XMMatrixRotationZ(z);
-	//mat.r[1];
-
-	
-	//ForwardVector.x = mat.m[0][0];
-	//ForwardVector.y = mat.m[1][1];
-	//ForwardVector.z = mat.m[2][2];
-
-	/*ForwardVector.x = curCos*cosf(y) - curSin*sinf(y);
-	ForwardVector.z = curSin*cosf(y) + curCos*sinf(y);*/
-
-	//ForwardTheta.y += y;
-
 	x /= DirectX::XM_2PI;
 	y /= DirectX::XM_2PI;
 	z /= DirectX::XM_2PI;
+
+	ForwardTheta.y += y;
+	ForwardTheta.y = fmod(ForwardTheta.y, DirectX::XM_2PI);
+
+	ForwardVector.x = 1.0f * cosf(-ForwardTheta.y);
+	ForwardVector.z = 1.0f * sinf(-ForwardTheta.y);
+
 	DirectX::XMMATRIX temp = DirectX::XMMatrixIdentity();
 	temp = DirectX::XMMatrixRotationX(x);
 	temp *= DirectX::XMMatrixRotationY(y);
@@ -356,12 +340,7 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 	return;
 }
 
-void CMyObject::update()
-{
-
-}
-
 float CMyObject::CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b)
 {
-	return sqrt(pow((a.x - b.x), 2) + pow((a.z - b.z), 2));
+	return sqrt(pow((a.x - b.x), 2) + pow((a.y- b.y), 2) + pow((a.z - b.z), 2));
 }

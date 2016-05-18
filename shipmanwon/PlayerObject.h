@@ -20,12 +20,17 @@ public:
 	void	createCylinder(void);
 	void	createTopCap(void);
 	void	createBottomCap(void);
-	void	update() override;
 
+	float	getRadious() 
+	{
+		return bottomRadius;
+	}
+	bool	isCollisionPlayer(CPlayerObject * enemy);
+	
 private:
 	std::wstring textureFilename = std::wstring();
 	ID3D11Resource* Resource;
-
+	
 	ID3D11Device*				temp_device = nullptr;
 	ID3D11ShaderResourceView*	m_pTextureRV = nullptr;
 	ID3D11SamplerState*			m_pSamplerLinear = nullptr;
@@ -35,13 +40,13 @@ private:
 
 	void	renderBuffers(ID3D11DeviceContext* deviceContext) override;
 	bool	initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount);
-
+	
 
 	//////////////////////////////////////////////////////////////////////////
 	//원기둥 그리는 변수들
 	float bottomRadius = 0.8f;
 	float topRadius = 0.8f;
-	float height = 0.8f;
+	float height = 0.2f;
 	UINT sliceCount = 100;
 	UINT stackCount = 5;
 	

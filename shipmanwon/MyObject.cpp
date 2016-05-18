@@ -62,12 +62,29 @@ void CMyObject::moveToward(float x, float y, float z)
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
+void CMyObject::moveToward(float x, float y, float z, float now_speed)
+{
+	float sum = abs(x) + abs(y) + abs(z);
+
+	DirectX::XMMATRIX temp = {
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		x / sum, y / sum, z / sum, 0.0f
+	};
+	ObjectTranslate += temp * now_speed;
+
+	setCurrentPosition(x / sum*now_speed, y / sum*now_speed, z / sum*now_speed);
+
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+}
+
 void CMyObject::moveForward()
 {
 	moveToward(ForwardVector.x, ForwardVector.y, ForwardVector.z);
 }
 
-void CMyObject::moveBackward()
+void CMyObject::moveBackward() //test function. made by scintil
 {
 	//moveToward(-ForwardVector.x, ForwardVector.y, -ForwardVector.z);
 	//moveToward(-ForwardVector.x, ForwardVector.y, -ForwardVector.z);
@@ -97,12 +114,22 @@ void CMyObject::boost()
 
 void CMyObject::setboostSpeed()
 {
-	speed = 1.0f;
+	speed = 0.5f;
 }
 
 void CMyObject::resetSpeed()
 {
 	speed = 0.05f;
+}
+
+float CMyObject::getNowSpeed()
+{
+	return speed;
+}
+
+DirectX::XMFLOAT3 CMyObject::getForwardVector()
+{
+	return ForwardVector;
 }
 
 DirectX::XMMATRIX CMyObject::getWorldMatrix()

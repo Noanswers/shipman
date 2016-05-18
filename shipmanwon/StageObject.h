@@ -1,6 +1,7 @@
 #pragma once
 #include "MyObject.h"
 
+
 class CStageObject : public CMyObject
 {
 public:

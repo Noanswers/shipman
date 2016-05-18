@@ -71,7 +71,7 @@ void CMyObject::moveBackward()
 {
 	//moveToward(-ForwardVector.x, ForwardVector.y, -ForwardVector.z);
 	//moveToward(-ForwardVector.x, ForwardVector.y, -ForwardVector.z);
-	moveToward(-30000*ForwardVector.x, ForwardVector.y, -30000*ForwardVector.z);
+	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
 	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
 	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
 	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
@@ -86,13 +86,22 @@ void CMyObject::moveBackward()
 	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
 }	
 
-
 void CMyObject::boost()
 {
-	speed = 1.0f;
+	setboostSpeed();
 
 	moveForward();
 
+	resetSpeed();
+}
+
+void CMyObject::setboostSpeed()
+{
+	speed = 1.0f;
+}
+
+void CMyObject::resetSpeed()
+{
 	speed = 0.05f;
 }
 

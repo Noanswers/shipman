@@ -48,14 +48,26 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 	auto point2 = player2->getCurrentPosition(); //player2 current position
 
 	//collision point x
-	auto cPointX = (pow(point1.x, 2) - pow(point2.x, 2) + pow(point1.y, 2) - pow(point2.y, 2)) / ( 2/(point1.x - point2.x) - 2*(point2.x - point1.x) ); 
+	//auto cPointX = (pow(point1.x, 2) - pow(point2.x, 2) + pow(point1.y, 2) - pow(point2.y, 2)) / ( 2/(point1.x - point2.x) - 2*(point2.x - point1.x) ); 
+	auto cPointX = (point1.x + point2.x) / 2;
 
 	//collision point y
-	auto cpointY = (point2.y - point1.y) / (point2.x - point1.x)*cPointX + point1.y + point2.y - (point2.y - point1.y)*(point1.x + point2.x) / (point2.x - point1.x);
+	//auto cpointY = (point2.y - point1.y) / (point2.x - point1.x)*cPointX + point1.y + point2.y - (point2.y - point1.y)*(point1.x + point2.x) / (point2.x - point1.x);
+	auto cPointZ = (point1.z + point2.z) / 2;
+
+	if (-0.01 < cPointX < 0.01)
+	{
+		cPointX = 0;
+	}
+
+	if (-1.0f < cPointZ || cPointZ < 1.0f)
+	{
+		cPointZ = 0;
+	}
 
 	//Collision Vector
-	DirectX::XMFLOAT3 cv1 = { cPointX - point1.x, point1.y, cpointY - point1.y };
-	DirectX::XMFLOAT3 cv2 = { cPointX - point2.x, point2.y, cpointY - point2.y };
+	DirectX::XMFLOAT3 cv1 = { cPointX - point1.x, point1.y, cPointZ - point1.z };
+	DirectX::XMFLOAT3 cv2 = { cPointX - point2.x, point2.y, cPointZ - point2.z };
 
 	//Forward Vector
 	auto fv1 = player1->getForwardVector();
@@ -68,54 +80,19 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 	if (dot1 > dot2)
 	{
 		OutputDebugStringW(L"dot1 > dot2\n");
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		//player1->moveToward(-cv2.x, cv2.y, -cv2.z);
+		player1->moveBackward();
 	}
 
 	else if (dot1 == dot2)
 	{
 		OutputDebugStringW(L"dot1 == dot2\n");
-		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
+// 		player2->moveToward(-cv1.x, cv1.y, -cv1.z);
+// 		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
 	}
 
 	else if (dot1 < dot2)
 	{
 		OutputDebugStringW(L"dot1 < dot2\n");
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-		player1->moveToward(-cv2.x, cv2.y, -cv2.z);
-		//player2->moveToward(-cv1.x, cv1.y, -cv1.z);
-		
+		player2->moveBackward();
 	}
 }

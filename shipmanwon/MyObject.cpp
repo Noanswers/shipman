@@ -199,6 +199,10 @@ void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
 	initializeBuffers(temp_device);
 }
 
+void CMyObject::setForwardVector(float x, float y, float z)
+{
+	ForwardVector = { x, y, z };
+}
 
 /*
 	=== [ private ] ===========================================================================
@@ -396,5 +400,7 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 
 float CMyObject::CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b)
 {
-	return sqrt(pow((a.x - b.x), 2) + pow((a.y- b.y), 2) + pow((a.z - b.z), 2));
+	//scintil
+	//계산의 정확도를 위해서 pow나 ^2를 쓰지 않고 2번 곱함
+	return sqrt( (a.x - b.x)*(a.x - b.x) + ((a.y- b.y)*(a.y - b.y)) + ((a.z - b.z)*(a.z - b.z)) );
 }

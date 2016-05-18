@@ -35,6 +35,7 @@ public:
 	void	setScale(float x, float y, float z);
 	void	setTranslate(float x, float y, float z);
 	void	setColorRGBA(float red, float green, float blue, float alpha);
+	void	setForwardVector(float x, float y, float z);
 
 	DirectX::XMMATRIX getWorldMatrix();
 

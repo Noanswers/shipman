@@ -347,6 +347,12 @@ void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 	{
 		CPlayerObject* pObj1 = new CPlayerObject();
 		scene->pushBack(pObj1, 10);
+
+		if (i == 0)
+		{
+			pObj1->setForwardVector(-1.0f, 0.0f, 0.0f);
+		}
+		
 		PlayerDataVector.push_back(std::make_tuple(new CPlayerData(), pObj1));
 	}
 	

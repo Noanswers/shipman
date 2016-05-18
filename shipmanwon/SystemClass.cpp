@@ -155,26 +155,10 @@ void CSystemClass::gameSceneInit()
 	
 	CMyScene* scene = SceneManager->getCurrentScene();
 
-
-	CPlayerObject* pObj1 = new CPlayerObject();
-	CPlayerObject* pObj2 = new CPlayerObject();
-	scene->pushBack(pObj1, 10);
-	scene->pushBack(pObj2, 10);
-	
-	PlayerDataVector.push_back(std::make_tuple(new CPlayerData(), pObj1));
-	PlayerDataVector.push_back(std::make_tuple(new CPlayerData(), pObj2));
-
-	int i = 1;
-	for (auto& iter : PlayerDataVector)
-	{
-		std::get<CPlayerData*>(iter)->initialize();
-		//std::get<CPlayerObject*>(iter)->setScale(0.5f, 0.2f, 0.5f);
-		std::get<CPlayerObject*>(iter)->setTranslate(3.0f*i, 0.0f, 0.0f);
-		i = -i;
-	}
-
+	initPlayerData(scene, 2);
 
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyUp(VK_W);
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyDown(VK_S);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyLeft(VK_A);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyRight(VK_D);
 	scene->initialize();
@@ -190,39 +174,22 @@ bool CSystemClass::frame()
 	}
 
 	//space button을 입력시 SCene이 넘어감
+	CMyScene* temp = SceneManager->getCurrentScene();
 	
+	//Space 입력시 Scene변경 (임시)
+	if ((uiCheck) && (Input->isKeyDown(VK_SPACE)))
+	{
+		gameSceneInit();
+		uiCheck = false;
+	}
+
+	getPlayerInput();
 
 	std::vector<CPlayerObject*> playerVector;
 	for (auto& iter : PlayerDataVector)
 	{
-		CPlayerData* player = std::get<CPlayerData*>(iter);
-		KeySetting key = player->getPlayerKeySetting();
-
 		playerVector.push_back(std::get<CPlayerObject*>(iter));
-
-		//여기서 플레이어마다 지정된 키가 눌렸을 때 특정 동작을 할당
-		if (Input->isKeyDown(key.up))
-		{
-			std::get<CPlayerObject*>(iter)->moveForward();
-		}
-
-		if (Input->isKeyDown(key.right))
-		{
-			std::get<CPlayerObject*>(iter)->setRotate(0.0f, 0.7f, 0.0f);
-		}
-
-		if (Input->isKeyDown(key.left))
-		{
-			std::get<CPlayerObject*>(iter)->setRotate(0.0f, -0.7f, 0.0f);
-		}
-
-		if (Input->isKeyDown(key.))
-		{	
-			std::get<CPlayerObject*>(iter)->boost();
-		}
-
 	}
-
 	GameManager->collisionCheck(playerVector);
 	
 	bool result = GameManager->frame();
@@ -237,20 +204,6 @@ bool CSystemClass::frame()
 	{
 		return false;
 	}
-
-	//const type_info a = typeid(SceneManager->getCurrentScene());
-
-	CMyScene* temp = SceneManager->getCurrentScene();
-	//Space 입력시 Scene변경 (임시)
-	if ((uiCheck)
-		&&
-		(Input->isKeyDown(VK_SPACE)))
-	{
-		gameSceneInit();
-		uiCheck = false;
-	}
-		
-
 
 	return true;
 }
@@ -386,4 +339,47 @@ void CSystemClass::shutdownWindows()
 	ApplicationHandle = NULL;
 
 	return;
+}
+
+void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
+{
+	for (int i = 0; i < playerNum; ++i)
+	{
+		CPlayerObject* pObj1 = new CPlayerObject();
+		scene->pushBack(pObj1, 10);
+		PlayerDataVector.push_back(std::make_tuple(new CPlayerData(), pObj1));
+	}
+	
+	int i = 0;
+	for (auto& iter : PlayerDataVector)
+	{
+		std::get<CPlayerData*>(iter)->initialize();
+		std::get<CPlayerObject*>(iter)->setTranslate(
+			3.0f*cosf(DirectX::XM_2PI*i / playerNum),
+			0.0f,
+			3.0f*sinf(DirectX::XM_2PI*i / playerNum)
+		);
+		++i;
+	}
+}
+
+void CSystemClass::getPlayerInput()
+{
+	for (auto& iter : PlayerDataVector)
+	{
+		CPlayerData* player = std::get<CPlayerData*>(iter);
+		KeySetting key = player->getPlayerKeySetting();
+
+		if (Input->isKeyDown(key.up))
+			std::get<CPlayerObject*>(iter)->moveForward();
+
+		if (Input->isKeyDown(key.right))
+			std::get<CPlayerObject*>(iter)->setRotate(0.0f, 0.7f, 0.0f);
+
+		if (Input->isKeyDown(key.left))
+			std::get<CPlayerObject*>(iter)->setRotate(0.0f, -0.7f, 0.0f);
+
+		if (Input->isKeyDown(key.down))
+			std::get<CPlayerObject*>(iter)->boost();
+	}
 }

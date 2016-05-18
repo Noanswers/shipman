@@ -38,6 +38,8 @@ private:
 	bool frame();
 	void initializeWindows(int& screenWidth, int& screenHeight);
 	void shutdownWindows();
+	void initPlayerData(CMyScene * scene, int playerNum);
+	void getPlayerInput();
 	void gameSceneInit();
 
 //	variables

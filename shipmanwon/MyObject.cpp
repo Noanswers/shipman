@@ -11,7 +11,7 @@ bool CMyObject::initialize(ID3D11Device* device, HWND hWnd)
 		return true;
 
 	//bool result = initializeBuffers(device);
-	bool result = initializeBuffers(device, vertices, indices, m_vertexCount, m_indexCount);
+	bool result = initializeBuffers(device);
 	if (result == true)
 		IsInit = true;
 
@@ -42,7 +42,7 @@ bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, std::function<b
 
 int CMyObject::getIndexCount()
 {
-	return m_indexCount;
+	return Indices.size();
 }
 
 void CMyObject::moveToward(float x, float y, float z)
@@ -148,16 +148,19 @@ void CMyObject::setScale(float x, float y, float z)
 
 void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
 {
-	for (int i = 0; i < m_vertexCount; ++i)
+	if (Verticies.size() < 1)
+		return;
+
+	for (int i = 0; i < Verticies.size(); ++i)
 	{
-		vertices[i].color = DirectX::XMFLOAT4(red, green, blue, alpha);
+		Verticies[i].color = DirectX::XMFLOAT4(red, green, blue, alpha);
 	}
 	
 	// 임시 코드
 	if (temp_device == nullptr)
 		return;
 
-	initializeBuffers(temp_device, vertices, indices, m_vertexCount, m_indexCount);
+	initializeBuffers(temp_device);
 }
 
 
@@ -167,7 +170,7 @@ void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
 
 HRESULT CMyObject::loadTexture()
 {
-	HRESULT hr = DirectX::CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &m_pTextureRV, NULL);
+	HRESULT hr = DirectX::CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &TextureRV, NULL);
 
 	/*HRESULT hr = D3DX11CreateShaderResourceViewFromFile(
 		temp_device, L"Texture/images.jpg", NULL, NULL, &g_pTextureRV, NULL);*/
@@ -187,7 +190,7 @@ HRESULT CMyObject::loadTexture()
 	sampDesc.MinLOD = 0;
 	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	hr = temp_device->CreateSamplerState(&sampDesc, &m_pSamplerLinear);	// SamplerState 생성
+	hr = temp_device->CreateSamplerState(&sampDesc, &SamplerLinear);	// SamplerState 생성
 	if (FAILED(hr))
 		return hr;
 
@@ -248,10 +251,15 @@ void CMyObject::createShader()
 	pPSBlob->Release();
 }
 
-//bool CMyObject::initializeBuffers(ID3D11Device* device)
-bool CMyObject::initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount)
+bool CMyObject::initializeBuffers(ID3D11Device* device)
 {
 	temp_device = device;
+
+	if (Verticies.size() < 1)
+		return true;
+
+	VertexType* vertices = &Verticies[0];
+	unsigned long* indices = &Indices[0];
 
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	D3D11_BUFFER_DESC indexBufferDesc;
@@ -261,7 +269,7 @@ bool CMyObject::initializeBuffers(ID3D11Device* device, VertexType* vertices, un
 
 	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
+	vertexBufferDesc.ByteWidth = sizeof(VertexType) * Verticies.size();
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
@@ -281,7 +289,7 @@ bool CMyObject::initializeBuffers(ID3D11Device* device, VertexType* vertices, un
 	
 	// Set up the description of the static index buffer.
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_indexCount;
+	indexBufferDesc.ByteWidth = sizeof(unsigned long) * Indices.size();
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
@@ -335,8 +343,8 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 	deviceContext->VSSetShader(m_pVertexShader, NULL, 0);
 	deviceContext->PSSetShader(m_pPixelShader, NULL, 0);
 	//텍스쳐!
-	deviceContext->PSSetShaderResources(0, 1, &m_pTextureRV);
-	deviceContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+	deviceContext->PSSetShaderResources(0, 1, &TextureRV);
+	deviceContext->PSSetSamplers(0, 1, &SamplerLinear);
 
 	// 생성된 버퍼의 정점들을 실제로 파이프라인으로 공급하려면 버퍼를 장치의 한 입력 슬롯에 묶어야 함
 	// 1번째 인자 : 
@@ -345,7 +353,7 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 
-	deviceContext->DrawIndexed(m_indexCount, 0, 0);
+	deviceContext->DrawIndexed(Indices.size(), 0, 0);
 
 	return;
 }

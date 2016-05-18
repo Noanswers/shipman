@@ -2,6 +2,7 @@
 
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#include <vector>
 #include <DirectXMath.h>
 #include <WICTextureLoader.h>
 #include <string>
@@ -59,21 +60,25 @@ protected:
 	};
 
 	ID3D11Device*				temp_device = nullptr;
-	ID3D11ShaderResourceView*	m_pTextureRV = nullptr;
-	ID3D11SamplerState*			m_pSamplerLinear = nullptr;
+	ID3D11ShaderResourceView*	TextureRV = nullptr;
+	ID3D11SamplerState*			SamplerLinear = nullptr;
 
-	virtual HRESULT loadTexture();
-	virtual void createShader();
+	HRESULT loadTexture();
+	void createShader();
 
-	virtual void renderBuffers(ID3D11DeviceContext*);
-	virtual bool initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount);
+	void renderBuffers(ID3D11DeviceContext*);
+//	virtual bool initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount);
+	virtual bool initializeBuffers(ID3D11Device* device);
 
 	virtual void shutdownBuffers();
 
-	int m_vertexCount;
+	/*int m_vertexCount;
 	int m_indexCount;
+*/
+	std::vector<VertexType> Verticies;
+	std::vector<unsigned long> Indices;
 
-	VertexType vertices[4] = 
+	/*VertexType vertices[4] = 
 	{
 		{ DirectX::XMFLOAT3(-6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 0.0f) },
 		{ DirectX::XMFLOAT3(0.0f, 4.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 1.0f) },
@@ -84,7 +89,7 @@ protected:
 	unsigned long indices[6] =
 	{
 		0, 1, 2, 2, 1, 3
-	};
+	};*/
 
 	ID3D11Buffer* m_vertexBuffer = nullptr;
 	ID3D11Buffer* m_indexBuffer = nullptr;

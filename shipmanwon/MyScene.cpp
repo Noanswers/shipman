@@ -6,24 +6,16 @@ void CMyScene::initialize()
 
 }
 
-void CMyScene::update()
+bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc)
 {
 	for (auto& iter : LayerList)
 	{
 		CMyLayer* layer = std::get<CMyLayer*>(iter);
-		layer->update();
+		bool result = layer->renderLayer(deviceContext, setShaderfunc);
+	
+		if (!result)
+			return result;
 	}
-}
-
-bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
-{
-	bool result = false;
-	for (auto& iter : LayerList)
-	{
-		CMyLayer* layer = std::get<CMyLayer*>(iter);
-		result = layer->renderLayer(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
-	}
-	return result;
 }
 
 void CMyScene::getSceneColor(float colorSet[4]) const

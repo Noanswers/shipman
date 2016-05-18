@@ -6,9 +6,7 @@ class CGameScene : public CMyScene
 public:
 	CGameScene() : CMyScene()
 	{
-
 	};
-
 
 	void initialize() override;
 };

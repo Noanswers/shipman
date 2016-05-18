@@ -60,9 +60,6 @@
     <ClInclude Include="CameraClass.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="config.h">
-      <Filter>소스 파일</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>소스 파일\Manager</Filter>
     </ClInclude>
@@ -93,8 +90,20 @@
     <ClInclude Include="StageObject.h">
       <Filter>소스 파일\object\subClass</Filter>
     </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
     <ClInclude Include="InputClass.h">
       <Filter>소스 파일\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerData.h">
+      <Filter>소스 파일\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StartObject.h">
+      <Filter>소스 파일\object\subClass</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -102,9 +111,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="shipmanwon.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphicsClass.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="D3DClass.cpp">
@@ -146,8 +152,23 @@
     <ClCompile Include="StageObject.cpp">
       <Filter>소스 파일\object\subClass</Filter>
     </ClCompile>
+    <ClCompile Include="config.cpp">
+      <Filter>헤더 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsClass.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
     <ClCompile Include="InputClass.cpp">
       <Filter>소스 파일\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerData.cpp">
+      <Filter>소스 파일\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="StartObject.cpp">
+      <Filter>소스 파일\object\subClass</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

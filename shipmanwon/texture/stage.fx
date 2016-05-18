@@ -39,6 +39,7 @@ VertexOut    VS(VertexIn vIn)
 
 	vOut.normal = mul(float4(vIn.normal, 0.0f), world);
 
+	/*vOut.tex = saturate(vIn.tex);*/
 	vOut.tex = vIn.tex;
 
 	return vOut;

@@ -1,14 +1,15 @@
 #include "stdafx.h"
 #include "MyLayer.h"
 
-bool CMyLayer::renderLayer(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
+bool CMyLayer::renderLayer(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc)
 {
-	bool result = false;
 	for (auto& iter : ObjectVector)
 	{
-		result = iter->renderObject(deviceContext, worldMatrix, viewMatrix, projectionMatrix);
+		bool result = iter->renderObject(deviceContext, setShaderfunc);
+	
+		if (!result)
+			return result;
 	}
-	return result;
 }
 
 bool CMyLayer::pushBack(CMyObject* object)
@@ -37,12 +38,4 @@ bool CMyLayer::initLayer(ID3D11Device* device, HWND hWnd)
 int CMyLayer::getObjectsSize()
 {
 	return ObjectVector.size();
-}
-
-void CMyLayer::update()
-{
-	for (auto& iter : ObjectVector)
-	{
-		iter->update();
-	}
 }

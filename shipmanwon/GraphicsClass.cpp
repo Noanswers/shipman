@@ -3,8 +3,6 @@
 
 bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 {
-	bool result;
-
 	// Create the Direct3D object.
 	m_Direct3D = new CD3DClass;
 	if (!m_Direct3D)
@@ -13,7 +11,7 @@ bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the Direct3D object.
-	result = m_Direct3D->initialize(screenWidth, screenHeight, VSYNC_ENABLED, hwnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
+	bool result = m_Direct3D->initialize(screenWidth, screenHeight, VSYNC_ENABLED, hwnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize Direct3D", L"Error", MB_OK);
@@ -28,14 +26,11 @@ bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Set the initial position of the camera.
-	//m_Camera->SetPosition(0.0f, 0.0f, -10.0f);
-	//m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
+	/*m_Camera->SetPosition(0.0f, -9.0f, -6.0f);
+	m_Camera->SetRotation(-60.0f, 0.0f, 0.0f);*/
 
-	m_Camera->SetPosition(0.0f, -9.0f, -6.0f);
-	m_Camera->SetRotation(-60.0f, 0.0f, 0.0f);
-
-	//m_Camera->SetPosition(10.0f, -10.0f, -10.0f);
-	//m_Camera->SetRotation(-45.0f, -45.0f, 45.0f);
+	m_Camera->SetPosition(0.0f, 9.0f, -6.0f);
+	m_Camera->SetRotation(60.0f, 0.0f, 0.0f);
 
 	createConstantBuffer();
 
@@ -65,16 +60,9 @@ void CGraphicsClass::shutdown()
 
 bool CGraphicsClass::frame(HWND hWnd)
 {
-	bool result;
-
-	// Render the graphics scene.
-	result = render(hWnd);
-	if (!result)
-	{
-		return false;
-	}
-
-	return true;
+	bool result = render(hWnd);
+	
+	return result;
 }
 
 bool CGraphicsClass::render(HWND hWnd)
@@ -84,6 +72,7 @@ bool CGraphicsClass::render(HWND hWnd)
 
 	// 랜더 타겟 뷰와 뎁스 스탠실 뷰를 클리어 합니다.
 	float color[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+	CSceneManager* sm = CSceneManager::GetInstance();
 
 	CMyScene* scene = CSceneManager::GetInstance()->getCurrentScene();
 	scene->getSceneColor(color);
@@ -101,26 +90,13 @@ bool CGraphicsClass::render(HWND hWnd)
 
 	calculateMatrixForCB();
 
-	/*
-		매번 랜더링하기 전에 init이 된 object가 없는지 확인하고, 
-		initialize가 되지 않은 경우 초기화 진행
-
-		그 후, 랜더링 작업
-	*/
-
 	result = scene->initScene(m_Direct3D->getDevice(), hWnd);
 	if (!result)
 	{
 		return false;
 	}
 
-	/*
-		renderScene 내부에 shader 포함
-	*/
-	CMyScene* currentScene = CSceneManager::GetInstance()->getCurrentScene();
-	result = currentScene->renderScene(m_Direct3D->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix);
-
-	// Render the model using the color shader.
+	result = renderCurrentScene();
 	if (!result)
 	{
 		return false;
@@ -154,7 +130,7 @@ void CGraphicsClass::calculateMatrixForCB()
 	ID3D11DeviceContext* deviceContext = m_Direct3D->getDeviceContext();
 	// 박스를 회전시키기 위한 연산.    위치, 크기를 변경하고자 한다면 SRT를 기억할 것.      
 
-	XMMATRIX wvp = worldMatrix * viewMatrix * projectionMatrix;
+	DirectX::XMMATRIX wvp = worldMatrix * viewMatrix * projectionMatrix;
 	ConstantBuffer       cb;
 
 	cb.wvp = XMMatrixTranspose(wvp);
@@ -165,4 +141,73 @@ void CGraphicsClass::calculateMatrixForCB()
 	deviceContext->UpdateSubresource(m_pConstantBuffer, 0, 0, &cb, 0, 0); // update data
 	deviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);// set constant buffer.
 	deviceContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);// set constant buffer to PS.
+}
+
+bool CGraphicsClass::renderCurrentScene()
+{
+	CMyScene* currentScene = CSceneManager::GetInstance()->getCurrentScene();
+	
+	std::function<bool(ID3D11DeviceContext*, CMyObject*)> testFunc(std::bind(&CGraphicsClass::setShaderParameters, this, std::placeholders::_1, std::placeholders::_2));
+
+	bool result = currentScene->renderScene(m_Direct3D->getDeviceContext(), testFunc);
+	return result;
+}
+
+bool CGraphicsClass::setShaderParameters(ID3D11DeviceContext* deviceContext, CMyObject* object)
+{
+	if (m_pConstantBuffer == nullptr)
+		return false;
+
+	//HRESULT result;
+	//D3D11_MAPPED_SUBRESOURCE mappedResource;
+	//ConstantBuffer* dataPtr;
+	//unsigned int bufferNumber;
+
+	// Transpose the matrices to prepare them for the shader.
+	//DirectX::XMMATRIX worldMatrix = XMMatrixTranspose(object->getWorldMatrix());
+	DirectX::XMMATRIX worldMatrix = object->getWorldMatrix();
+	
+	DirectX::XMMATRIX viewMatrix = DirectX::XMMatrixIdentity();
+	m_Camera->GetViewMatrix(viewMatrix);
+	//XMMatrixTranspose(viewMatrix);
+
+	DirectX::XMMATRIX projectionMatrix = DirectX::XMMatrixIdentity();
+	m_Direct3D->getProjectionMatrix(projectionMatrix);
+	//XMMatrixTranspose(projectionMatrix);
+
+	// Lock the constant buffer so it can be written to.
+	//result = deviceContext->Map(m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	//if (FAILED(result))
+	//{
+	//	return false;
+	//}
+
+	//// Get a pointer to the data in the constant buffer.
+	//dataPtr = (ConstantBuffer*)mappedResource.pData;
+
+	// Copy the matrices into the constant buffer.
+	//dataPtr->world = worldMatrix;
+	//dataPtr->wvp = worldMatrix * viewMatrix * projectionMatrix;
+
+	//// Unlock the constant buffer.
+	//deviceContext->Unmap(m_pConstantBuffer, 0);
+
+	// Set the position of the constant buffer in the vertex shader.
+	//bufferNumber = 0;
+
+	// Finanly set the constant buffer in the vertex shader with the updated values.
+
+	DirectX::XMMATRIX wvp = worldMatrix * viewMatrix * projectionMatrix;
+	ConstantBuffer       cb;
+
+	cb.wvp = DirectX::XMMatrixTranspose(wvp);
+	cb.world = DirectX::XMMatrixTranspose(worldMatrix);
+	cb.lightDir = lightDirection;
+	cb.lightColor = lightColor;
+
+	deviceContext->UpdateSubresource(m_pConstantBuffer, 0, 0, &cb, 0, 0); // update data
+	deviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	deviceContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);// set constant buffer to PS.
+
+	return true;
 }

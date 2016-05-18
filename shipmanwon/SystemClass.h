@@ -6,6 +6,8 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <windows.h>
+#include <vector>
+#include <tuple>
 #include "InputClass.h"
 #include "GraphicsClass.h"
 #include "SceneManager.h"
@@ -14,12 +16,12 @@
 #include "MyObject.h"
 #include "GameManager.h"
 #include "MyTime.h"
-
+#include "PlayerData.h"
 
 class CSystemClass
 {
 public:
-	CSystemClass();
+	CSystemClass() = default;
 	CSystemClass(const CSystemClass&) = delete;
 	~CSystemClass() = default;
 
@@ -35,12 +37,18 @@ private:
 	void initializeWindows(int& screenWidth, int& screenHeight);
 	void shutdownWindows();
 
+	void initPlayerData(CMyScene * scene, int playerNum);
+
+	void getPlayerInput();
+
 //	variables
+	std::vector<std::tuple<CPlayerData*, CPlayerObject*>> PlayerDataVector;
+
 	CGraphicsClass* Graphics;
-	//CInputClass*	Input;
+	CInputClass*	Input = nullptr;
 	CMyTime*		MyTime;
 
-	CGameManager*	GameManager;
+	CGameManager*	GameManager = nullptr;
 	CSceneManager*	SceneManager;
 
 	LPCWSTR m_applicationName;

@@ -2,12 +2,7 @@
 #include "SystemClass.h"
 #include "StartScene.h"
 #include "GameScene.h"
-
-CSystemClass::CSystemClass()
-{
-	//Input = nullptr;
-	Graphics = nullptr;
-}
+#include "Log.h"
 
 bool CSystemClass::initialize()
 {
@@ -36,12 +31,23 @@ bool CSystemClass::initialize()
 
 	SceneManager->initialize();
 	CMyScene* scene = SceneManager->getCurrentScene();
+	
+	initPlayerData(scene, 4);
+
 	scene->initialize();
 	
 	// Create the input object.  This object will be used to handle reading the keyboard input from the user.
-	CInputClass::GetInstance()->initialize();
-	
+	Input = CInputClass::GetInstance();
+
 	// Initialize the input object.
+	Input->initialize();
+
+	//Log initialize
+
+	CLog* log = new CLog;
+	log->initialize();
+	log->SendErrorLogMessage("test\n");
+	log->SendErrorLogMessage("test2\n");
 
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	Graphics = new CGraphicsClass;
@@ -70,14 +76,13 @@ void CSystemClass::shutdown()
 		Graphics = nullptr;
 	}
 
-	// Release the input object.
-	/*if (CInputClass *Input = CInputClass::GetInstance())
+	/*if (Input)
 	{
-		delete Input;
-		Input = nullptr;
+		Input->DestorySingleton();
 	}*/
 
-	/*if (GameManager)
+	/*
+	if (GameManager)
 	{
 		GameManager->DestorySingleton();
 	}*/
@@ -142,26 +147,8 @@ bool CSystemClass::frame()
 		return false;
 	}
 
-	if (CInputClass::GetInstance()->isKeyDown(VK_UP))
-	{
-		//CMyScene* scene = SceneManager->getCurrentScene();
-	}
-
-	if (CInputClass::GetInstance()->isKeyDown(VK_LEFT))
-	{
-		if (SceneManager->getStackSize() > 1)
-		{
-			SceneManager->popBack();
-		}
-	}
-
-	if (CInputClass::GetInstance()->isKeyDown(VK_RIGHT))
-	{
-		CGameScene* game = new CGameScene();
-		game->initialize();
-		SceneManager->pushBack(game);
-	}
-
+	getPlayerInput();
+	
 	bool result = GameManager->frame();
 	if (!result)
 	{
@@ -185,16 +172,14 @@ LRESULT CALLBACK CSystemClass::messageHandler(HWND hwnd, UINT umsg, WPARAM wpara
 		// Check if a key has been pressed on the keyboard.
 	case WM_KEYDOWN:
 	{
-		// If a key is pressed send it to the input object so it can record that state.
-		CInputClass::GetInstance()->keyDown((unsigned int)wparam);
+		Input->keyDown((unsigned int)wparam);
 		return 0;
 	}
 
 	// Check if a key has been released on the keyboard.
 	case WM_KEYUP:
 	{
-		// If a key is released then send it to the input object so it can unset the state for that key.
-		CInputClass::GetInstance()->keyUp((unsigned int)wparam);
+		Input->keyUp((unsigned int)wparam);
 		return 0;
 	}
 
@@ -309,4 +294,49 @@ void CSystemClass::shutdownWindows()
 	ApplicationHandle = NULL;
 
 	return;
+}
+
+void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
+{
+	for (int i = 0; i < playerNum; ++i)
+	{
+		CPlayerObject* pObj1 = new CPlayerObject();
+		scene->pushBack(pObj1, 10);
+		PlayerDataVector.push_back(std::make_tuple(new CPlayerData(), pObj1));
+	}
+
+	int i = 0;
+	for (auto& iter : PlayerDataVector)
+	{
+		std::get<CPlayerData*>(iter)->initialize();
+		std::get<CPlayerObject*>(iter)->setScale(0.5f, 0.2f, 0.5f);
+		std::get<CPlayerObject*>(iter)->setTranslate(
+			3.0f*cosf(DirectX::XM_2PI*i / playerNum),
+			0.0f,
+			3.0f*sinf(DirectX::XM_2PI*i / playerNum)
+			);
+		++i;
+	}
+}
+
+void CSystemClass::getPlayerInput()
+{
+	for (auto& iter : PlayerDataVector)
+	{
+		CPlayerData* player = std::get<CPlayerData*>(iter);
+		KeySetting key = player->getPlayerKeySetting();
+
+		//여기서 플레이어마다 지정된 키가 눌렸을 때 특정 동작을 할당
+		if (Input->isKeyDown(key.up))
+			std::get<CPlayerObject*>(iter)->moveForward();
+
+		if (Input->isKeyDown(key.right))
+			std::get<CPlayerObject*>(iter)->setRotate(0.0f, 1.0f, 0.0f);
+
+		if (Input->isKeyDown(key.left))
+			std::get<CPlayerObject*>(iter)->setRotate(0.0f, -1.0f, 0.0f);
+
+		if (Input->isKeyDown(key.down))
+			std::get<CPlayerObject*>(iter)->setTranslate(0.0f, 0.0f, 0.0f);
+	}
 }

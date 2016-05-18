@@ -5,37 +5,43 @@ class CStageObject : public CMyObject
 {
 public:
 	CStageObject() = default;
+	CStageObject(const CStageObject&) = default;
 	~CStageObject() = default;
 	
 	bool	initialize(ID3D11Device* device, HWND hWnd) override;
 	void	shutdown() override;
-	bool	renderObject(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix) override;
+	bool	renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc) override;
+
+	//void	CStageObject::renderBuffers(ID3D11DeviceContext* deviceContext) override;
 
 private:
+	std::wstring textureFilename = std::wstring();
+	ID3D11Resource* Resource;
+
+	ID3D11Device*				temp_device = nullptr;
+	ID3D11ShaderResourceView*	g_pTextureRV = nullptr;
+	ID3D11SamplerState*			g_pSamplerLinear = nullptr;
+
+	HRESULT loadTexture(); //override???
+	void createShader();
 
 	void	renderBuffers(ID3D11DeviceContext* deviceContext) override;
-	VertexType vertices[8] =
-	{
-		{ DirectX::XMFLOAT3(-6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.0f, 4.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.0f, -4.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+	bool	initializeBuffers(ID3D11Device* device, VertexType* vertices, unsigned long* indices, int m_vertexCount, int m_indexCount);
 
-		{ DirectX::XMFLOAT3(-6.0f, 0.0f, -2.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.0f, 4.0f, -2.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(0.0f, -4.0f, -2.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-		{ DirectX::XMFLOAT3(6.0f, 0.0f, -2.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
+	int m_vertexCount = 4;
+	int m_indexCount = 6;
+
+	VertexType vertices[4] =
+	{
+		{ DirectX::XMFLOAT3(-6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(0.0f, 0.0f, 4.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(0.0f, 1.0f) },
+		{ DirectX::XMFLOAT3(0.0f, 0.0f, -4.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 0.0f) },
+		{ DirectX::XMFLOAT3(6.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) ,DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(1.0f, 1.0f) }
 	};
 
-	unsigned long indices[36] =
+	unsigned long indices[6] =
 	{
-		0, 1, 2, 2, 1, 3,
-		4, 0, 2, 4, 2, 6, 6, 2, 3, 6, 3, 7,
-		7, 3, 1, 7, 1, 5, 5, 1, 0, 5, 0, 4,
-		4, 6, 5, 6, 7, 4
+		0, 1, 2, 2, 1, 3
 	};
-
-	int m_vertexCount = 8;
-	int m_indexCount = 36;
 };
 

@@ -21,11 +21,15 @@ public:
 	bool initialize(int, int, HWND);
 	void shutdown();
 	bool frame(HWND hWnd);
+	bool setShaderParameters(ID3D11DeviceContext* deviceContext, CMyObject* object);
 
 private:
 	bool render(HWND hWnd);
+	bool renderCurrentScene();
+
 	void createConstantBuffer();
 	void calculateMatrixForCB();
+
 
 	CSceneManager* SceneManager = nullptr;
 	CD3DClass* m_Direct3D = nullptr;
@@ -42,13 +46,15 @@ private:
 	{
 		XMFLOAT4(0.8f, 0.8f, 1.0f, 1.0f)
 	};
+
+	struct ConstantBuffer
+	{
+		XMMATRIX	wvp;
+		XMMATRIX	world;
+
+		XMFLOAT4	lightDir;
+		XMFLOAT4	lightColor;
+	};
 };
 
-struct ConstantBuffer
-{
-	XMMATRIX	wvp;
-	XMMATRIX	world;
 
-	XMFLOAT4	lightDir;
-	XMFLOAT4	lightColor;
-};

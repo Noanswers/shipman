@@ -21,7 +21,7 @@ bool CMyObject::initialize(ID3D11Device* device, HWND hWnd)
 	return result;
 }
 
-void CMyObject::shutdown()
+void CMyObject::shutdown()  
 {
 	// Shutdown the vertex and index buffers.
 	shutdownBuffers();
@@ -29,24 +29,45 @@ void CMyObject::shutdown()
 	return;
 }
 
-void CMyObject::update()
-{
 
-
-}
-
-bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, DirectX::XMMATRIX worldMatrix, DirectX::XMMATRIX viewMatrix, DirectX::XMMATRIX projectionMatrix)
+bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc)
 {
 	bool result = true;
 	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
+	
+	setShaderfunc(deviceContext, this);
 	renderBuffers(deviceContext);
-
+	
 	return result;
 }
 
 int CMyObject::getIndexCount()
 {
 	return m_indexCount;
+}
+
+void CMyObject::moveToward(float x, float y, float z)
+{
+	float sum = abs(x) + abs(y) + abs(z);
+	DirectX::XMMATRIX temp = {
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		x/ sum, y/ sum, z/ sum, 0.0f
+	};
+	ObjectTranslate += (temp * speed);
+
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+}
+
+void CMyObject::moveForward()
+{
+	moveToward(ForwardVector.x, ForwardVector.y, ForwardVector.z);
+}
+
+DirectX::XMMATRIX CMyObject::getWorldMatrix()
+{
+	return ObjectWorld;
 }
 
 void CMyObject::setTranslate(float x, float y, float z)
@@ -58,9 +79,22 @@ void CMyObject::setTranslate(float x, float y, float z)
 
 void CMyObject::setRotate(float x, float y, float z)
 {
-	ObjectRotate = DirectX::XMMatrixRotationX(x);
-	ObjectRotate *= DirectX::XMMatrixRotationY(y);
-	ObjectRotate *= DirectX::XMMatrixRotationZ(z);
+	x /= DirectX::XM_2PI;
+	y /= DirectX::XM_2PI;
+	z /= DirectX::XM_2PI;
+
+	ForwardTheta.y += y;
+	ForwardTheta.y = fmod(ForwardTheta.y, DirectX::XM_2PI);
+	
+	ForwardVector.x = 1.0f * cosf(-ForwardTheta.y);
+	ForwardVector.z = 1.0f * sinf(-ForwardTheta.y);
+
+	DirectX::XMMATRIX temp = DirectX::XMMatrixIdentity();
+	temp = DirectX::XMMatrixRotationX(x);
+	temp *= DirectX::XMMatrixRotationY(y);
+	temp *= DirectX::XMMatrixRotationZ(z);
+
+	ObjectRotate *= temp;
 
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
@@ -89,7 +123,6 @@ void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
 /*
 	=== [ private ] ===========================================================================
 */
-
 HRESULT CMyObject::loadTexture()
 {
 	HRESULT hr = DirectX::CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &TextureRV, NULL);

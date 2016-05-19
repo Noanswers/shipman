@@ -22,6 +22,7 @@ public:
 	int		getIndexCount();
 
 	void	moveToward(float x, float y, float z);
+	void moveTowardByOuter(float x, float y, float z);
 	void	moveToward(float x, float y, float z, float now_speed);
 	void	moveForward();
 	void	moveBackward();
@@ -32,8 +33,9 @@ public:
 	void	setMaximumSpeed(float speed);
 	//void	setboostSpeed();
 	void	resetSpeed();
-	float	getNowSpeed();
+	float	getCurrentSpeed();
 	DirectX::XMFLOAT3	getForwardVector();
+	DirectX::XMFLOAT3	getForwardTheta() const;
 
 	void	setRotate(float x, float y, float z);
 	void	setScale(float x, float y, float z);
@@ -49,19 +51,37 @@ public:
 	void	setCurrentPosition(float x, float y, float z);
 	std::string getObjectName() const;
 	void setObjectName(std::string objName);
-
+	float	getMass();
 	float	CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b);
 	void	setTexture(std::wstring texName);
+	float	getCOR() const;
+	void	setCOR(float cor);
+
+	void	setCurrentSpeed(float speed);
+	void	setForwardTheta(DirectX::XMFLOAT3 theta);
+	void	setOuterTheta(DirectX::XMFLOAT3 theta);
+	void	setOuterVector(float x, float y, float z);
+	DirectX::XMFLOAT3 getMoveTheta();
+	float	getOuterSpeed() const;
+	void	setOuterSpeed(float speed);
+	
+	void	move();
 
 protected:
 	void shutdownBuffers();
+	float ObjectCOR = 0.7;
+	float ObjectMass = 2.0f;
 
 	DirectX::XMFLOAT3 currentPosition = { 0.0f,0.0f,0.0f };
 	DirectX::XMFLOAT3 ForwardTheta = { 0.0f, 0.0f, 0.0f };
 	DirectX::XMFLOAT3 ForwardVector = { 1.0f, 0.0f, 0.0f };
 
+	DirectX::XMFLOAT3 OuterTheta = { 0.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 OuterVector = { 1.0f, 0.0f, 0.0f };
+
 	float SpeedDelta = 0.0f;
 	float CurrentSpeed = 0.0f;
+	float OuterSpeed = 0.0f;
 	float MaximumSpeed = 0.1f;
 
 	std::wstring textureFilename = std::wstring();

@@ -68,6 +68,25 @@ void CMyObject::moveToward(float x, float y, float z)
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
+void CMyObject::moveTowardByOuter(float x, float y, float z)
+{
+	float sum = abs(x) + abs(y) + abs(z);
+
+	DirectX::XMMATRIX temp = {
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		x / sum, y / sum, z / sum, 0.0f
+	};
+	ObjectTranslate += temp * OuterSpeed;
+
+	setCurrentPosition(x / sum*OuterSpeed, y / sum*OuterSpeed, z / sum*OuterSpeed);
+	if (OuterSpeed > 0) {
+		OuterSpeed -= 0.01f;
+	}
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+}
+
 void CMyObject::moveToward(float x, float y, float z, float now_speed)
 {
 	float sum = abs(x) + abs(y) + abs(z);
@@ -88,6 +107,18 @@ void CMyObject::moveToward(float x, float y, float z, float now_speed)
 void CMyObject::moveForward()
 {
 	moveToward(ForwardVector.x, ForwardVector.y, ForwardVector.z);
+}
+
+void CMyObject::move()
+{
+//	moveForward();
+	if (OuterSpeed <= 0) {
+		OuterSpeed = 0;
+		OuterVector = ForwardVector;
+	}
+
+	moveForward();
+	moveTowardByOuter(OuterVector.x, OuterVector.y, OuterVector.z);
 }
 
 void CMyObject::moveBackward() //test function. made by scintil
@@ -145,7 +176,7 @@ void CMyObject::resetSpeed()
 	MaximumSpeed = 0.1f;
 }
 
-float CMyObject::getNowSpeed()
+float CMyObject::getCurrentSpeed()
 {
 	return CurrentSpeed;
 }
@@ -153,6 +184,11 @@ float CMyObject::getNowSpeed()
 DirectX::XMFLOAT3 CMyObject::getForwardVector()
 {
 	return ForwardVector;
+}
+
+DirectX::XMFLOAT3 CMyObject::getForwardTheta() const
+{
+	return ForwardTheta;
 }
 
 DirectX::XMMATRIX CMyObject::getWorldMatrix()
@@ -175,6 +211,11 @@ std::string CMyObject::getObjectName() const
 void CMyObject::setObjectName(std::string objName)
 {
 	ObjectName = objName;
+}
+
+float CMyObject::getMass()
+{
+	return ObjectMass;
 }
 
 void CMyObject::setTranslate(float x, float y, float z)
@@ -439,4 +480,51 @@ void CMyObject::setTexture(std::wstring texName)
 {
 	textureFilename = texName;
 	loadTexture();
+}
+
+float CMyObject::getCOR() const
+{
+	return ObjectCOR;
+}
+
+void CMyObject::setCOR(float cor)
+{
+	ObjectCOR = cor;
+}
+
+void CMyObject::setCurrentSpeed(float speed)
+{
+	CurrentSpeed = speed;
+}
+
+void CMyObject::setForwardTheta(DirectX::XMFLOAT3 theta)
+{
+	ForwardTheta = theta;
+}
+
+void CMyObject::setOuterTheta(DirectX::XMFLOAT3 theta)
+{
+	OuterTheta = theta;
+}
+
+void CMyObject::setOuterVector(float x, float y, float z)
+{
+	OuterVector.x = x;
+	OuterVector.y = y;
+	OuterVector.z = z;
+}
+
+DirectX::XMFLOAT3 CMyObject::getMoveTheta()
+{
+	return OuterTheta;
+}
+
+float CMyObject::getOuterSpeed() const
+{
+	return OuterSpeed;
+}
+
+void CMyObject::setOuterSpeed(float speed)
+{
+	OuterSpeed = speed;
 }

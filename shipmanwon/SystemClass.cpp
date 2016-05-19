@@ -165,7 +165,7 @@ bool CSystemClass::frame()
 	std::vector<CPlayerObject*> playerVector;
 	for (auto& iter : PlayerDataVector)
 	{
-		std::get<CPlayerObject*>(iter)->moveForward();
+		std::get<CPlayerObject*>(iter)->move();
 		playerVector.push_back(std::get<CPlayerObject*>(iter));
 	}
 	GameManager->collisionCheck(playerVector);
@@ -320,12 +320,12 @@ void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 	{
 		CPlayerObject* pObj1 = new CPlayerObject();
 		scene->pushBack(pObj1, 10);
-
+/*
 		if (i == 0)
 		{
 			pObj1->setForwardVector(-1.0f, 0.0f, 0.0f);
 		}
-		
+		*/
 		PlayerDataVector.push_back(std::make_tuple(new CPlayerData(), pObj1));
 	}
 	

@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <unordered_set>
 #include "StageObject.h"
 #include "config.h"
 
@@ -42,33 +43,38 @@ void CStageObject::createStage()
 	Indices.push_back(2);
 	Indices.push_back(1);
 	Indices.push_back(3);
+
+	realPosition[0] = DirectX::XMFLOAT3(-6.0f, 0.0f, 0.0f);
+	realPosition[1] = DirectX::XMFLOAT3(0.0f, 0.0f, 4.0f);
+	realPosition[2] = DirectX::XMFLOAT3(6.0f, 0.0f, 0.0f);
+	realPosition[3] = DirectX::XMFLOAT3(0.0f, 0.0f, -4.0f);
 }
 
-bool CStageObject::isGetOutStage(DirectX::XMFLOAT3 position)
+bool CStageObject::isGetOutStage(DirectX::XMFLOAT3 pos)
 {
+	std::unordered_set<float> temp;
+	
+	float x = pos.x;
+	float z = pos.z;
+	float x1, x2, z1, z2;
 	int count = 0;
-	int i;
-	double xinters;
-	int xq=0;
-	DirectX::XMFLOAT3 temp1 = Verticies[0].position;
-	for (i = 1; i <= 4; i++)
+
+	for (int i = 0; i < 4 /*vertix_num*/; i++)
 	{
-		DirectX::XMFLOAT3 temp2 = Verticies[i % 4].position;
-		if(position.z > min(temp1.z, temp2.z))
-			if(position.z <= max(temp1.z, temp2.z))
-				if (position.x <= max(temp1.x, temp2.x))
-				{
-					if (temp1.z != temp2.z)
-					{
-						xq = (position.z - temp1.z) * (temp2.x - temp1.x) / (temp2.z - temp1.z) + temp1.x;
-						if (temp1.x == temp2.x || position.x <= xq)
-							count++;
-					}
-				}
-		temp1 = temp2;
+		x1 = realPosition[i].x;
+		x2 = realPosition[(i + 1) % 4].x;
+		z1 = realPosition[i].z;
+		z2 = realPosition[(i + 1) % 4].z;
+
+		float result = (z - z1) *((x2 - x1) / (z2 - z1)) + x1;
+
+		if (result >= x)
+			if (result <= max(x1, x2))
+				temp.insert(temp.end(), result);
 	}
 
-	if (count % 2 == 0)return true;
+	if (temp.size() % 2 == 0)
+		return true;
 
 	return false;
 }

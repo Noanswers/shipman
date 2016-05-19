@@ -49,29 +49,21 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 
 void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageObject* stage)
 {
-	int numOfPlayer = 2;
-	int idx = 0;
+	//int numOfPlayer = 2;
+	//int idx = 0;
 
 	for (auto& iter : playerVector)
 	{
-		if (getout_checker)
+		DirectX::XMFLOAT3 currentPos = iter->getCurrentPosition();
+		if (stage->isGetOutStage(currentPos))
 		{
-			getout_checker = false;
+			doGetOut(iter);
 		}
-
-		if ((idx + 1) < numOfPlayer)
-			if (stage->isGetOutStage(iter->getCurrentPosition()))
-			{
-				doGetOut(iter);
-				getout_checker = true;
-			}
-			else
-				break;
-
-		idx++;
+		
+		
 	}
 }
 void CGameManager::doGetOut(CPlayerObject* player)
 {
-	while (1);
+	OutputDebugStringA("out\n");
 }

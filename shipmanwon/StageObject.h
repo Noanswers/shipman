@@ -16,5 +16,12 @@ public:
 
 private:
 	void createStage();
+	//юс╫ц╟╙
+	DirectX::XMFLOAT3 realPosition[4];
+	
+	
+		
+		
+	
 };
 

@@ -22,7 +22,7 @@ public:
 	int		getIndexCount();
 
 	void	moveToward(float x, float y, float z);
-	void moveTowardByOuter(float x, float y, float z);
+	void	moveTowardByOuter(float x, float y, float z);
 	void	moveToward(float x, float y, float z, float now_speed);
 	void	moveForward();
 	void	moveBackward();
@@ -33,7 +33,7 @@ public:
 	void	setMaximumSpeed(float speed);
 	//void	setboostSpeed();
 	void	resetSpeed();
-	float	getCurrentSpeed();
+	float	getCurrentSpeed() const;
 	DirectX::XMFLOAT3	getForwardVector();
 	DirectX::XMFLOAT3	getForwardTheta() const;
 
@@ -50,7 +50,7 @@ public:
 
 	void	setCurrentPosition(float x, float y, float z);
 	std::string getObjectName() const;
-	void setObjectName(std::string objName);
+	void	setObjectName(std::string objName);
 	float	getMass();
 	float	CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b);
 	void	setTexture(std::wstring texName);
@@ -82,7 +82,7 @@ protected:
 	float SpeedDelta = 0.0f;
 	float CurrentSpeed = 0.0f;
 	float OuterSpeed = 0.0f;
-	float MaximumSpeed = 0.1f;
+	float MaximumSpeed = 0.08f;
 
 	std::wstring textureFilename = std::wstring();
 	std::string	 ObjectName = std::string();

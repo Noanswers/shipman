@@ -154,7 +154,7 @@ void CMyObject::accelerate()
 void CMyObject::boost()
 {
 	//setboostSpeed();
-	setMaximumSpeed(2.5f);
+	setMaximumSpeed(1.5f);
 	accelerate();
 	//moveForward();
 
@@ -176,7 +176,7 @@ void CMyObject::resetSpeed()
 	MaximumSpeed = 0.1f;
 }
 
-float CMyObject::getCurrentSpeed()
+float CMyObject::getCurrentSpeed() const
 {
 	return CurrentSpeed;
 }

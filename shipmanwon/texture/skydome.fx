@@ -24,14 +24,17 @@ struct   VertexOut
 {
 	float4  posH		: SV_POSITION;       // Projection ÁÂÇ¥(Homogeneous Coordinates)
 	float3  posLocal	: POSITION;       // ·ÎÄÃ ÁÂÇ¥
+
+	float4	color		: COLOR;
 };
 
 VertexOut   VS(VertexIn vIn)
 {
 	VertexOut   vout;
-
+	vout.color = vIn.color;
 	float4   projectionPos = mul(float4 (vIn.posLocal, 1.0f), wvp);
 	vout.posH = projectionPos.xyww;   // SkyÀÇ ±íÀÌ °ªÀº Ç×»ó 1ÀÌ¾î¾ß ÇÑ´Ù. 
+	   
 	vout.posLocal = vIn.posLocal;     // local ÁÂÇ¥¸¦ lookupÁÂÇ¥·Î ¾´´Ù. ( view ÁÂÇ¥ )
 
 	return vout;
@@ -39,5 +42,6 @@ VertexOut   VS(VertexIn vIn)
 
 float4   PS(VertexOut vOut) : SV_Target
 {
+//	return vOut.color;
 	return cubeMap.Sample(samLinear, vOut.posLocal);
 }

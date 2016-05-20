@@ -30,4 +30,4 @@ static const std::wstring textureTitle = config::makeDirectory("shipmanwon\\text
 static const std::wstring textureStage = config::makeDirectory("shipmanwon\\texture\\stage.png");
 static const std::wstring texturePress = config::makeDirectory("shipmanwon\\texture\\spacebar.png");
 
-static const std::wstring textureSky = config::makeDirectory("shipmanwon\\texture\\sky.png");
+static const std::wstring textureSky = config::makeDirectory("shipmanwon\\texture\\grasscube1024.dds");

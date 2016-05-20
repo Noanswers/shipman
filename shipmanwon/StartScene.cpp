@@ -9,7 +9,7 @@
 
 void CStartScene::initialize()
 {
-	setSceneColor(0.94f, 0.92f, 0.8f, 1.0f);
+//	setSceneColor(0.94f, 0.92f, 0.8f, 1.0f);
 
 	CStartObject* title = new CStartObject();
 	title->setObjectName("title");

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "GameScene.h"
 #include "StageObject.h"
+#include "SkyObject.h"
 
 void CGameScene::initialize()
 {
@@ -9,4 +10,7 @@ void CGameScene::initialize()
 
 	CStageObject* stage = new CStageObject();
 	pushBack(stage, 10);
+
+	CMyObject* sky = new CSkyObject();
+	pushBack(sky, 10);
 }

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include <cmath>
+#include <DDSTextureLoader.h>
 #include "SkyObject.h"
 #include "config.h"
 
@@ -20,7 +20,7 @@ bool CSkyObject::initialize(ID3D11Device* device, HWND hWnd)
 
 	loadSkyTexture();
 	createShader();
-	createSphere(5000.0f, 10, 10);
+	createSphere(8.0f, 10, 10);
 	createRenderState();
 	createDepthStencil();
 
@@ -35,17 +35,6 @@ void CSkyObject::shutdown()
 {
 	CMyObject::shutdown();
 }
-//
-//bool CSkyObject::renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc)
-//{
-//	bool result = true;
-//	// Put the vertex and index buffers on the graphics pipeline to prepare them for drawing.
-//
-//	setShaderfunc(deviceContext, this);
-//	renderBuffers(deviceContext);
-//
-//	return result;
-//}
 
 void CSkyObject::createShader()
 {
@@ -131,7 +120,6 @@ void CSkyObject::createSkyVertexBufferLayout(ID3DBlob* pVSBlob)
 		&SkyVertexLayout);
 }
 
-
 // initializeBuffer function
 
 bool CSkyObject::initializeBuffers(ID3D11Device* device)
@@ -178,7 +166,8 @@ void CSkyObject::createSkyIndexBuffer()
 
 void CSkyObject::loadSkyTexture()
 {
-	CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &TextureRV, NULL);
+//	CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &TextureRV, NULL);
+	CreateDDSTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &TextureRV, NULL);
 }
 
 void CSkyObject::createRenderState()
@@ -217,7 +206,7 @@ void CSkyObject::createSphere(float radius, int sliceCount, int stackCount)
 
 	for (int i = 0; i < stackCount; ++i) 
 	{
-		float phi = i*phiStep;
+		float phi = (i+1)*phiStep;
 		for (int j = 0; j <= sliceCount; ++j)
 		{
 			float theta = j*thetaStep;
@@ -235,31 +224,31 @@ void CSkyObject::createSphere(float radius, int sliceCount, int stackCount)
 		XMFLOAT3(0.0f, -radius, 0.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, -radius, 0.0f), XMFLOAT2(0.0f, 0.0f) 
 	});
 
-
 	for (int i = 1; i <= sliceCount; i++) {
 		Indices.push_back(0);
-		Indices.push_back(i + 1);
 		Indices.push_back(i);
+		Indices.push_back(i + 1);
+		
 	}
 	int baseIndex = 1;
 	int ringVertexCount = sliceCount + 1;
 	for (int i = 0; i < stackCount - 2; i++) {
 		for (int j = 0; j < sliceCount; j++) {
-			Indices.push_back(baseIndex + i*ringVertexCount + j);
 			Indices.push_back(baseIndex + i*ringVertexCount + j + 1);
+			Indices.push_back(baseIndex + i*ringVertexCount + j);
 			Indices.push_back(baseIndex + (i + 1)*ringVertexCount + j);
 					
-			Indices.push_back(baseIndex + (i + 1)*ringVertexCount + j);
-			Indices.push_back(baseIndex + i*ringVertexCount + j + 1);
 			Indices.push_back(baseIndex + (i + 1)*ringVertexCount + j + 1);
+			Indices.push_back(baseIndex + i*ringVertexCount + j + 1);
+			Indices.push_back(baseIndex + (i + 1)*ringVertexCount + j);
 		}
 	}
 	int southPoleIndex = Verticies.size() - 1;
 	baseIndex = southPoleIndex - ringVertexCount;
 	for (int i = 0; i < sliceCount; i++) {
 		Indices.push_back(southPoleIndex);
-		Indices.push_back(baseIndex + i);
 		Indices.push_back(baseIndex + i + 1);
+		Indices.push_back(baseIndex + i);
 	}
 }
 
@@ -271,19 +260,20 @@ void CSkyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 
 	deviceContext->OMSetDepthStencilState(DepthStencilLessEqual, 0);
 
-	deviceContext->IASetInputLayout(m_pVertexLayout);
+	deviceContext->IASetInputLayout(SkyVertexLayout);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	deviceContext->VSSetShader(m_pVertexShader, NULL, 0);
-	deviceContext->PSSetShader(m_pPixelShader, NULL, 0);
+	deviceContext->RSSetState(SolidRS);
+	
+	deviceContext->VSSetShader(SkyVertexShader, NULL, 0);
+	deviceContext->PSSetShader(SkyPixelShader, NULL, 0);
 	//텍스쳐!
 	deviceContext->PSSetShaderResources(0, 1, &TextureRV);
 	deviceContext->PSSetSamplers(0, 1, &SamplerLinear);
 
 	// 생성된 버퍼의 정점들을 실제로 파이프라인으로 공급하려면 버퍼를 장치의 한 입력 슬롯에 묶어야 함
 	// 1번째 인자 : 
-	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	deviceContext->IASetVertexBuffers(0, 1, &SkyVertBuffer, &stride, &offset);
+	deviceContext->IASetIndexBuffer(SkyIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 

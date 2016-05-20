@@ -68,9 +68,9 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 	float newP2x = (p2m - p1m*e) / (p1m + p2m)*p2xSpeed + (p1m + p1m*e) / (p1m + p2m)*p1xSpeed;
 	float newP2z = (p2m - p1m*e) / (p1m + p2m)*p2zSpeed + (p1m + p1m*e) / (p1m + p2m)*p1zSpeed;
 
-	player1->setOuterSpeed(sqrt(newP1x*newP1x + newP1z*newP1z)*3);
+	player1->setOuterSpeed(sqrt(newP1x*newP1x + newP1z*newP1z)*2);
 	player1->setCurrentSpeed(0);
-	player2->setOuterSpeed(sqrt(newP2x*newP2x + newP2z*newP2z)*3);
+	player2->setOuterSpeed(sqrt(newP2x*newP2x + newP2z*newP2z)*2);
 	player2->setCurrentSpeed(0);
 
 	player1->setOuterTheta({ 0.0f, -atan2(newP1z, newP1x), 0.0f });

@@ -5,6 +5,7 @@
 #include "PlayerObject.h"
 #include "StartObject.h"
 #include "config.h"
+#include "SkyObject.h"
 
 void CStartScene::initialize()
 {
@@ -21,6 +22,9 @@ void CStartScene::initialize()
 	pressButton->setScale(0.5f, 0.5f, 0.5f);
 	pressButton->setTexture(texturePress);
 	pushBack(pressButton, 10);
+
+	CMyObject* sky = new CSkyObject();
+	pushBack(sky, 10);
 }
 
 void CStartScene::doAction(float delta)

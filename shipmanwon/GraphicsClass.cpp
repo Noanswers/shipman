@@ -1,14 +1,13 @@
 #include "stdafx.h"
 #include "GraphicsClass.h"
+#include "SkyObject.h"
 
 bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 {
 	// Create the Direct3D object.
 	m_Direct3D = new CD3DClass;
 	if (!m_Direct3D)
-	{
 		return false;
-	}
 
 	// Initialize the Direct3D object.
 	bool result = m_Direct3D->initialize(screenWidth, screenHeight, VSYNC_ENABLED, hwnd, FULL_SCREEN, SCREEN_DEPTH, SCREEN_NEAR);
@@ -21,20 +20,11 @@ bool CGraphicsClass::initialize(int screenWidth, int screenHeight, HWND hwnd)
 	// Create the camera object.
 	m_Camera = new CCameraClass();
 	if (!m_Camera)
-	{
 		return false;
-	}
 
 	setCameraStartScene();
-
-	//// Set the initial position of the camera.
-	///*m_Camera->SetPosition(0.0f, -9.0f, -6.0f);
-	//m_Camera->SetRotation(-60.0f, 0.0f, 0.0f);*/
-
-	//m_Camera->SetPosition(0.0f, 9.0f, -6.0f);
-	//m_Camera->SetRotation(60.0f, 0.0f, 0.0f);
-
 	createConstantBuffer();
+	createSkyConstantBuffer();
 
 	return true;
 }
@@ -72,7 +62,7 @@ bool CGraphicsClass::frame(HWND hWnd)
 
 bool CGraphicsClass::render(HWND hWnd)
 {
-	XMMATRIX worldMatrix, viewMatrix, projectionMatrix;
+	/*XMMATRIX worldMatrix, viewMatrix, projectionMatrix;*/
 	bool result;
 
 	// 랜더 타겟 뷰와 뎁스 스탠실 뷰를 클리어 합니다.
@@ -88,11 +78,6 @@ bool CGraphicsClass::render(HWND hWnd)
 	// Generate the view matrix based on the camera's position.
 	m_Camera->Render();
 
-	// Get the world, view, and projection matrices from the camera and d3d objects.
-	m_Direct3D->getWorldMatrix(worldMatrix);
-	m_Camera->GetViewMatrix(viewMatrix);
-	m_Direct3D->getProjectionMatrix(projectionMatrix);
-
 	calculateMatrixForCB();
 
 	result = scene->initScene(m_Direct3D->getDevice(), hWnd);
@@ -106,6 +91,13 @@ bool CGraphicsClass::render(HWND hWnd)
 	{
 		return false;
 	}
+
+	// test
+	/*CMyObject* bg = new CSkyObject();
+	bg->initialize(m_Direct3D->getDevice(), hWnd);
+	std::function<bool(ID3D11DeviceContext*, CMyObject*)> setSkyShader(std::bind(&CGraphicsClass::setShaderParameters, this, std::placeholders::_1, std::placeholders::_2));
+	bg->renderObject(m_Direct3D->getDeviceContext(), setSkyShader);*/
+
 
 	// 백 버퍼와 프론트 버퍼를 교체해줍니다.
 	m_Direct3D->endScene();
@@ -123,6 +115,18 @@ void CGraphicsClass::createConstantBuffer()
 	cbd.CPUAccessFlags = 0;
 	m_Direct3D->getDevice()->CreateBuffer(&cbd, NULL, &m_pConstantBuffer);
 }
+
+void CGraphicsClass::createSkyConstantBuffer()
+{
+	D3D11_BUFFER_DESC cbd;
+	ZeroMemory(&cbd,   sizeof(cbd));
+	cbd.Usage = D3D11_USAGE_DEFAULT;
+	cbd.ByteWidth = sizeof(skyConstantBuffer);
+	cbd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbd.CPUAccessFlags = 0;
+	m_Direct3D->getDevice()->CreateBuffer(&cbd, NULL, &SkyConstantBuffer);
+}
+
 
 void CGraphicsClass::calculateMatrixForCB()
 {
@@ -163,45 +167,19 @@ bool CGraphicsClass::setShaderParameters(ID3D11DeviceContext* deviceContext, CMy
 	if (m_pConstantBuffer == nullptr)
 		return false;
 
-	//HRESULT result;
-	//D3D11_MAPPED_SUBRESOURCE mappedResource;
-	//ConstantBuffer* dataPtr;
-	//unsigned int bufferNumber;
-
 	// Transpose the matrices to prepare them for the shader.
-	//DirectX::XMMATRIX worldMatrix = XMMatrixTranspose(object->getWorldMatrix());
 	DirectX::XMMATRIX worldMatrix = object->getWorldMatrix();
 	
 	DirectX::XMMATRIX viewMatrix = DirectX::XMMatrixIdentity();
 	m_Camera->GetViewMatrix(viewMatrix);
-	//XMMatrixTranspose(viewMatrix);
-
+	
 	DirectX::XMMATRIX projectionMatrix = DirectX::XMMatrixIdentity();
 	m_Direct3D->getProjectionMatrix(projectionMatrix);
-	//XMMatrixTranspose(projectionMatrix);
-
-	// Lock the constant buffer so it can be written to.
-	//result = deviceContext->Map(m_pConstantBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-	//if (FAILED(result))
-	//{
-	//	return false;
-	//}
-
-	//// Get a pointer to the data in the constant buffer.
-	//dataPtr = (ConstantBuffer*)mappedResource.pData;
-
-	// Copy the matrices into the constant buffer.
-	//dataPtr->world = worldMatrix;
-	//dataPtr->wvp = worldMatrix * viewMatrix * projectionMatrix;
-
-	//// Unlock the constant buffer.
-	//deviceContext->Unmap(m_pConstantBuffer, 0);
-
-	// Set the position of the constant buffer in the vertex shader.
-	//bufferNumber = 0;
-
+	
+	DirectX::XMMATRIX orthogonalMatrix = DirectX::XMMatrixIdentity();
+	m_Direct3D->getOrthoMatrix(orthogonalMatrix);
+	
 	// Finanly set the constant buffer in the vertex shader with the updated values.
-
 	DirectX::XMMATRIX wvp = worldMatrix * viewMatrix * projectionMatrix;
 	ConstantBuffer       cb;
 
@@ -213,6 +191,36 @@ bool CGraphicsClass::setShaderParameters(ID3D11DeviceContext* deviceContext, CMy
 	deviceContext->UpdateSubresource(m_pConstantBuffer, 0, 0, &cb, 0, 0); // update data
 	deviceContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 	deviceContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);// set constant buffer to PS.
+
+	return true;
+}
+
+bool CGraphicsClass::setSkyShaderParameters(ID3D11DeviceContext* deviceContext, CMyObject* object)
+{
+	if (m_pConstantBuffer == nullptr)
+		return false;
+
+	// Transpose the matrices to prepare them for the shader.
+	DirectX::XMMATRIX worldMatrix = object->getWorldMatrix();
+
+	DirectX::XMMATRIX viewMatrix = DirectX::XMMatrixIdentity();
+	m_Camera->GetViewMatrix(viewMatrix);
+
+	DirectX::XMMATRIX projectionMatrix = DirectX::XMMatrixIdentity();
+	m_Direct3D->getProjectionMatrix(projectionMatrix);
+
+	DirectX::XMMATRIX orthogonalMatrix = DirectX::XMMatrixIdentity();
+	m_Direct3D->getOrthoMatrix(orthogonalMatrix);
+
+	// Finanly set the constant buffer in the vertex shader with the updated values.
+	DirectX::XMMATRIX wvp = worldMatrix * viewMatrix * projectionMatrix;
+	ConstantBuffer       cb;
+
+	cb.wvp = DirectX::XMMatrixTranspose(wvp);
+
+	deviceContext->UpdateSubresource(SkyConstantBuffer, 0, 0, &cb, 0, 0); // update data
+	deviceContext->VSSetConstantBuffers(0, 1, &SkyConstantBuffer);
+	deviceContext->PSSetConstantBuffers(0, 1, &SkyConstantBuffer);// set constant buffer to PS.
 
 	return true;
 }

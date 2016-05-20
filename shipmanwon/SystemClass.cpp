@@ -3,6 +3,7 @@
 #include "StartScene.h"
 #include "GameScene.h"
 #include "Log.h"
+#include "SkyObject.h"
 
 bool CSystemClass::initialize()
 {
@@ -28,8 +29,10 @@ bool CSystemClass::initialize()
 	CMyScene* scene = SceneManager->getCurrentScene();
 	scene->initialize();
 
+
 	Input = CInputClass::GetInstance();
 	Input->initialize();
+
 
 	//Log initialize
 
@@ -37,6 +40,8 @@ bool CSystemClass::initialize()
 	log->initialize();
 	log->SendErrorLogMessage("test\n");
 	log->SendErrorLogMessage("test2\n");
+
+
 
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	Graphics = new CGraphicsClass;

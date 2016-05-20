@@ -8,6 +8,8 @@
 #include <string>
 #include <functional>
 
+using namespace DirectX;
+
 class CMyObject
 {
 public:
@@ -18,7 +20,7 @@ public:
 	virtual bool	initialize(ID3D11Device* device, HWND hWnd);
 	virtual void	shutdown();
 
-	bool	renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc);
+	virtual bool	renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc);
 	int		getIndexCount();
 
 	void	moveToward(float x, float y, float z);
@@ -31,7 +33,6 @@ public:
 	
 	void	boost();
 	void	setMaximumSpeed(float speed);
-	//void	setboostSpeed();
 	void	resetSpeed();
 	float	getCurrentSpeed();
 	DirectX::XMFLOAT3	getForwardVector();
@@ -44,9 +45,7 @@ public:
 	void	setForwardVector(float x, float y, float z);
 
 	DirectX::XMMATRIX getWorldMatrix();
-
-	DirectX::XMFLOAT3 getCurrentPosition ()
-	{return currentPosition;}
+	DirectX::XMFLOAT3 getCurrentPosition()	{return currentPosition;}
 
 	void	setCurrentPosition(float x, float y, float z);
 	std::string getObjectName() const;
@@ -102,10 +101,10 @@ protected:
 	ID3D11SamplerState*			SamplerLinear = nullptr;
 
 	HRESULT loadTexture();
-	void createShader();
+	virtual void createShader();
 
-	void renderBuffers(ID3D11DeviceContext*);
-	bool initializeBuffers(ID3D11Device* device);
+	virtual void renderBuffers(ID3D11DeviceContext*);
+	virtual bool initializeBuffers(ID3D11Device* device);
 
 	std::vector<VertexType> Verticies;
 	std::vector<unsigned long> Indices;

@@ -22,6 +22,7 @@ public:
 	void shutdown();
 	bool frame(HWND hWnd);
 	bool setShaderParameters(ID3D11DeviceContext* deviceContext, CMyObject* object);
+	bool setSkyShaderParameters(ID3D11DeviceContext * deviceContext, CMyObject * object);
 	
 //	임시 카메라 세팅
 	void setCameraStartScene();
@@ -64,6 +65,14 @@ private:
 
 		XMFLOAT4	lightDir;
 		XMFLOAT4	lightColor;
+	};
+
+	ID3D11Buffer * SkyConstantBuffer;
+	void createSkyConstantBuffer();
+
+	struct    skyConstantBuffer
+	{
+		XMMATRIX wvp;
 	};
 };
 

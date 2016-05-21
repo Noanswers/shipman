@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "StageObject.h"
+#include "TreeObject.h"
 #include "config.h"
 
-bool CStageObject::initialize(ID3D11Device* device, HWND hWnd)
+bool CTreeObject::initialize(ID3D11Device* device, HWND hWnd)
 {
 	if (textureFilename.empty() == true)
 		textureFilename = textureStage;
@@ -10,7 +10,7 @@ bool CStageObject::initialize(ID3D11Device* device, HWND hWnd)
 	if (IsInit == true)
 		return true;
 
-	createStage();
+	createTree();
 	bool result = initializeBuffers(device);
 	if (result == true)
 		IsInit = true;
@@ -21,7 +21,7 @@ bool CStageObject::initialize(ID3D11Device* device, HWND hWnd)
 	return result;
 }
 
-void CStageObject::shutdown()
+void CTreeObject::shutdown()
 {
 	CMyObject::shutdown();
 	shutdownBuffers();
@@ -29,7 +29,7 @@ void CStageObject::shutdown()
 	return;
 }
 
-void CStageObject::createShader()
+void CTreeObject::createShader()
 {
 	ID3DBlob* pErrorBlob = NULL;
 	ID3DBlob* pVSBlob = NULL;
@@ -84,114 +84,106 @@ void CStageObject::createShader()
 	pPSBlob->Release();
 }
 
-void CStageObject::createStage()
+void CTreeObject::createTree()
 {
-	float topRadius = 3.0f;
-	float bottomRadius = 8.0f;
-	float delta = bottomRadius - topRadius;
+	float upperHeight = 12.0f;
+	float upperwidth = 4.0f;
+	float slice = 4;
 
-	float height = 10.0f;
-	int slice = 15;
-	int stack = 1;
+	float lowerWidthTop = 1.0f;
+	float lowerWidthBottom = 2.0f;
+	float lowerHeight = 1.0f;
+	
+	float totalHeight = upperHeight + lowerHeight;
+	float delta = lowerWidthBottom - lowerWidthTop;
 
 	Verticies.clear();
 	Indices.clear();
 
-//	Top Bottom 생성
-	float theta = XM_2PI / slice;
-	Verticies.push_back({ 
-		XMFLOAT3(0.0f, 0.0f, 0.0f), 
-		XMFLOAT4(0.8f, 1.0f, 1.0f, 1.0f), 
-		XMFLOAT3(0.0f, 1.0f, 0.0f), 
-		XMFLOAT2(0.5f, 0.0f) }
+	//	upper 생성 (나뭇잎 부분)
+	Verticies.push_back({
+		XMFLOAT3(0.0f, totalHeight, 0.0f),
+		XMFLOAT4(0.2f, 0.4f, 0.0f, 1.0f),
+		XMFLOAT3(0.0f, 1.0f, 0.0f),
+		XMFLOAT2(0.0f, 0.0f) }
 	);
 
-	for (int i = 0; i <= stack; ++i)
+	float theta = XM_2PI / slice;
+
+	for (int i = 0; i <= slice; ++i)
 	{
-		float a = XM_PI / slice * (i % 2);
-		float stackHeight = height / stack * i;
+		float radius = upperwidth / 2;
+		Verticies.push_back({
+			XMFLOAT3(radius*cosf(theta*i), lowerHeight, radius*sinf(theta*i)),
+			XMFLOAT4(0.2f, 0.4f, 0.0f, 1.0f),
+			XMFLOAT3(0.0f, 1.0f, 0.0f),
+			XMFLOAT2(0.0f, 0.0f) }
+		);
+	}
+
+	// flat design을 위해 normal vector를 계산하여 새로 생성
+	for (int i = 0; i < slice; ++i)
+	{
+		XMFLOAT3 pos1 = Verticies[0].position;
+		XMFLOAT3 pos2 = Verticies[i + 2].position;
+		XMFLOAT3 pos3 = Verticies[i + 1].position;
+
+		XMFLOAT3 vec1, vec2;
+		vec1.x = pos2.x - pos1.x;
+		vec1.y = pos2.y - pos1.y;
+		vec1.z = pos2.z - pos1.z;
+
+		vec2.x = pos3.x - pos1.x;
+		vec2.y = pos3.y - pos1.y;
+		vec2.z = pos3.z - pos1.z;
+
+		XMVECTOR vector1 = XMLoadFloat3(&vec1);
+		XMVECTOR vector2 = XMLoadFloat3(&vec2);
+
+		XMVECTOR cross = XMVector3Cross(vector1, vector2);
+		XMVECTOR result = XMVector3Normalize(cross);
+
+		XMFLOAT3 newNormal;
+		XMStoreFloat3(&newNormal, result);
+
+		auto newVertex1 = Verticies[0];
+		auto newVertex2 = Verticies[i + 2];
+		auto newVertex3 = Verticies[i + 1];
+
+		newVertex1.normal = newNormal;
+		newVertex2.normal = newNormal;
+		newVertex3.normal = newNormal;
+
+		Verticies.push_back(newVertex1);
+		Indices.push_back(Verticies.size() - 1);
+		Verticies.push_back(newVertex2);
+		Indices.push_back(Verticies.size() - 1);
+		Verticies.push_back(newVertex3);
+		Indices.push_back(Verticies.size() - 1);
+	}
+
+	int base = Verticies.size();
+	// lower part 생성 (목재)
+	for (int i = 0; i < 2; ++i)
+	{
+		float radius = lowerWidthTop / 2 + delta*i;
 		for (int j = 0; j <= slice; ++j)
 		{
-			int idx = j%slice;
-			float radius = topRadius + delta*i;
-			//theta += sinf(rand());
-			//float normal = (-1) ^ i;
-			
-			Verticies.push_back({ 
-				XMFLOAT3(radius*cosf(theta*idx - a), -stackHeight, radius*sinf(theta*idx - a)), 
-				XMFLOAT4(0.8f, 1.0f, 1.0f, 1.0f), 
+			Verticies.push_back({
+				XMFLOAT3(radius*cosf(theta*j), lowerHeight - lowerHeight*i, radius*sinf(theta*j)),
+				XMFLOAT4(0.4f, 0.2f, 0.0f, 1.0f),
 				XMFLOAT3(0.0f, 1.0f, 0.0f),
-				XMFLOAT2(1.0f, 0.0f) }
+				XMFLOAT2(0.0f, 0.0f) }
 			);
 		}
 	}
-	Verticies.push_back({
-		XMFLOAT3(0.0f, 0.0f, 0.0f), 
-		XMFLOAT4(0.8f, 1.0f, 1.0f, 1.0f), 
-		XMFLOAT3(0.0f, -1.0f, 0.0f), 
-		XMFLOAT2(0.5f, 0.0f) }
-	);
-	//	Indices 추가
+
+	//	아래 목재부분을 구성하는 정점 새로 생성
 	for (int i = 0; i < slice; ++i)
 	{
-		Indices.push_back(0);
-		Indices.push_back(i + 2);
-		Indices.push_back(i + 1);
-	}
-	//for (int i = 0; i < slice; ++i)
-	//{
-	//	Indices.push_back(Verticies.size()-1);
-	//	Indices.push_back(i + 10);
-	//	Indices.push_back(i + 11);
-	//}
-
-//	윗 삼각형을 구성하는 정점 생성
-	for (int i = 0; i < slice; ++i)
-	{
-		XMFLOAT3 pos1 = Verticies[i + 1].position;
-		XMFLOAT3 pos2 = Verticies[i + 2].position;
-		XMFLOAT3 pos3 = Verticies[i + 2 + slice + 1].position;
-
-		XMFLOAT3 vec1, vec2;
-		vec1.x = pos2.x - pos1.x;
-		vec1.y = pos2.y - pos1.y;
-		vec1.z = pos2.z - pos1.z;
-
-		vec2.x = pos3.x - pos1.x;
-		vec2.y = pos3.y - pos1.y;
-		vec2.z = pos3.z - pos1.z;
-
-		XMVECTOR vector1 = XMLoadFloat3(&vec1);
-		XMVECTOR vector2 = XMLoadFloat3(&vec2);
-
-		XMVECTOR cross = XMVector3Cross(vector1, vector2);
-		XMVECTOR result = XMVector3Normalize(cross);
-		
-		XMFLOAT3 newNormal;
-		XMStoreFloat3(&newNormal, result);
-
-		auto newVertex1 = Verticies[i + 1];
-		auto newVertex2 = Verticies[i + 2];
-		auto newVertex3 = Verticies[i + 2 + slice + 1];
-
-		newVertex1.normal = newNormal;
-		newVertex2.normal = newNormal;
-		newVertex3.normal = newNormal;
-
-		Verticies.push_back(newVertex1);
-		Indices.push_back(Verticies.size() -1);
-		Verticies.push_back(newVertex2);
-		Indices.push_back(Verticies.size() - 1);
-		Verticies.push_back(newVertex3);
-		Indices.push_back(Verticies.size() - 1);
-	}
-
-//	아래 삼각형을 구성하는 정점 생성
-	for (int i = 0; i < slice; ++i)
-	{
-		XMFLOAT3 pos1 = Verticies[i + 1].position;
-		XMFLOAT3 pos2 = Verticies[i + 2 + slice + 1].position;
-		XMFLOAT3 pos3 = Verticies[i + 2 + slice].position;
+		XMFLOAT3 pos1 = Verticies[base + i].position;
+		XMFLOAT3 pos2 = Verticies[base + i + 1].position;
+		XMFLOAT3 pos3 = Verticies[base + i + slice + 2].position;
 
 		XMFLOAT3 vec1, vec2;
 		vec1.x = pos2.x - pos1.x;
@@ -211,9 +203,9 @@ void CStageObject::createStage()
 		XMFLOAT3 newNormal;
 		XMStoreFloat3(&newNormal, result);
 
-		auto newVertex1 = Verticies[i + 1];
-		auto newVertex2 = Verticies[i + 2 + slice + 1];
-		auto newVertex3 = Verticies[i + 2 + slice];
+		auto newVertex1 = Verticies[base + i];
+		auto newVertex2 = Verticies[base + i + 1];
+		auto newVertex3 = Verticies[base + i + slice + 2];
 
 		newVertex1.normal = newNormal;
 		newVertex2.normal = newNormal;
@@ -226,4 +218,45 @@ void CStageObject::createStage()
 		Verticies.push_back(newVertex3);
 		Indices.push_back(Verticies.size() - 1);
 	}
+
+	for (int i = 0; i < slice; ++i)
+	{
+		XMFLOAT3 pos1 = Verticies[base + i].position;
+		XMFLOAT3 pos2 = Verticies[base + i + slice + 2].position;
+		XMFLOAT3 pos3 = Verticies[base + i + slice + 1].position;
+
+		XMFLOAT3 vec1, vec2;
+		vec1.x = pos2.x - pos1.x;
+		vec1.y = pos2.y - pos1.y;
+		vec1.z = pos2.z - pos1.z;
+
+		vec2.x = pos3.x - pos1.x;
+		vec2.y = pos3.y - pos1.y;
+		vec2.z = pos3.z - pos1.z;
+
+		XMVECTOR vector1 = XMLoadFloat3(&vec1);
+		XMVECTOR vector2 = XMLoadFloat3(&vec2);
+
+		XMVECTOR cross = XMVector3Cross(vector1, vector2);
+		XMVECTOR result = XMVector3Normalize(cross);
+
+		XMFLOAT3 newNormal;
+		XMStoreFloat3(&newNormal, result);
+
+		auto newVertex1 = Verticies[base + i];
+		auto newVertex2 = Verticies[base + i + slice + 2];
+		auto newVertex3 = Verticies[base + i + slice + 1];
+
+		newVertex1.normal = newNormal;
+		newVertex2.normal = newNormal;
+		newVertex3.normal = newNormal;
+
+		Verticies.push_back(newVertex1);
+		Indices.push_back(Verticies.size() - 1);
+		Verticies.push_back(newVertex2);
+		Indices.push_back(Verticies.size() - 1);
+		Verticies.push_back(newVertex3);
+		Indices.push_back(Verticies.size() - 1);
+	}
+
 }

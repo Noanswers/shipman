@@ -20,7 +20,7 @@ bool CSkyObject::initialize(ID3D11Device* device, HWND hWnd)
 
 	loadSkyTexture();
 	createShader();
-	createSphere(8.0f, 10, 10);
+	createSphere(300.0f, 10, 10);
 	createRenderState();
 	createDepthStencil();
 

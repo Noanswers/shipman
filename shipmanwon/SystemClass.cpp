@@ -349,8 +349,8 @@ void CSystemClass::getPlayerInput()
 		CPlayerData* player = std::get<CPlayerData*>(iter);
 		KeySetting key = player->getPlayerKeySetting();
 
-		if (Input->isKeyDown(key.up))
-			std::get<CPlayerObject*>(iter)->accelerate();
+ 		if (Input->isKeyDown(key.up))
+ 			std::get<CPlayerObject*>(iter)->accelerate();
 
 		if (Input->isKeyDown(key.right))
 			std::get<CPlayerObject*>(iter)->setRotate(0.0f, 0.7f, 0.0f);
@@ -359,6 +359,6 @@ void CSystemClass::getPlayerInput()
 			std::get<CPlayerObject*>(iter)->setRotate(0.0f, -0.7f, 0.0f);
 
 		if (Input->isKeyDown(key.down))
-			std::get<CPlayerObject*>(iter)->boost();
+			std::get<CPlayerObject*>(iter)->moveStop();
 	}
 }

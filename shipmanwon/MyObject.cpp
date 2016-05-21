@@ -87,23 +87,6 @@ void CMyObject::moveTowardByOuter(float x, float y, float z)
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
-void CMyObject::moveToward(float x, float y, float z, float now_speed)
-{
-	float sum = abs(x) + abs(y) + abs(z);
-
-	DirectX::XMMATRIX temp = {
-		0.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 0.0f,
-		x / sum, y / sum, z / sum, 0.0f
-	};
-	ObjectTranslate += temp * now_speed;
-
-	setCurrentPosition(x / sum*now_speed, y / sum*now_speed, z / sum*now_speed);
-
-	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
-}
-
 void CMyObject::moveForward()
 {
 	moveToward(ForwardVector.x, ForwardVector.y, ForwardVector.z);
@@ -111,7 +94,6 @@ void CMyObject::moveForward()
 
 void CMyObject::move()
 {
-//	moveForward();
 	if (OuterSpeed <= 0) {
 		OuterSpeed = 0;
 		OuterVector = ForwardVector;
@@ -123,30 +105,24 @@ void CMyObject::move()
 
 void CMyObject::moveBackward() //test function. made by scintil
 {
-	//moveToward(-ForwardVector.x, ForwardVector.y, -ForwardVector.z);
-	//moveToward(-ForwardVector.x, ForwardVector.y, -ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
-	moveToward(-30000 * ForwardVector.x, ForwardVector.y, -30000 * ForwardVector.z);
+	moveToward(-1 * ForwardVector.x, ForwardVector.y, -1 * ForwardVector.z);
 }	
+
+void CMyObject::moveStop()
+{
+	CurrentSpeed = 0.0f;	
+	moveBackward();
+}
 
 void CMyObject::accelerate()
 {
 	if (CurrentSpeed < MaximumSpeed)
 	{
-		SpeedDelta += 0.02f;
+		SpeedDelta += 0.015f;
+
 		if (SpeedDelta > DirectX::XM_PI / 2)
 			SpeedDelta = DirectX::XM_PI / 2;
+
 		CurrentSpeed = MaximumSpeed * sinf(SpeedDelta);
 	}
 }

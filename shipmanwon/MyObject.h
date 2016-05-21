@@ -23,17 +23,18 @@ public:
 
 	void	moveToward(float x, float y, float z);
 	void	moveTowardByOuter(float x, float y, float z);
-	void	moveToward(float x, float y, float z, float now_speed);
 	void	moveForward();
 	void	moveBackward();
+	void	moveStop();
 
 	void	accelerate();
 	
 	void	boost();
 	void	setMaximumSpeed(float speed);
-	//void	setboostSpeed();
+
 	void	resetSpeed();
 	float	getCurrentSpeed() const;
+
 	DirectX::XMFLOAT3	getForwardVector();
 	DirectX::XMFLOAT3	getForwardTheta() const;
 
@@ -69,7 +70,7 @@ public:
 
 protected:
 	void shutdownBuffers();
-	float ObjectCOR = 0.7;
+	float ObjectCOR = 1.9;
 	float ObjectMass = 2.0f;
 
 	DirectX::XMFLOAT3 currentPosition = { 0.0f,0.0f,0.0f };

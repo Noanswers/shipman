@@ -15,23 +15,16 @@ bool CGameManager::frame()
 
 void CGameManager::collisionCheck(std::vector<CPlayerObject*> playerVector)
 {
-	int numOfPlayer = 2;
-	int idx = 0;
+	if (playerVector.size() < 2)
+		return;
 
-	for (auto& iter : playerVector)
+	for (auto iter = playerVector.begin(); iter < playerVector.end() - 1; ++iter)
 	{
-		if (test_checker)
-			test_checker = false;
-
-		if ((idx + 1) < numOfPlayer)
-			if (iter->isCollisionPlayer(playerVector[idx + 1]))
-			{
-				doCollision(playerVector[idx], playerVector[idx + 1]);
-				test_checker = true;
-			}
-		else
-			break;
-		idx++;
+		for (auto iter2 = (iter + 1); iter2 < playerVector.end(); ++iter2)
+		{
+			if((*iter)->isCollisionPlayer(*iter2))
+				doCollision(*iter, *iter2);
+		}
 	}
 }
 
@@ -39,8 +32,8 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 {
 	//물체가 비벼질 경우 물체의 위치가 겹쳐서 충돌이 계속 일어나는 경우가 발생.
 	//최대한 방지 하기 위해 충돌시 물체의 현재 위치를 충돌 포인트에서 조금씩 뒤로 띄워줌.
-	player1->moveBackward();
-	player2->moveBackward();
+	//player1->moveBackward();
+	//player2->moveBackward();
 
 	//현재 위치
 	auto p1Pos = player1->getCurrentPosition();
@@ -87,10 +80,15 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 	//Forward Vector에 대하여 내적을 진행하여 각도에 따라 충돌을 분리
 	auto FV_Dot_product = p1FV.x * p2FV.x + p1FV.y * p2FV.y + p1FV.z * p2FV.z;
 
+	player1->moveToward(-colVec.x, colVec.y , -colVec.z);
+	player2->moveToward(colVec.x, colVec.y, colVec.z);
+
 	//player new speed
 	if ( FV_Dot_product > 0 )
 	{
-		OutputDebugStringW(L"scintil \n");
+		//////////////////////////////////////////////////////////////////////////
+		//Logic.1
+		//OutputDebugStringW(L"scintil \n");
 
 		newP1x = p2xSpeed*(-colVec.x);
  		newP1z = p2zSpeed*(-colVec.z);
@@ -98,18 +96,23 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
  		newP2x = p1xSpeed*(colVec.x);
  		newP2z = p1zSpeed*(colVec.z);
 
-		player1->setOuterSpeed(sqrt(newP1x*newP1x + newP1z*newP1z) * 3);
+		float newP1OuterSpeed = sqrt(newP1x*newP1x + newP1z*newP1z);
+		float newP2OuterSpeed = sqrt(newP2x*newP2x + newP2z*newP2z);
+
+		player1->setOuterSpeed(newP1OuterSpeed * 3);
 		player1->setCurrentSpeed(0);
 
-		player2->setOuterSpeed(sqrt(newP2x*newP2x + newP2z*newP2z) * 3);
+		player2->setOuterSpeed(newP2OuterSpeed * 3);
 		player2->setCurrentSpeed(0);
 
-		player1->setOuterTheta({ 0.0f, atan2(newP1z, newP1x), 0.0f });
-		player2->setOuterTheta({ 0.0f, atan2(newP2z, newP2x), 0.0f });
+		player1->setOuterTheta({ 0.0f, DirectX::XM_2PI- atan2(newP1z, newP1x), 0.0f });
+		player2->setOuterTheta({ 0.0f, DirectX::XM_2PI- atan2(newP2z, newP2x), 0.0f });
 	}
 	else
 	{
-		OutputDebugStringW(L"jsfumato \n"); 
+		//////////////////////////////////////////////////////////////////////////
+		//Logic.2
+		//OutputDebugStringW(L"jsfumato \n"); 
 
 		newP1x = (p1m - p2m*e) / (p1m + p2m)*p1xSpeed + (p2m + p2m*e) / (p1m + p2m)*p2xSpeed;
 		newP1z = (p1m - p2m*e) / (p1m + p2m)*p1zSpeed + (p2m + p2m*e) / (p1m + p2m)*p2zSpeed;
@@ -119,24 +122,23 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 
 		auto euler = (float)exp(1);
 
+		float newP1OuterSpeed = sqrt(newP1x*newP1x + newP1z*newP1z);
+		float newP2OuterSpeed = sqrt(newP2x*newP2x + newP2z*newP2z);
+
 		//P1 벡터 합성
-		auto newP1OuterSpeed = sqrt( log( newP1x*newP1x + newP1z*newP1z + euler) ) - 0.8f;
+		//auto newP1OuterSpeed = sqrt( log( newP1x*newP1x + newP1z*newP1z + euler) ) - 0.8f;
 
 		player1->setOuterSpeed( newP1OuterSpeed );
 		player1->setCurrentSpeed(0);
 
-		//assert(player1->getOuterSpeed() <= 0.08f);
-		
 		//P2 벡터 합성
-		auto newP2OuterSpeed = sqrt( log( newP2x*newP2x + newP2z*newP2z + euler) ) - 0.8f;
+		//auto newP2OuterSpeed = sqrt( log( newP2x*newP2x + newP2z*newP2z + euler) ) - 0.8f;
 
 		player2->setOuterSpeed( newP2OuterSpeed );
 		player2->setCurrentSpeed(0);
 
-		//assert(player2->getOuterSpeed() <= 0.08f);
-
-		player1->setOuterTheta({ 0.0f, atan2(newP1z, newP1x), 0.0f });
-		player2->setOuterTheta({ 0.0f, atan2(newP2z, newP2x), 0.0f });
+		player1->setOuterTheta({ 0.0f, DirectX::XM_2PI - atan2(newP1z, newP1x), 0.0f });
+		player2->setOuterTheta({ 0.0f, DirectX::XM_2PI - atan2(newP2z, newP2x), 0.0f });
 	}
 
 	//////////////////////////////////////////////////////////////////////////

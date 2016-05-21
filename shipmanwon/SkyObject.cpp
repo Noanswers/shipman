@@ -124,8 +124,6 @@ void CSkyObject::createSkyVertexBufferLayout(ID3DBlob* pVSBlob)
 
 bool CSkyObject::initializeBuffers(ID3D11Device* device)
 {
-	temp_device = device;
-
 	createSkyVertexBuffer();
 	createSkyIndexBuffer();
 	return true;
@@ -133,7 +131,6 @@ bool CSkyObject::initializeBuffers(ID3D11Device* device)
 
 void CSkyObject::createSkyVertexBuffer()
 {
-	//CreateSkySphereBuffer(30, 30, 5000.0f); 				   // Sphere 생성 및 vertex/index 정보 구성(책 예제 참조)
 	VertexType* vertices = &Verticies[0];
 
 	D3D11_BUFFER_DESC bd;
@@ -166,7 +163,6 @@ void CSkyObject::createSkyIndexBuffer()
 
 void CSkyObject::loadSkyTexture()
 {
-//	CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &TextureRV, NULL);
 	CreateDDSTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &TextureRV, NULL);
 }
 

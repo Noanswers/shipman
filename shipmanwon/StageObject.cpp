@@ -10,13 +10,15 @@ bool CStageObject::initialize(ID3D11Device* device, HWND hWnd)
 	if (IsInit == true)
 		return true;
 
-	createStage();
-	bool result = initializeBuffers(device);
-	if (result == true)
-		IsInit = true;
+	temp_device = device;
 
 	loadTexture();
 	createShader();
+	createStage(topRadius, bottomRadius, height, slice);
+
+	bool result = initializeBuffers(device);
+	if (result == true)
+		IsInit = true;
 
 	return result;
 }
@@ -84,25 +86,26 @@ void CStageObject::createShader()
 	pPSBlob->Release();
 }
 
-void CStageObject::createStage()
+void CStageObject::createStage(float topRadius, float bottomRadius, float height, int slice)
 {
-	float topRadius = 3.0f;
-	float bottomRadius = 8.0f;
-	float delta = bottomRadius - topRadius;
-
-	float height = 10.0f;
-	int slice = 15;
-	int stack = 1;
-
 	Verticies.clear();
 	Indices.clear();
 
-//	Top Bottom 생성
+	createTempVertex(topRadius, bottomRadius, height, slice, stack);
+	createUpperTriangleOnStack(slice);
+	createLowerTriangleOnStack(slice);
+}
+
+void CStageObject::createTempVertex(float topRadius, float bottomRadius, float height, int slice, int stack)
+{
+	float delta = bottomRadius - topRadius;
+
+	//	Top Bottom 생성
 	float theta = XM_2PI / slice;
-	Verticies.push_back({ 
-		XMFLOAT3(0.0f, 0.0f, 0.0f), 
-		XMFLOAT4(0.8f, 1.0f, 1.0f, 1.0f), 
-		XMFLOAT3(0.0f, 1.0f, 0.0f), 
+	Verticies.push_back({
+		XMFLOAT3(0.0f, 0.0f, 0.0f),
+		XMFLOAT4(0.8f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT3(0.0f, 1.0f, 0.0f),
 		XMFLOAT2(0.5f, 0.0f) }
 	);
 
@@ -116,19 +119,19 @@ void CStageObject::createStage()
 			float radius = topRadius + delta*i;
 			//theta += sinf(rand());
 			//float normal = (-1) ^ i;
-			
-			Verticies.push_back({ 
-				XMFLOAT3(radius*cosf(theta*idx - a), -stackHeight, radius*sinf(theta*idx - a)), 
-				XMFLOAT4(0.8f, 1.0f, 1.0f, 1.0f), 
+
+			Verticies.push_back({
+				XMFLOAT3(radius*cosf(theta*idx - a), -stackHeight, radius*sinf(theta*idx - a)),
+				XMFLOAT4(0.8f, 1.0f, 1.0f, 1.0f),
 				XMFLOAT3(0.0f, 1.0f, 0.0f),
 				XMFLOAT2(1.0f, 0.0f) }
 			);
 		}
 	}
 	Verticies.push_back({
-		XMFLOAT3(0.0f, 0.0f, 0.0f), 
-		XMFLOAT4(0.8f, 1.0f, 1.0f, 1.0f), 
-		XMFLOAT3(0.0f, -1.0f, 0.0f), 
+		XMFLOAT3(0.0f, 0.0f, 0.0f),
+		XMFLOAT4(0.8f, 1.0f, 1.0f, 1.0f),
+		XMFLOAT3(0.0f, -1.0f, 0.0f),
 		XMFLOAT2(0.5f, 0.0f) }
 	);
 	//	Indices 추가
@@ -138,14 +141,11 @@ void CStageObject::createStage()
 		Indices.push_back(i + 2);
 		Indices.push_back(i + 1);
 	}
-	//for (int i = 0; i < slice; ++i)
-	//{
-	//	Indices.push_back(Verticies.size()-1);
-	//	Indices.push_back(i + 10);
-	//	Indices.push_back(i + 11);
-	//}
+}
 
-//	윗 삼각형을 구성하는 정점 생성
+void CStageObject::createUpperTriangleOnStack(int slice)
+{
+	//	윗 삼각형을 구성하는 정점 생성
 	for (int i = 0; i < slice; ++i)
 	{
 		XMFLOAT3 pos1 = Verticies[i + 1].position;
@@ -166,7 +166,7 @@ void CStageObject::createStage()
 
 		XMVECTOR cross = XMVector3Cross(vector1, vector2);
 		XMVECTOR result = XMVector3Normalize(cross);
-		
+
 		XMFLOAT3 newNormal;
 		XMStoreFloat3(&newNormal, result);
 
@@ -179,14 +179,17 @@ void CStageObject::createStage()
 		newVertex3.normal = newNormal;
 
 		Verticies.push_back(newVertex1);
-		Indices.push_back(Verticies.size() -1);
+		Indices.push_back(Verticies.size() - 1);
 		Verticies.push_back(newVertex2);
 		Indices.push_back(Verticies.size() - 1);
 		Verticies.push_back(newVertex3);
 		Indices.push_back(Verticies.size() - 1);
 	}
+}
 
-//	아래 삼각형을 구성하는 정점 생성
+void CStageObject::createLowerTriangleOnStack(int slice)
+{
+	//	아래 삼각형을 구성하는 정점 생성
 	for (int i = 0; i < slice; ++i)
 	{
 		XMFLOAT3 pos1 = Verticies[i + 1].position;

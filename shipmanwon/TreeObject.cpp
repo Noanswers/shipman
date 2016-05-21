@@ -4,20 +4,22 @@
 
 bool CTreeObject::initialize(ID3D11Device* device, HWND hWnd)
 {
+	temp_device = device;
+
 	if (textureFilename.empty() == true)
 		textureFilename = textureStage;
 
 	if (IsInit == true)
 		return true;
-
-	createTree();
+	
+	loadTexture();
+	createShader();
+	createTree(upperHeight, upperWidth, lowerWidthTop, lowerWidthBottom, lowerHeight, slice);
+	
 	bool result = initializeBuffers(device);
 	if (result == true)
 		IsInit = true;
-
-	loadTexture();
-	createShader();
-
+	
 	return result;
 }
 
@@ -84,21 +86,27 @@ void CTreeObject::createShader()
 	pPSBlob->Release();
 }
 
-void CTreeObject::createTree()
+void CTreeObject::createTree(float upperHeight, float upperWidth, float lowerWidthTop, float lowerWidthBottom, float lowerHeight, int slice)
 {
-	float upperHeight = 12.0f;
-	float upperwidth = 4.0f;
-	float slice = 4;
-
-	float lowerWidthTop = 1.0f;
-	float lowerWidthBottom = 2.0f;
-	float lowerHeight = 1.0f;
-	
-	float totalHeight = upperHeight + lowerHeight;
+	/*float totalHeight = upperHeight + lowerHeight;
 	float delta = lowerWidthBottom - lowerWidthTop;
-
+*/
 	Verticies.clear();
 	Indices.clear();
+
+	createTempUpperVertex(upperHeight, upperWidth, lowerHeight, slice);
+	createUpperPart(upperHeight, upperWidth, lowerHeight, slice);
+
+	int base = Verticies.size();
+	
+	createTempVertexOfWood(lowerWidthTop, lowerWidthBottom, lowerHeight, slice);
+	createUpperTriangleOfWood(lowerWidthTop, lowerWidthBottom, slice, base);
+	createLowerTriangleOfWood(lowerWidthTop, lowerWidthBottom, slice, base);
+}
+
+void CTreeObject::createTempUpperVertex(float upperHeight, float upperwidth, float lowerHeight, int slice)
+{
+	float totalHeight = upperHeight + lowerHeight;
 
 	//	upper 생성 (나뭇잎 부분)
 	Verticies.push_back({
@@ -120,6 +128,32 @@ void CTreeObject::createTree()
 			XMFLOAT2(0.0f, 0.0f) }
 		);
 	}
+}
+
+void CTreeObject::createUpperPart(float upperHeight, float upperwidth, float lowerHeight, int slice)
+{
+	//float totalHeight = upperHeight + lowerHeight;
+
+	////	upper 생성 (나뭇잎 부분)
+	//Verticies.push_back({
+	//	XMFLOAT3(0.0f, totalHeight, 0.0f),
+	//	XMFLOAT4(0.2f, 0.4f, 0.0f, 1.0f),
+	//	XMFLOAT3(0.0f, 1.0f, 0.0f),
+	//	XMFLOAT2(0.0f, 0.0f) }
+	//);
+
+	//float theta = XM_2PI / slice;
+
+	//for (int i = 0; i <= slice; ++i)
+	//{
+	//	float radius = upperwidth / 2;
+	//	Verticies.push_back({
+	//		XMFLOAT3(radius*cosf(theta*i), lowerHeight, radius*sinf(theta*i)),
+	//		XMFLOAT4(0.2f, 0.4f, 0.0f, 1.0f),
+	//		XMFLOAT3(0.0f, 1.0f, 0.0f),
+	//		XMFLOAT2(0.0f, 0.0f) }
+	//	);
+	//}
 
 	// flat design을 위해 normal vector를 계산하여 새로 생성
 	for (int i = 0; i < slice; ++i)
@@ -161,8 +195,13 @@ void CTreeObject::createTree()
 		Verticies.push_back(newVertex3);
 		Indices.push_back(Verticies.size() - 1);
 	}
+}
 
-	int base = Verticies.size();
+void CTreeObject::createTempVertexOfWood(float lowerWidthTop, float lowerWidthBottom, float lowerHeight, int slice)
+{
+	float delta = lowerWidthBottom - lowerWidthTop;
+	float theta = XM_2PI / slice;
+
 	// lower part 생성 (목재)
 	for (int i = 0; i < 2; ++i)
 	{
@@ -177,6 +216,12 @@ void CTreeObject::createTree()
 			);
 		}
 	}
+}
+
+void CTreeObject::createUpperTriangleOfWood(float lowerWidthTop, float lowerWidthBottom, int slice, int base)
+{
+	float delta = lowerWidthBottom - lowerWidthTop;
+	float theta = XM_2PI / slice;
 
 	//	아래 목재부분을 구성하는 정점 새로 생성
 	for (int i = 0; i < slice; ++i)
@@ -218,6 +263,12 @@ void CTreeObject::createTree()
 		Verticies.push_back(newVertex3);
 		Indices.push_back(Verticies.size() - 1);
 	}
+}
+
+void CTreeObject::createLowerTriangleOfWood(float lowerWidthTop, float lowerWidthBottom, int slice, int base)
+{
+	float delta = lowerWidthBottom - lowerWidthTop;
+	float theta = XM_2PI / slice;
 
 	for (int i = 0; i < slice; ++i)
 	{
@@ -258,5 +309,4 @@ void CTreeObject::createTree()
 		Verticies.push_back(newVertex3);
 		Indices.push_back(Verticies.size() - 1);
 	}
-
 }

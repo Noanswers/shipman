@@ -4,13 +4,15 @@
 
 bool CGroundObject::initialize(ID3D11Device* device, HWND hWnd)
 {
+	temp_device = device;
+
 	if (textureFilename.empty() == true)
 		textureFilename = textureStage;
 
 	if (IsInit == true)
 		return true;
 
-	createGround();
+	createGround(100.0f, 100.0f, 50);
 	bool result = initializeBuffers(device);
 	if (result == true)
 		IsInit = true;
@@ -84,17 +86,19 @@ void CGroundObject::createShader()
 	pPSBlob->Release();
 }
 
-void CGroundObject::createGround()
+void CGroundObject::createGround(float width, float length, int slice)
 {
-	float width = 500.0f;
-	float length = 500.0f;
-
-	int slice = 50;
-
 	std::vector<VertexType> tempVec;
 	Verticies.clear();
 	Indices.clear();
 
+	createTempVertex(tempVec, width, length, slice);
+	createGroundLeftUpper(tempVec, slice);
+	createGroundRightLower(tempVec, slice);
+}
+
+void CGroundObject::createTempVertex(std::vector<VertexType>& vec, float width, float length, int slice)
+{
 	float deltaWidth = width / slice;
 	float deltaLength = length / slice;
 	for (int i = 0; i <= slice; ++i)
@@ -102,7 +106,7 @@ void CGroundObject::createGround()
 		for (int j = 0; j <= slice; ++j)
 		{
 			float height = 3.0f * sinf(100.0f / (rand() % 200));
-			tempVec.push_back({
+			vec.push_back({
 				XMFLOAT3(deltaWidth*j - width / 2, height, deltaLength*i - length / 2),
 				XMFLOAT4(0.2f, 0.3f, 0.0f, 1.0f),
 				XMFLOAT3(0.0f, 1.0f, 0.0f),
@@ -110,7 +114,10 @@ void CGroundObject::createGround()
 			);
 		}
 	}
+}
 
+void CGroundObject::createGroundLeftUpper(std::vector<VertexType>& tempVec, int slice)
+{
 	for (int i = 0; i < slice; ++i)
 	{
 		for (int j = 0; j < slice; ++j)
@@ -135,11 +142,11 @@ void CGroundObject::createGround()
 			XMVECTOR result = XMVector3Normalize(cross);
 
 			XMFLOAT3 newNormal;
-			XMStoreFloat3(&newNormal, result);
+			DirectX::XMStoreFloat3(&newNormal, result);
 
 			auto newVertex1 = tempVec[j + i*(slice + 1)];
 			auto newVertex2 = tempVec[j + (i + 1)*(slice + 1)];
-			auto newVertex3 = tempVec[j + 1 +(i + 1)*(slice + 1)];
+			auto newVertex3 = tempVec[j + 1 + (i + 1)*(slice + 1)];
 
 			newVertex1.normal = newNormal;
 			newVertex2.normal = newNormal;
@@ -151,13 +158,12 @@ void CGroundObject::createGround()
 			Indices.push_back(Verticies.size() - 1);
 			Verticies.push_back(newVertex3);
 			Indices.push_back(Verticies.size() - 1);
-
-			//Indices.push_back(j + i*(slice+1));
-			//Indices.push_back(j + 1 + i*(slice + 1));
-			//Indices.push_back(j + 1 + (i+1)*(slice + 1));
 		}
 	}
+}
 
+void CGroundObject::createGroundRightLower(std::vector<VertexType>& tempVec, int slice)
+{
 	for (int i = 0; i < slice; ++i)
 	{
 		for (int j = 0; j < slice; ++j)
@@ -198,10 +204,6 @@ void CGroundObject::createGround()
 			Indices.push_back(Verticies.size() - 1);
 			Verticies.push_back(newVertex3);
 			Indices.push_back(Verticies.size() - 1);
-
-			//Indices.push_back(j + i*(slice + 1));
-			//Indices.push_back(j + 1 + (i + 1)*(slice + 1));
-			//Indices.push_back(j + (i + 1)*(slice + 1));
 		}
 	}
 }

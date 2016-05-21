@@ -57,7 +57,6 @@ bool CStageObject::isGetOutStage(DirectX::XMFLOAT3 pos)
 	float x = pos.x;
 	float z = pos.z;
 	float x1, x2, z1, z2;
-	int count = 0;
 
 	for (int i = 0; i < 4 /*vertix_num*/; i++)
 	{
@@ -68,9 +67,11 @@ bool CStageObject::isGetOutStage(DirectX::XMFLOAT3 pos)
 
 		float result = (z - z1) *((x2 - x1) / (z2 - z1)) + x1;
 
-		if (result >= x)
-			if (result <= max(x1, x2))
-				temp.insert(temp.end(), result);
+		if (result < x)
+			continue;
+		/*if (result >= x)*/
+		if (result <= max(x1, x2) && result >= min(x1, x2))
+			temp.insert(temp.end(), result);
 	}
 
 	if (temp.size() % 2 == 0)

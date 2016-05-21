@@ -54,6 +54,6 @@ void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageO
 }
 void CGameManager::doGetOut(CPlayerObject* player)
 {
+	//if (player->getCurrentPosition().y > -10000.0f)
 	player->dropDown(0.2f);
-	OutputDebugStringA("out\n");
 }

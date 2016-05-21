@@ -38,6 +38,9 @@ void CPlayerObject::shutdown()
 
 void CPlayerObject::dropDown(float speed)
 {
+	/*if (currentPosition.y < -2000.0f)
+		return;*/
+
 	DirectX::XMMATRIX temp = {
 		0.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f,
@@ -47,6 +50,9 @@ void CPlayerObject::dropDown(float speed)
 	ObjectTranslate += temp * speed;
 
 	setCurrentPosition(currentPosition.x, currentPosition.y - speed, currentPosition.z);
+	
+	ObjectRotate *= DirectX::XMMatrixRotationX(sinf(ForwardTheta.y) * speed/5);
+	ObjectRotate *= DirectX::XMMatrixRotationZ(cosf(ForwardTheta.y) * speed/5);
 
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }

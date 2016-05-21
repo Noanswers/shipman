@@ -195,7 +195,9 @@ bool CSystemClass::frame()
 	for (auto& iter : PlayerDataVector)
 	{
 		playerVector.push_back(std::get<CPlayerObject*>(iter));
+		
 	}
+	
 
 	bool result = GameManager->frame();
 	if (!result)

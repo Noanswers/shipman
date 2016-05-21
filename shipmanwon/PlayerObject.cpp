@@ -36,6 +36,21 @@ void CPlayerObject::shutdown()
 	return;
 }
 
+void CPlayerObject::dropDown(float speed)
+{
+	DirectX::XMMATRIX temp = {
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 0.0f,
+		0.0f,-1.0f, 0.0f, 0.0f
+	};
+	ObjectTranslate += temp * speed;
+
+	setCurrentPosition(currentPosition.x, currentPosition.y - speed, currentPosition.z);
+
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+}
+
 bool CPlayerObject::isCollisionPlayer(CPlayerObject* enemy)
 {
 	DirectX::XMFLOAT3 en_curPos = enemy->currentPosition;

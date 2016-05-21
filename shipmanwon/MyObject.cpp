@@ -108,7 +108,7 @@ void CMyObject::setCurrentPosition(float x, float y, float z)
 	currentPosition.z += z;
 }
 
-void CMyObject::setTranslate(float x, float y, float z)
+void CMyObject::setTranslate(float x, float y, float z) 
 {
 	setCurrentPosition(x, y, z);
 

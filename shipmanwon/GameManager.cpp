@@ -21,9 +21,7 @@ void CGameManager::collisionCheck(std::vector<CPlayerObject*> playerVector)
 	for (auto& iter : playerVector)
 	{
 		if (test_checker)
-		{
 			test_checker = false;
-		}
 
 		if ((idx + 1) < numOfPlayer)
 			if (iter->isCollisionPlayer(playerVector[idx + 1]))
@@ -31,14 +29,10 @@ void CGameManager::collisionCheck(std::vector<CPlayerObject*> playerVector)
 				doCollision(playerVector[idx], playerVector[idx + 1]);
 				test_checker = true;
 			}
-
-
 		else
 			break;
-
 		idx++;
 	}
-
 }
 
 void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
@@ -49,9 +43,6 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 
 void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageObject* stage)
 {
-	//int numOfPlayer = 2;
-	//int idx = 0;
-
 	for (auto& iter : playerVector)
 	{
 		DirectX::XMFLOAT3 currentPos = iter->getCurrentPosition();
@@ -59,11 +50,10 @@ void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageO
 		{
 			doGetOut(iter);
 		}
-		
-		
 	}
 }
 void CGameManager::doGetOut(CPlayerObject* player)
 {
+	player->dropDown(0.2f);
 	OutputDebugStringA("out\n");
 }

@@ -108,7 +108,13 @@
     <ClInclude Include="MyChrono.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
+    <ClInclude Include="TreeObject.h">
+      <Filter>소스 파일\object\subClass</Filter>
+    </ClInclude>
     <ClInclude Include="SkyObject.h">
+      <Filter>소스 파일\object\subClass</Filter>
+    </ClInclude>
+    <ClInclude Include="GroundObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
@@ -179,7 +185,13 @@
     <ClCompile Include="MyChrono.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
+    <ClCompile Include="TreeObject.cpp">
+      <Filter>소스 파일\object\subClass</Filter>
+    </ClCompile>
     <ClCompile Include="SkyObject.cpp">
+      <Filter>소스 파일\object\subClass</Filter>
+    </ClCompile>
+    <ClCompile Include="GroundObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

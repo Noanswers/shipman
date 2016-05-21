@@ -21,6 +21,7 @@ static struct config
 static const std::wstring VS_Directory = config::makeDirectory("shipmanwon\\color.vs");
 static const std::wstring PS_Directory = config::makeDirectory("shipmanwon\\color.ps");
 static const std::wstring FxFile = config::makeDirectory("shipmanwon\\texture\\stage.fx");
+static const std::wstring StageFxFile = config::makeDirectory("shipmanwon\\texture\\newstage.fx");
 static const std::wstring SkyFxFile = config::makeDirectory("shipmanwon\\texture\\skydome.fx");
 
 

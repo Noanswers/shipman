@@ -294,6 +294,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GraphicsClass.h" />
+    <ClInclude Include="GroundObject.h" />
     <ClInclude Include="InputClass.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="MyChrono.h" />
@@ -315,6 +316,7 @@
     <ClInclude Include="SystemClass.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="TreeObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CameraClass.cpp" />
@@ -323,6 +325,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GraphicsClass.cpp" />
+    <ClCompile Include="GroundObject.cpp" />
     <ClCompile Include="InputClass.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="MyChrono.cpp" />
@@ -349,6 +352,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="SystemClass.cpp" />
+    <ClCompile Include="TreeObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="shipmanwon.rc" />

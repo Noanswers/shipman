@@ -338,8 +338,6 @@ void CMyObject::createShader()
 
 bool CMyObject::initializeBuffers(ID3D11Device* device)
 {
-	temp_device = device;
-
 	if (Verticies.size() < 1)
 		return true;
 

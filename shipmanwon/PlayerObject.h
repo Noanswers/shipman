@@ -24,6 +24,7 @@ public:
 	{
 		return bottomRadius;
 	}
+	void	dropDown(float speed);
 	bool	isCollisionPlayer(CPlayerObject * enemy);
 	
 private:

@@ -12,12 +12,12 @@ void CStartScene::initialize()
 
 	CStartObject* title = new CStartObject();
 	title->setObjectName("title");
-	title->setTranslate(0, 1.0f, 0);
+	title->setTranslate(0.0f, 1.0f, 0.0f);
 	pushBack(title, 10);
 
 	CStartObject* pressButton = new CStartObject();
 	pressButton->setObjectName("pressButton");
-	pressButton->setTranslate(0, -2.0f, -1.5f);
+	pressButton->setTranslate(0.0f, -2.0f, -1.5f);
 	pressButton->setScale(0.5f, 0.5f, 0.5f);
 	pressButton->setTexture(texturePress);
 	pushBack(pressButton, 10);
@@ -28,6 +28,6 @@ void CStartScene::doAction(float delta)
 	auto vector = getObjectsByName("title");
 	for (auto& iter : vector)
 	{
-		iter->setRotate(delta, 0, 0);
+		iter->setRotate(delta, 0.0f, 0.0f);
 	}
 }

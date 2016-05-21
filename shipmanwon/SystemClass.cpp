@@ -130,6 +130,11 @@ void CSystemClass::gameSceneInit()
 	SceneManager->pushBack(gameScene);
 	
 	CMyScene* scene = SceneManager->getCurrentScene();
+	
+	//수정
+	CStageObject* stageobject = new CStageObject();
+	gameScene->pushBack(stageobject, 10);
+	stage = stageobject;
 
 	initPlayerData(scene, 2);
 
@@ -137,6 +142,7 @@ void CSystemClass::gameSceneInit()
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyDown(VK_S);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyLeft(VK_A);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyRight(VK_D);
+	
 	scene->initialize();
 
 	//!! 임시!! 빠른 수정 요망!!
@@ -167,9 +173,10 @@ bool CSystemClass::frame()
 	{
 		std::get<CPlayerObject*>(iter)->move();
 		playerVector.push_back(std::get<CPlayerObject*>(iter));
+		
 	}
-	GameManager->collisionCheck(playerVector);
 	
+
 	bool result = GameManager->frame();
 	if (!result)
 		return false;
@@ -178,6 +185,9 @@ bool CSystemClass::frame()
 	if (!result)
 		return false;
 
+	GameManager->collisionCheck(playerVector);
+	GameManager->getOutCheck(playerVector, stage);
+	
 	return true;
 }
 

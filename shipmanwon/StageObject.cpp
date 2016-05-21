@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include <unordered_set>
 #include "StageObject.h"
 #include "config.h"
 
@@ -87,4 +88,39 @@ void CStageObject::createStage()
 	}; 
 	
 	Indices.insert(Indices.end(), a, a + 36);
+
+	realPosition[0] = DirectX::XMFLOAT3(-6.0f, 0.0f, 0.0f);
+	realPosition[1] = DirectX::XMFLOAT3(0.0f, 0.0f, 4.0f);
+	realPosition[2] = DirectX::XMFLOAT3(6.0f, 0.0f, 0.0f);
+	realPosition[3] = DirectX::XMFLOAT3(0.0f, 0.0f, -4.0f);
+}
+
+bool CStageObject::isGetOutStage(DirectX::XMFLOAT3 pos)
+{
+	std::unordered_set<float> temp;
+	
+	float x = pos.x;
+	float z = pos.z;
+	float x1, x2, z1, z2;
+
+	for (int i = 0; i < 4 /*vertix_num*/; i++)
+	{
+		x1 = realPosition[i].x;
+		z1 = realPosition[i].z;
+		x2 = realPosition[(i + 1) % 4].x;
+		z2 = realPosition[(i + 1) % 4].z;
+
+		float result = (z - z1) *((x2 - x1) / (z2 - z1)) + x1;
+
+		if (result < x)
+			continue;
+		/*if (result >= x)*/
+		if (result <= max(x1, x2) && result >= min(x1, x2))
+			temp.insert(temp.end(), result);
+	}
+
+	if (temp.size() % 2 == 0)
+		return true;
+
+	return false;
 }

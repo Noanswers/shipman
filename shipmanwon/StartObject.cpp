@@ -91,3 +91,4 @@ void CStartObject::createObject()
 	};
 	Indices.insert(Indices.end(), a, a + 36);
 }
+

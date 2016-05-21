@@ -69,7 +69,7 @@ public:
 	void	move();
 
 protected:
-	void shutdownBuffers();
+	//void shutdownBuffers();
 	float ObjectCOR = 1.9;
 	float ObjectMass = 2.0f;
 
@@ -105,7 +105,9 @@ protected:
 	void createShader();
 
 	void renderBuffers(ID3D11DeviceContext*);
-	bool initializeBuffers(ID3D11Device* device);
+	virtual bool initializeBuffers(ID3D11Device* device);
+
+	virtual void shutdownBuffers();
 
 	std::vector<VertexType> Verticies;
 	std::vector<unsigned long> Indices;

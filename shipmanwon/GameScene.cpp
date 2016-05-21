@@ -3,6 +3,7 @@
 #include "StageObject.h"
 #include "SkyObject.h"
 #include "TreeObject.h"
+#include "GroundObject.h"
 
 void CGameScene::initialize()
 {
@@ -32,4 +33,8 @@ void CGameScene::initialize()
 	CMyObject* tree4 = new CTreeObject();
 	tree4->setTranslate(10.0f, -20.0f, 18.0f);
 	pushBack(tree4, 10);
+
+	CMyObject* ground = new CGroundObject();
+	ground->setTranslate(0.0f, -20.0f, 0.0f);
+	pushBack(ground, 10);
 }

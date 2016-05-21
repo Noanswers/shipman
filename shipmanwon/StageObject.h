@@ -12,6 +12,8 @@ public:
 	bool	initialize(ID3D11Device* device, HWND hWnd) override;
 	void	shutdown() override;
 
+	void createShader() override;
+
 private:
 	void createStage();
 };

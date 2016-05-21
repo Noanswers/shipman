@@ -3,8 +3,31 @@
 #include "MyObject.h"
 #include "StageObject.h"
 #include "PlayerObject.h"
+#include "StartObject.h"
+#include "config.h"
 
 void CStartScene::initialize()
 {
-	setSceneColor(0.2f, 0.0f, 0.0f, 1.0f);
+	setSceneColor(0.94f, 0.92f, 0.8f, 1.0f);
+
+	CStartObject* title = new CStartObject();
+	title->setObjectName("title");
+	title->setTranslate(0, 1.0f, 0);
+	pushBack(title, 10);
+
+	CStartObject* pressButton = new CStartObject();
+	pressButton->setObjectName("pressButton");
+	pressButton->setTranslate(0, -2.0f, -1.5f);
+	pressButton->setScale(0.5f, 0.5f, 0.5f);
+	pressButton->setTexture(texturePress);
+	pushBack(pressButton, 10);
+}
+
+void CStartScene::doAction(float delta)
+{
+	auto vector = getObjectsByName("title");
+	for (auto& iter : vector)
+	{
+		iter->setRotate(delta, 0, 0);
+	}
 }

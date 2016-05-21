@@ -7,5 +7,6 @@ public:
 	CStartScene() : CMyScene() {};
 
 	void initialize() override;
+	void doAction(float delta);
 };
 

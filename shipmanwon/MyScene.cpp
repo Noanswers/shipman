@@ -34,6 +34,22 @@ void CMyScene::setSceneColor(const float red, const float green, const float blu
 	SceneColor[3] = alpha;
 }
 
+std::vector<CMyObject*> CMyScene::getObjectsByName(std::string objName)
+{
+	std::vector<CMyObject*> objectVector;
+
+	for (auto& iter : ObjectList)
+	{
+		if (iter->getObjectName() == objName)
+			objectVector.push_back(iter);
+	}
+	return objectVector;
+}
+
+void CMyScene::doAction(float delta)
+{
+}
+
 bool CMyScene::pushBack(CMyObject* object, int layerNum)
 {
 	bool isExist = checkLayerExist(layerNum);
@@ -47,6 +63,8 @@ bool CMyScene::pushBack(CMyObject* object, int layerNum)
 	size_t preSize = layer->getObjectsSize();
 	layer->pushBack(object);
 	size_t currentSize = layer->getObjectsSize();
+
+	ObjectList.push_back(object);
 
 	if (currentSize == (preSize + 1))
 		return true;

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SceneManager.h"
 #include "StartScene.h"
+#include "GameScene.h"
 
 void CSceneManager::initialize()
 {
@@ -8,6 +9,9 @@ void CSceneManager::initialize()
 
 	CStartScene* startScene = new CStartScene();
 
+	CGameScene* gameScene = new CGameScene();
+	
+	SceneStack.push_back(gameScene);
 	SceneStack.push_back(startScene);
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "Singleton.h"
-#include "SceneManager.h"
-#include "MyScene.h"
+#include <vector>
+#include "PlayerObject.h"
 
 class CGameManager : public CSingleton<CGameManager>
 {
@@ -17,7 +17,8 @@ public:
 
 	void initialize();
 	bool frame();
-	void update();
-
+	void collisionCheck(std::vector<CPlayerObject*> playerVector);
+	void doCollision(CPlayerObject* player1, CPlayerObject* player2);
 private:
+	bool test_checker = false;
 };

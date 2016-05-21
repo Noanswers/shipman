@@ -5,7 +5,7 @@
 void CInputClass::initialize()
 {
 	// Initialize all the keys to being released and not pressed.
-	for (int i = 0; i<256; i++)
+	for (int i = 0; i < 256; i++)
 	{
 		Keys[i] = false;
 	}

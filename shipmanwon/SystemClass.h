@@ -17,6 +17,7 @@
 #include "GameManager.h"
 #include "MyTime.h"
 #include "PlayerData.h"
+#include "StartObject.h"
 
 class CSystemClass
 {
@@ -36,10 +37,9 @@ private:
 	bool frame();
 	void initializeWindows(int& screenWidth, int& screenHeight);
 	void shutdownWindows();
-
 	void initPlayerData(CMyScene * scene, int playerNum);
-
 	void getPlayerInput();
+	void gameSceneInit();
 
 //	variables
 	std::vector<std::tuple<CPlayerData*, CPlayerObject*>> PlayerDataVector;
@@ -54,6 +54,7 @@ private:
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
+	bool uiCheck = true;
 };
 
 static CSystemClass* ApplicationHandle = nullptr;

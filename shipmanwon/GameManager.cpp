@@ -86,7 +86,9 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 	//player new speed
 	if ( FV_Dot_product > 0 )
 	{
-		OutputDebugStringW(L"scintil \n");
+		//////////////////////////////////////////////////////////////////////////
+		//Logic.1
+		//OutputDebugStringW(L"scintil \n");
 
 		newP1x = p2xSpeed*(-colVec.x);
  		newP1z = p2zSpeed*(-colVec.z);
@@ -108,7 +110,9 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 	}
 	else
 	{
-		OutputDebugStringW(L"jsfumato \n"); 
+		//////////////////////////////////////////////////////////////////////////
+		//Logic.2
+		//OutputDebugStringW(L"jsfumato \n"); 
 
 		newP1x = (p1m - p2m*e) / (p1m + p2m)*p1xSpeed + (p2m + p2m*e) / (p1m + p2m)*p2xSpeed;
 		newP1z = (p1m - p2m*e) / (p1m + p2m)*p1zSpeed + (p2m + p2m*e) / (p1m + p2m)*p2zSpeed;
@@ -127,15 +131,11 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 		player1->setOuterSpeed( newP1OuterSpeed );
 		player1->setCurrentSpeed(0);
 
-		//assert(player1->getOuterSpeed() <= 0.08f);
-		
 		//P2 º¤ÅÍ ÇÕ¼º
 		//auto newP2OuterSpeed = sqrt( log( newP2x*newP2x + newP2z*newP2z + euler) ) - 0.8f;
 
 		player2->setOuterSpeed( newP2OuterSpeed );
 		player2->setCurrentSpeed(0);
-
-		//assert(player2->getOuterSpeed() <= 0.08f);
 
 		player1->setOuterTheta({ 0.0f, DirectX::XM_2PI - atan2(newP1z, newP1x), 0.0f });
 		player2->setOuterTheta({ 0.0f, DirectX::XM_2PI - atan2(newP2z, newP2x), 0.0f });

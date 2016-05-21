@@ -105,12 +105,12 @@
     <ClInclude Include="StartObject.h">
       <Filter>소스 파일\object\subClass</Filter>
     </ClInclude>
-<<<<<<< HEAD
-=======
     <ClInclude Include="MyChrono.h">
       <Filter>소스 파일\System</Filter>
     </ClInclude>
->>>>>>> master
+    <ClInclude Include="SkyObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -176,12 +176,12 @@
     <ClCompile Include="StartObject.cpp">
       <Filter>소스 파일\object\subClass</Filter>
     </ClCompile>
-<<<<<<< HEAD
-=======
     <ClCompile Include="MyChrono.cpp">
       <Filter>소스 파일\System</Filter>
     </ClCompile>
->>>>>>> master
+    <ClCompile Include="SkyObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="shipmanwon.rc">

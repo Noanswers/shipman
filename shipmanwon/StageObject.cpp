@@ -32,8 +32,35 @@ void CStageObject::shutdown()
 
 void CStageObject::createStage()
 {
+	/*float topRadius = 250.0f;
+	float bottomRadius = 400.0f;
+	float delta = bottomRadius - topRadius;
+
+	float height = 400.0f;
+	int slice = 8;
+	int stack = 5;
+
 	Verticies.clear();
 	Indices.clear();
+
+	float theta = XM_2PI / slice;
+	Verticies.push_back({ DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(0.5f, 0.0f) });
+	
+	for (int i = 0; i <= stack; ++i)
+	{
+		float a = XM_PI / slice * (i % 2);
+		float stackHeight = height / stack * i;
+		for (int j = 0; j <= slice; ++j)
+		{
+			int idx = i%slice;
+			float radius = topRadius + delta*i;
+			theta += sinf(rand());
+
+			Verticies.push_back({ XMFLOAT3(radius*cosf(theta*idx - a), -stackHeight, radius*sinf(theta*idx - a)), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f), XMFLOAT2(0.5f, 0.0f) });
+		}
+	}
+	
+	Verticies.push_back({ DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(0.5f, 0.0f) });*/
 
 //	up
 	Verticies.push_back({ DirectX::XMFLOAT3(0.0f, 0.0f, 4.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f), DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f), DirectX::XMFLOAT2(0.5f, 0.0f) });

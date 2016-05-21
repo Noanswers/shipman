@@ -320,7 +320,8 @@ bool CD3DClass::initialize(int screenWidth, int screenHeight, bool vsync, HWND h
 	m_worldMatrix = XMMatrixIdentity();
 
 	// Create an orthographic projection matrix for 2D rendering.
-	m_orthoMatrix = XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
+	//m_orthoMatrix = XMMatrixOrthographicLH((float)screenWidth, (float)screenHeight, screenNear, screenDepth);
+	m_orthoMatrix = XMMatrixOrthographicLH((float)15, (float)12, screenNear, screenDepth);
 
 	return true;
 }

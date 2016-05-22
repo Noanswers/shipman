@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "ResultScene.h"
 #include "ResultObject.h"
+#include "InputClass.h"
 
 void CGameManager::initialize()
 {
@@ -164,11 +165,8 @@ void CGameManager::doGetOut(CPlayerObject* player)
 	//if (player->getCurrentPosition().y > -10000.0f)
 	player->dropDown(0.1f);
 
-	if(player->getCurrentPosition().y <= -20)
+	if(player->getCurrentPosition().y <= -10.0f)
 		player->SetOutPlayer(true);
-
-
-	
 }
 
 void CGameManager::resultCheck(std::vector<CPlayerObject*> playerVector)
@@ -214,4 +212,7 @@ void CGameManager::doEnd()
 	CResultObject* resultObject = new CResultObject();
 	resultObject->SetWinPlayerNum(winPlayer->GetplayerNumber());
 	resultScene->pushBack(resultObject, 10);
+	/*
+	if(CInputClass::GetInstance()->isKeyDown(VK_SPACE))
+		CSceneManager::GetInstance()->popBack();*/
 }

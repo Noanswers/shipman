@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "GameManager.h"
 #include "SceneManager.h"
+#include "ResultScene.h"
+#include "ResultObject.h"
 
 void CGameManager::initialize()
 {
@@ -161,4 +163,53 @@ void CGameManager::doGetOut(CPlayerObject* player)
 {
 	//if (player->getCurrentPosition().y > -10000.0f)
 	player->dropDown(0.1f);
+	player->SetOutPlayer(true);
+
+
+	
+}
+
+void CGameManager::resultCheck(std::vector<CPlayerObject*> playerVector)
+{
+
+	if (isEnd(playerVector))
+	{
+		doEnd();
+	}
+	
+}
+
+bool CGameManager::isEnd(std::vector<CPlayerObject*> playerVector)
+{
+	int playerCount = 0;
+	
+	CPlayerObject* winPlayer;
+	for (auto& i : playerVector)
+	{
+		if (i->GetOutPlayer())
+			playerCount++;
+		else
+			winPlayer = i;
+	}
+
+	if (playerCount == (numPlayer - 1))
+	{
+		this->winPlayer = winPlayer;
+		return true;
+	}
+
+	return false;
+
+}
+
+void CGameManager::doEnd()
+{
+	CResultScene* resultScene = new CResultScene();
+
+	resultScene->initialize();
+	CSceneManager::GetInstance()->pushBack(resultScene);
+
+	CResultObject* resultObject = new CResultObject();
+	resultObject->SetWinPlayerNum(winPlayer->GetplayerNumber());
+	resultScene->pushBack(resultObject, 10);
 }

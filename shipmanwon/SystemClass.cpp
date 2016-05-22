@@ -192,6 +192,7 @@ bool CSystemClass::frame()
 
 	GameManager->collisionCheck(playerVector);
 	GameManager->getOutCheck(playerVector, stage);
+	GameManager->resultCheck(playerVector);
 	
 	return true;
 }
@@ -332,6 +333,7 @@ void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 	for (int i = 0; i < playerNum; ++i)
 	{
 		CPlayerObject* pObj1 = new CPlayerObject();
+		pObj1->SetPlayerNumber(i+1);
 		scene->pushBack(pObj1, 10);
 /*
 		if (i == 0)

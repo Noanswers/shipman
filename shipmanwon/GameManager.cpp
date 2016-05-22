@@ -163,7 +163,9 @@ void CGameManager::doGetOut(CPlayerObject* player)
 {
 	//if (player->getCurrentPosition().y > -10000.0f)
 	player->dropDown(0.1f);
-	player->SetOutPlayer(true);
+
+	if(player->getCurrentPosition().y <= -20)
+		player->SetOutPlayer(true);
 
 
 	

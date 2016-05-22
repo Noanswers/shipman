@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "GameManager.h"
 #include "SceneManager.h"
+#include "ResultScene.h"
+#include "ResultObject.h"
 
 void CGameManager::initialize()
 {
@@ -49,8 +51,6 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 
 void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageObject* stage)
 {
-	//int numOfPlayer = 2;
-	//int idx = 0;
 
 	for (auto& iter : playerVector)
 	{
@@ -59,11 +59,58 @@ void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageO
 		{
 			doGetOut(iter);
 		}
-		
-		
 	}
 }
 void CGameManager::doGetOut(CPlayerObject* player)
 {
+	player->SetOutPlayer(true);
+
 	OutputDebugStringA("out\n");
+
+	
+}
+
+void CGameManager::resultCheck(std::vector<CPlayerObject*> playerVector)
+{
+
+	if (isEnd(playerVector))
+	{
+		doEnd();
+	}
+	
+}
+
+bool CGameManager::isEnd(std::vector<CPlayerObject*> playerVector)
+{
+	int playerCount = 0;
+	
+	CPlayerObject* winPlayer;
+	for (auto& i : playerVector)
+	{
+		if (i->GetOutPlayer())
+			playerCount++;
+		else
+			winPlayer = i;
+	}
+
+	if (playerCount == (numPlayer - 1))
+	{
+		this->winPlayer = winPlayer;
+		return true;
+	}
+
+	return false;
+
+}
+
+void CGameManager::doEnd()
+{
+	CResultScene* resultScene = new CResultScene();
+
+	resultScene->initialize();
+	CSceneManager::GetInstance()->pushBack(resultScene);
+
+	CResultObject* resultObject = new CResultObject();
+	resultObject->SetWinPlayerNum(winPlayer->GetplayerNumber());
+	resultScene->pushBack(resultObject, 10);
 }

@@ -21,10 +21,17 @@ public:
 	void collisionCheck(std::vector<CPlayerObject*> playerVector);
 	void doCollision(CPlayerObject* player1, CPlayerObject* player2);
 
-	void getOutCheck(std::vector<CPlayerObject*> playerVector, CStageObject * stage);
+	void getOutCheck(std::vector<CPlayerObject*> playerVector, CStageObject* stage);
 	void doGetOut(CPlayerObject* player);
+
+	void resultCheck(std::vector<CPlayerObject*> playerVector);
+
+	bool isEnd(std::vector<CPlayerObject*> playerVector);
+	void doEnd();
 
 private:
 	bool test_checker = false;
 	bool getout_checker = false;
+	CPlayerObject* winPlayer;
+	int numPlayer = 2; //setting ÇÊ¿ä
 };

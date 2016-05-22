@@ -25,6 +25,29 @@ public:
 		return bottomRadius;
 	}
 	bool	isCollisionPlayer(CPlayerObject * enemy);
+
+
+
+	int GetplayerNumber()
+	{
+		return playerNumber;
+	}
+
+	void SetPlayerNumber(int set)
+	{
+		playerNumber = set;
+	}
+
+
+	bool GetOutPlayer()
+	{
+		return isOutPlayer;
+	}
+
+	void SetOutPlayer(bool set)
+	{
+		isOutPlayer = set;
+	}
 	
 private:
 	//원기둥 그리는 변수들
@@ -36,5 +59,8 @@ private:
 	
 	////////////////플레이어 정보
 	float speed = 0.01f;
+
+	int playerNumber = 1;
+	bool isOutPlayer = false;
 };
 

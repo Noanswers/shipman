@@ -105,6 +105,12 @@
     <ClInclude Include="StartObject.h">
       <Filter>소스 파일\object\subClass</Filter>
     </ClInclude>
+    <ClInclude Include="ResultScene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -169,6 +175,12 @@
     </ClCompile>
     <ClCompile Include="StartObject.cpp">
       <Filter>소스 파일\object\subClass</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultObject.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -23,3 +23,4 @@ static const std::wstring PS_Directory = config::makeDirectory("shipmanwon\\colo
 static const std::wstring FxFile = config::makeDirectory("shipmanwon\\texture\\stage.fx");
 static const std::wstring textureDefault = config::makeDirectory("shipmanwon\\texture\\default.jpg");
 static const std::wstring texturestage = config::makeDirectory("shipmanwon\\texture\\profile.png");
+static const std::wstring resultTextureDefault = config::makeDirectory("shipmanwon\\texture\\resultP");

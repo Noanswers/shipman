@@ -22,7 +22,7 @@ bool CResultObject::initialize(ID3D11Device* device, HWND hWnd)
 		//char *playernum = 
 		textureFilename = resultTextureDefault;
 		textureFilename += std::to_wstring(winPlayerNum);
-		textureFilename += L".jpg";
+		textureFilename += L".jpeg";
 
 	}
 		
@@ -63,28 +63,17 @@ void CResultObject::createObject()
 	//!! temp!! 수정이 시급함! 더 안전하게 만들어야 함!
 	unsigned long a[] = {
 		// top
-		6, 7, 5,
-		7, 4, 5,
-
+		2, 3, 0, 2, 0, 1,
 		// front
-		2, 6, 1,
-		6, 5, 1,
-
-		// right
-		7, 6, 3,
-		3, 6, 2,
-
-		// left
-		1, 5, 0,
-		0, 5, 4,
-
-		// back
-		0, 4, 7,
-		0, 7, 3,
-
+		6, 7, 4, 6, 4, 5,
 		// bottom
-		1, 0, 2,
-		0, 3, 2
+		10, 11, 8, 10, 8, 9,
+		// back
+		14, 15, 12, 14, 12, 13,
+		// right
+		18, 19, 16, 18, 16, 17,
+		// left
+		22, 23, 20, 22, 20, 21
 	};
 	Indices.insert(Indices.end(), a, a + 36);
 }

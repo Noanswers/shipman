@@ -16,7 +16,7 @@ public:
 
 private:
 	void	createTree(float upperHeight, float upperWidth, float lowerWidthTop, float lowerWidthBottom, float lowerHeight, int slice);
-	
+
 	void	createTempUpperVertex(float upperHeight, float upperwidth, float lowerHeight, int slice);
 	void	createUpperPart(float upperHeight, float upperwidth, float lowerHeight, int slice);
 

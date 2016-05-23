@@ -129,8 +129,6 @@ void CSystemClass::gameSceneInit()
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyLeft(VK_A);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyRight(VK_D);
 	
-	
-
 	//!! 임시!! 빠른 수정 요망!!
 	Graphics->gameScene = true;
 }
@@ -167,7 +165,7 @@ bool CSystemClass::frame()
 
 	if (dynamic_cast<CGameScene*>(currentScene))
 	{
-		result = GameManager->frame(playerVector);
+		result = GameManager->frame(PlayerVector);
 		if (!result)
 		{
 			CLog::GetInstance()->SendErrorLogMessage("GameManager Frame Error!\n");
@@ -314,11 +312,11 @@ void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 	for (int i = 0; i < playerNum; ++i)
 	{
 		CPlayerObject* playerObj = new CPlayerObject();
-		playerObj->SetPlayerNumber(i+1);
+		playerObj->setPlayerNumber(i+1);
 		scene->pushBack(playerObj, 10);
 	
 		PlayerDataVector.push_back(std::make_tuple(new CPlayerData(), playerObj));
-		playerVector.push_back(playerObj);
+		PlayerVector.push_back(playerObj);
 	}
 	
 	for (auto& iter : PlayerDataVector)
@@ -329,17 +327,17 @@ void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 
 		std::get<CPlayerData*>(iter)->initialize();
 
-		// 초기 위치와 텍스쳐의 방향을 initialize합니다.
+		// 초기 위치와 방향을 initialize합니다.
 		std::get<CPlayerObject*>(iter)->setTranslate( 3.0f*cosf(theta), 0.0f, 3.0f*sinf(theta) );
-		std::get<CPlayerObject*>(iter)->setRotate( 0.0f, -1.0f * cosf(theta), 0.0f );
+		std::get<CPlayerObject*>(iter)->setRotate( 0.0f, theta + XM_PI, 0.0f );
 		
 		// OuterVector를 initialize합니다.
 		std::get<CPlayerObject*>(iter)->setOuterVector(	-1.0f*cosf(theta), 0.0f, -1.0f*sinf(theta) );
-		std::get<CPlayerObject*>(iter)->setOuterTheta(XMFLOAT3(0.0f, -1.0f * cosf(theta), 0.0f));
+		std::get<CPlayerObject*>(iter)->setOuterTheta(XMFLOAT3(0.0f, theta + XM_PI, 0.0f));
 
 		// ForwardVector를 initialize합니다.
 		std::get<CPlayerObject*>(iter)->setForwardVector( -1.0f*cosf(theta), 0.0f, -1.0f*sinf(theta) );		
-		std::get<CPlayerObject*>(iter)->setForwardTheta( XMFLOAT3(0.0f, -1.0f * cosf(theta), 0.0f) );
+		std::get<CPlayerObject*>(iter)->setForwardTheta( XMFLOAT3(0.0f, theta + XM_PI, 0.0f) );
 	}
 }
 

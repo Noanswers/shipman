@@ -21,72 +21,50 @@ public:
 	virtual void	shutdown();
 
 	virtual bool	renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc);
-	int		getIndexCount();
+	int				getIndexCount();
+	float			calcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b); //for Collision Check
 
-	void	moveToward(float x, float y, float z);
-	void	moveTowardByOuter(float x, float y, float z);
-	void	moveForward();
-	void	moveBackward();
-	void	moveStop();
+	//Object Moving
+	void			move();
+	void			moveToward(float x, float y, float z);
+	void			moveTowardByOuter(float x, float y, float z);
+	void			moveForward();
+	void			moveBackward();
+	void			moveStop();
+	void			accelerate();
+	void			boost();
+	void			resetSpeed();
 
-	void	accelerate();
+	//Set
+	void			setCurrentPosition(float x, float y, float z);
+	void			setRotate(float x, float y, float z);
+	void			setScale(float x, float y, float z);
+	void			setTranslate(float x, float y, float z);
+	void			setColorRGBA(float red, float green, float blue, float alpha);
+	void			setForwardVector(float x, float y, float z);
+	void			setObjectName(std::string objName);
+	void			setTexture(std::wstring texName);
+	void			setCOR(float cor);
+	void			setCurrentSpeed(float speed);
+	void			setMaximumSpeed(float speed);
+	void			setForwardTheta(DirectX::XMFLOAT3 theta);
+	void			setOuterTheta(DirectX::XMFLOAT3 theta);
+	void			setOuterVector(float x, float y, float z);
+	void			setOuterSpeed(float speed);
 	
-	void	boost();
-	void	setMaximumSpeed(float speed);
-
-	void	resetSpeed();
-	float	getCurrentSpeed() const;
-
-	DirectX::XMFLOAT3	getForwardVector();
+	//Get
+	std::string			getObjectName() const;
+	float				getCurrentSpeed() const;
+	float				getMass() const;
+	float				getCOR() const;
+	float				getOuterSpeed() const;
+	DirectX::XMMATRIX	getWorldMatrix() const;
+	DirectX::XMFLOAT3	getCurrentPosition() const { return currentPosition; }
+	DirectX::XMFLOAT3	getMoveTheta() const;
+	DirectX::XMFLOAT3	getForwardVector() const;
 	DirectX::XMFLOAT3	getForwardTheta() const;
 
-	void	setRotate(float x, float y, float z);
-	void	setScale(float x, float y, float z);
-	void	setTranslate(float x, float y, float z);
-	void	setColorRGBA(float red, float green, float blue, float alpha);
-	void	setForwardVector(float x, float y, float z);
-
-	DirectX::XMMATRIX getWorldMatrix();
-	DirectX::XMFLOAT3 getCurrentPosition()	{return currentPosition;}
-
-	void	setCurrentPosition(float x, float y, float z);
-	std::string getObjectName() const;
-	void	setObjectName(std::string objName);
-	float	getMass();
-	float	CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b);
-	void	setTexture(std::wstring texName);
-	float	getCOR() const;
-	void	setCOR(float cor);
-
-	void	setCurrentSpeed(float speed);
-	void	setForwardTheta(DirectX::XMFLOAT3 theta);
-	void	setOuterTheta(DirectX::XMFLOAT3 theta);
-	void	setOuterVector(float x, float y, float z);
-	DirectX::XMFLOAT3 getMoveTheta();
-	float	getOuterSpeed() const;
-	void	setOuterSpeed(float speed);
-	
-	void	move();
-
 protected:
-	float ObjectCOR = 1.9;
-	float ObjectMass = 2.0f;
-
-	DirectX::XMFLOAT3 currentPosition = { 0.0f,0.0f,0.0f };
-	DirectX::XMFLOAT3 ForwardTheta = { 0.0f, 0.0f, 0.0f };
-	DirectX::XMFLOAT3 ForwardVector = { 1.0f, 0.0f, 0.0f };
-	DirectX::XMFLOAT3 OuterTheta = { 0.0f, 0.0f, 0.0f };
-	DirectX::XMFLOAT3 OuterVector = { 1.0f, 0.0f, 0.0f };
-
-	float SpeedDelta = 0.0f;
-	float CurrentSpeed = 0.0f;
-	float OuterSpeed = 0.0f;
-	float MaximumSpeed = 0.08f;
-
-	std::wstring textureFilename = std::wstring();
-	std::string	 ObjectName = std::string();
-	ID3D11Resource* Resource;
-
 	struct VertexType
 	{
 		DirectX::XMFLOAT3 position;
@@ -96,35 +74,51 @@ protected:
 		DirectX::XMFLOAT2 tex;
 	};
 
-	ID3D11Device*				temp_device = nullptr;
-	ID3D11ShaderResourceView*	TextureRV = nullptr;
-	ID3D11SamplerState*			SamplerLinear = nullptr;
-
-	HRESULT loadTexture();
-	virtual void createShader();
-
-	virtual void shutdownBuffers();
-
-	virtual void renderBuffers(ID3D11DeviceContext*);
-	virtual bool initializeBuffers(ID3D11Device* device);
-
-	std::vector<VertexType> Verticies;
-	std::vector<unsigned long> Indices;
-
-	ID3D11Buffer* m_vertexBuffer = nullptr;
-	ID3D11Buffer* m_indexBuffer = nullptr;
-
-	ID3D11VertexShader* m_pVertexShader = NULL;
-	ID3D11InputLayout*	m_pVertexLayout = NULL;
-	ID3D11PixelShader*	m_pPixelShader = NULL;
-
 	bool	IsInit = false;
-	
-	DirectX::XMMATRIX ObjectScale = DirectX::XMMatrixIdentity();
-	DirectX::XMMATRIX ObjectRotate = DirectX::XMMatrixIdentity();
-	DirectX::XMMATRIX ObjectTranslate = DirectX::XMMatrixIdentity();
 
-	DirectX::XMMATRIX ObjectWorld = DirectX::XMMatrixIdentity();
-	DirectX::XMMATRIX ObjectView = DirectX::XMMatrixIdentity();
-	DirectX::XMMATRIX ObjectProjection = DirectX::XMMatrixIdentity();
+	float ObjectCOR		= 1.9;
+	float ObjectMass	= 2.0f;
+	float SpeedDelta	= 0.0f;
+	float CurrentSpeed	= 0.0f;
+	float OuterSpeed	= 0.0f;
+	float MaximumSpeed	= 0.08f;
+
+	DirectX::XMFLOAT3 currentPosition	= { 0.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 ForwardTheta		= { 0.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 ForwardVector		= { 1.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 OuterTheta		= { 0.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 OuterVector		= { 1.0f, 0.0f, 0.0f };
+
+	std::string	 ObjectName = std::string();
+	std::wstring textureFilename = std::wstring();
+	ID3D11Resource* Resource;
+
+	ID3D11Device*				pTemp_Device = nullptr;
+	ID3D11ShaderResourceView*	pTextureRV = nullptr;
+	ID3D11SamplerState*			pSamplerLinear = nullptr;
+
+	//Shader
+	std::vector<VertexType>		Verticies;
+	std::vector<unsigned long>	Indices;
+	ID3D11Buffer*				pVertexBuffer = nullptr;
+	ID3D11Buffer*				pIndexBuffer = nullptr;
+	ID3D11VertexShader*			pVertexShader = nullptr;
+	ID3D11InputLayout*			pVertexLayout = nullptr;
+	ID3D11PixelShader*			pPixelShader = nullptr;
+
+	HRESULT				loadTexture();
+
+	virtual void		createShader();
+	virtual void		shutdownBuffers();
+	virtual void		renderBuffers(ID3D11DeviceContext*);
+	virtual bool		initializeBuffers(ID3D11Device* device);
+
+	//Object Matrix
+	DirectX::XMMATRIX ObjectScale		= DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX ObjectRotate		= DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX ObjectTranslate	= DirectX::XMMatrixIdentity();
+
+	DirectX::XMMATRIX ObjectWorld		= DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX ObjectView		= DirectX::XMMatrixIdentity();
+	DirectX::XMMATRIX ObjectProjection	= DirectX::XMMatrixIdentity();
 };

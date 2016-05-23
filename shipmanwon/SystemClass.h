@@ -44,18 +44,18 @@ private:
 
 //	variables
 	std::vector<std::tuple<CPlayerData*, CPlayerObject*>> PlayerDataVector;
-	std::vector<CPlayerObject*> playerVector;
+	std::vector<CPlayerObject*> PlayerVector;
 
-	CGraphicsClass* Graphics;
+	CGraphicsClass* Graphics = nullptr;
 	CInputClass*	Input = nullptr;
-	CMyTime*		MyTime;
+	CMyTime*		MyTime = nullptr;
 
 	CGameManager*	GameManager = nullptr;
-	CSceneManager*	SceneManager;
+	CSceneManager*	SceneManager = nullptr;
 
-	LPCWSTR m_applicationName;
-	HINSTANCE m_hinstance;
-	HWND m_hwnd;
+	LPCWSTR			m_applicationName;
+	HINSTANCE		m_hinstance;
+	HWND			m_hwnd;
 };
 
 static CSystemClass* ApplicationHandle = nullptr;

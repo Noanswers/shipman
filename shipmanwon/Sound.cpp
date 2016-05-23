@@ -185,7 +185,7 @@ bool CSound::LoadWaveFile(std::wstring filename, IDirectSoundBuffer8** secondary
 	}
 
 	// Check that the audio format is WAVE_FORMAT_PCM.
-	if (waveFileHeader.audioFormat != WAVE_FORMAT_PCM)
+	/*if (waveFileHeader.audioFormat != WAVE_FORMAT_PCM)
 	{
 		return false;
 	}
@@ -206,7 +206,7 @@ bool CSound::LoadWaveFile(std::wstring filename, IDirectSoundBuffer8** secondary
 	if (waveFileHeader.bitsPerSample != 16)
 	{
 		return false;
-	}
+	}*/
 
 	// Check for the data chunk header.
 	if ((waveFileHeader.dataChunkId[0] != 'd') || (waveFileHeader.dataChunkId[1] != 'a') ||
@@ -215,10 +215,10 @@ bool CSound::LoadWaveFile(std::wstring filename, IDirectSoundBuffer8** secondary
 		return false;
 	}
 	// Set the wave format of secondary buffer that this wave file will be loaded onto.
-	waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-	waveFormat.nSamplesPerSec = 44100;
-	waveFormat.wBitsPerSample = 16;
-	waveFormat.nChannels = 2;
+	waveFormat.wFormatTag = waveFileHeader.audioFormat;
+	waveFormat.nSamplesPerSec = waveFileHeader.sampleRate;
+	waveFormat.wBitsPerSample = waveFileHeader.bitsPerSample;
+	waveFormat.nChannels = waveFileHeader.numChannels;
 	waveFormat.nBlockAlign = (waveFormat.wBitsPerSample / 8) * waveFormat.nChannels;
 	waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
 	waveFormat.cbSize = 0;

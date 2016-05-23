@@ -3,19 +3,13 @@
 #include "config.h"
 #include <string>
 
-
-
-
-
 bool CResultObject::initialize(ID3D11Device* device, HWND hWnd)
 {
-	if (temp_device != device)
+	if (pTemp_Device != device)
 	{
-		temp_device = device;
+		pTemp_Device = device;
 		IsInit = false;
 	}
-
-
 
 	if (textureFilename.empty() == true)
 	{
@@ -25,7 +19,6 @@ bool CResultObject::initialize(ID3D11Device* device, HWND hWnd)
 		textureFilename += L".jpeg";
 
 	}
-		
 
 	if (IsInit == true)
 		return true;

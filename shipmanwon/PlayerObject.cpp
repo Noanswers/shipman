@@ -6,9 +6,9 @@
 
 bool CPlayerObject::initialize(ID3D11Device* device, HWND hWnd)
 {
-	if (temp_device != device)
+	if (pTemp_Device != device)
 	{
-		temp_device = device;
+		pTemp_Device = device;
 		IsInit = false;
 	}
 
@@ -61,7 +61,7 @@ bool CPlayerObject::isCollisionPlayer(CPlayerObject* enemy)
 {
 	DirectX::XMFLOAT3 en_curPos = enemy->currentPosition;
 
-	if ( CalcDistanceTwoPoint(en_curPos, currentPosition) <= (bottomRadius + enemy->getRadious()) )
+	if ( calcDistanceTwoPoint(en_curPos, currentPosition) <= (bottomRadius + enemy->getRadious()) )
 		return true;
 
 	return false;
@@ -101,13 +101,12 @@ void CPlayerObject::createCylinder()
 			vertex.color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 			vertex.normal = vertex.position;
 
-			//verteex.TangentU 필요한지 확인할것
 			Verticies.push_back(vertex);
 		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////
-	//make indicies
+	//Make Indicies
 	UINT ringVertexCount = sliceCount + 1;
 
 	for (UINT i = 0; i < stackCount; ++i)

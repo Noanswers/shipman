@@ -30,7 +30,6 @@ void CMyObject::shutdown()
 	return;
 }
 
-
 bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc)
 {
 	bool result = true;
@@ -45,6 +44,27 @@ bool CMyObject::renderObject(ID3D11DeviceContext* deviceContext, std::function<b
 int CMyObject::getIndexCount()
 {
 	return Indices.size();
+}
+
+float CMyObject::calcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b)
+{
+	//Scintil
+	//계산의 정확도를 위해서 pow나 ^2를 쓰지 않고 2번 곱함
+	return sqrt((a.x - b.x)*(a.x - b.x) + ((a.y - b.y)*(a.y - b.y)) + ((a.z - b.z)*(a.z - b.z)));
+}
+
+//////////////////////////////////////////////////////////////////////////
+//Object Moving
+//////////////////////////////////////////////////////////////////////////
+void CMyObject::move()
+{
+	if (OuterSpeed <= 0) {
+		OuterSpeed = 0;
+		OuterVector = ForwardVector;
+	}
+
+	moveForward();
+	moveTowardByOuter(OuterVector.x, OuterVector.y, OuterVector.z);
 }
 
 void CMyObject::moveToward(float x, float y, float z)
@@ -92,17 +112,6 @@ void CMyObject::moveForward()
 	moveToward(ForwardVector.x, ForwardVector.y, ForwardVector.z);
 }
 
-void CMyObject::move()
-{
-	if (OuterSpeed <= 0) {
-		OuterSpeed = 0;
-		OuterVector = ForwardVector;
-	}
-
-	moveForward();
-	moveTowardByOuter(OuterVector.x, OuterVector.y, OuterVector.z);
-}
-
 void CMyObject::moveBackward() //test function. made by scintil
 {
 	moveToward(-1 * ForwardVector.x, ForwardVector.y, -1 * ForwardVector.z);
@@ -141,66 +150,19 @@ void CMyObject::boost()
 	//resetSpeed();
 }
 
-void CMyObject::setMaximumSpeed(float speed)
-{
-	MaximumSpeed = speed;
-	CurrentSpeed = speed * 3 / 4;
-}
-
 void CMyObject::resetSpeed()
 {
 	MaximumSpeed = 0.1f;
 }
 
-float CMyObject::getCurrentSpeed() const
-{
-	return CurrentSpeed;
-}
-
-DirectX::XMFLOAT3 CMyObject::getForwardVector()
-{
-	return ForwardVector;
-}
-
-DirectX::XMFLOAT3 CMyObject::getForwardTheta() const
-{
-	return ForwardTheta;
-}
-
-DirectX::XMMATRIX CMyObject::getWorldMatrix()
-{
-	return ObjectWorld;
-}
-
+//////////////////////////////////////////////////////////////////////////
+//Set
+//////////////////////////////////////////////////////////////////////////
 void CMyObject::setCurrentPosition(float x, float y, float z)
 {
 	currentPosition.x += x;
 	currentPosition.y += y;
 	currentPosition.z += z;
-}
-
-std::string CMyObject::getObjectName() const
-{
-	return ObjectName;
-}
-
-void CMyObject::setObjectName(std::string objName)
-{
-	ObjectName = objName;
-}
-
-float CMyObject::getMass()
-{
-	return ObjectMass;
-}
-
-void CMyObject::setTranslate(float x, float y, float z)
-{
-	setCurrentPosition(x, y, z);
-
-	ObjectTranslate = DirectX::XMMatrixTranslation(x, y, z);
-
-	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
 void CMyObject::setRotate(float x, float y, float z)
@@ -231,6 +193,15 @@ void CMyObject::setScale(float x, float y, float z)
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }
 
+void CMyObject::setTranslate(float x, float y, float z)
+{
+	setCurrentPosition(x, y, z);
+
+	ObjectTranslate = DirectX::XMMatrixTranslation(x, y, z);
+
+	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
+}
+
 void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
 {
 	if (Verticies.size() < 1)
@@ -240,12 +211,12 @@ void CMyObject::setColorRGBA(float red, float green, float blue, float alpha)
 	{
 		Verticies[i].color = DirectX::XMFLOAT4(red, green, blue, alpha);
 	}
-	
+
 	// 임시 코드
-	if (temp_device == nullptr)
+	if (pTemp_Device == nullptr)
 		return;
 
-	initializeBuffers(temp_device);
+	initializeBuffers(pTemp_Device);
 }
 
 void CMyObject::setForwardVector(float x, float y, float z)
@@ -253,12 +224,110 @@ void CMyObject::setForwardVector(float x, float y, float z)
 	ForwardVector = { x, y, z };
 }
 
-/*
-	=== [ private ] ===========================================================================
-*/
+void CMyObject::setObjectName(std::string objName)
+{
+	ObjectName = objName;
+
+}
+
+void CMyObject::setTexture(std::wstring texName)
+{
+	textureFilename = texName;
+	loadTexture();
+}
+
+void CMyObject::setCOR(float cor)
+{
+	ObjectCOR = cor;
+}
+
+void CMyObject::setCurrentSpeed(float speed)
+{
+	CurrentSpeed = speed;
+}
+
+void CMyObject::setMaximumSpeed(float speed)
+{
+	MaximumSpeed = speed;
+	CurrentSpeed = speed * 3 / 4;
+}
+
+void CMyObject::setForwardTheta(DirectX::XMFLOAT3 theta)
+{
+	ForwardTheta = theta;
+}
+
+void CMyObject::setOuterTheta(DirectX::XMFLOAT3 theta)
+{
+	OuterTheta = theta;
+}
+
+void CMyObject::setOuterVector(float x, float y, float z)
+{
+	OuterVector.x = x;
+	OuterVector.y = y;
+	OuterVector.z = z;
+}
+
+void CMyObject::setOuterSpeed(float speed)
+{
+	OuterSpeed = speed;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//Get
+//////////////////////////////////////////////////////////////////////////
+std::string CMyObject::getObjectName() const
+{
+	return ObjectName;
+}
+
+float CMyObject::getCurrentSpeed() const
+{
+	return CurrentSpeed;
+}
+
+float CMyObject::getMass() const
+{
+	return ObjectMass;
+}
+
+float CMyObject::getCOR() const
+{
+	return ObjectCOR;
+}
+
+float CMyObject::getOuterSpeed() const
+{
+	return OuterSpeed;
+}
+
+DirectX::XMMATRIX CMyObject::getWorldMatrix() const
+{
+	return ObjectWorld;
+}
+
+DirectX::XMFLOAT3 CMyObject::getMoveTheta() const
+{
+	return OuterTheta;
+}
+
+DirectX::XMFLOAT3 CMyObject::getForwardVector() const
+{
+	return ForwardVector;
+}
+
+DirectX::XMFLOAT3 CMyObject::getForwardTheta() const
+{
+	return ForwardTheta;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//private 
+//////////////////////////////////////////////////////////////////////////
 HRESULT CMyObject::loadTexture()
 {
-	HRESULT hr = DirectX::CreateWICTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &TextureRV, NULL);
+	HRESULT hr = DirectX::CreateWICTextureFromFile(pTemp_Device, textureFilename.c_str(), &Resource, &pTextureRV, NULL);
 
 	//텍스쳐를 생성한 D3D device, 텍스쳐 경로, 추가 이미지 정보(보통 NULL), 자원 적재 스레드 ( 보통 NULL) 생성된 이미지 뷰, 자원 적재 스레드가 NULL 이면 NULL
 
@@ -275,7 +344,7 @@ HRESULT CMyObject::loadTexture()
 	sampDesc.MinLOD = 0;
 	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	hr = temp_device->CreateSamplerState(&sampDesc, &SamplerLinear);	// SamplerState 생성
+	hr = pTemp_Device->CreateSamplerState(&sampDesc, &pSamplerLinear);	// SamplerState 생성
 	if (FAILED(hr))
 		return hr;
 
@@ -293,10 +362,10 @@ void CMyObject::createShader()
 		&pVSBlob, &pErrorBlob);
 
 	//버텍스 쉐이더 생성
-	hr = temp_device->CreateVertexShader(
+	hr = pTemp_Device->CreateVertexShader(
 		pVSBlob->GetBufferPointer(),
 		pVSBlob->GetBufferSize(),
-		0, &m_pVertexShader);
+		0, &pVertexShader);
 
 	//	해당 D3D_INPUT_ELEMENT_DESC 를 vertex의 struct에 맞춰서 수정해야 함
 
@@ -315,10 +384,10 @@ void CMyObject::createShader()
 
 	UINT numElements = ARRAYSIZE(layout);
 
-	hr = temp_device->CreateInputLayout(layout, numElements,
+	hr = pTemp_Device->CreateInputLayout(layout, numElements,
 		pVSBlob->GetBufferPointer(),
 		pVSBlob->GetBufferSize(),
-		&m_pVertexLayout);
+		&pVertexLayout);
 
 	pVSBlob->Release();
 
@@ -329,9 +398,9 @@ void CMyObject::createShader()
 		0, 0,												// 쉐이더 옵션
 		&pPSBlob, &pErrorBlob);								// 리턴
 
-	hr = temp_device->CreatePixelShader(pPSBlob->GetBufferPointer(),
+	hr = pTemp_Device->CreatePixelShader(pPSBlob->GetBufferPointer(),
 		pPSBlob->GetBufferSize(),
-		0, &m_pPixelShader);
+		0, &pPixelShader);
 
 	pPSBlob->Release();
 }
@@ -364,7 +433,7 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 	vertexData.SysMemSlicePitch = 0;
 
 	// Now create the vertex buffer.
-	HRESULT result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &m_vertexBuffer);
+	HRESULT result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &pVertexBuffer);
 	if (FAILED(result))
 	{
 		return false;
@@ -384,7 +453,7 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 	indexData.SysMemSlicePitch = 0;
 
 	// Create the index buffer.
-	result = device->CreateBuffer(&indexBufferDesc, &indexData, &m_indexBuffer);
+	result = device->CreateBuffer(&indexBufferDesc, &indexData, &pIndexBuffer);
 	if (FAILED(result))
 	{
 		return false;
@@ -398,17 +467,17 @@ bool CMyObject::initializeBuffers(ID3D11Device* device)
 void CMyObject::shutdownBuffers()
 {
 	// Release the index buffer.
-	if (m_indexBuffer)
+	if (pIndexBuffer)
 	{
-		m_indexBuffer->Release();
-		m_indexBuffer = 0;
+		pIndexBuffer->Release();
+		pIndexBuffer = 0;
 	}
 
 	// Release the vertex buffer.
-	if (m_vertexBuffer)
+	if (pVertexBuffer)
 	{
-		m_vertexBuffer->Release();
-		m_vertexBuffer = 0;
+		pVertexBuffer->Release();
+		pVertexBuffer = 0;
 	}
 
 	return;
@@ -420,85 +489,25 @@ void CMyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 	unsigned int stride = sizeof(VertexType);;
 	unsigned int offset = 0;
 
-	deviceContext->IASetInputLayout(m_pVertexLayout);
+	deviceContext->IASetInputLayout(pVertexLayout);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	deviceContext->VSSetShader(m_pVertexShader, NULL, 0);
-	deviceContext->PSSetShader(m_pPixelShader, NULL, 0);
+	deviceContext->VSSetShader(pVertexShader, NULL, 0);
+	deviceContext->PSSetShader(pPixelShader, NULL, 0);
 	
 	//텍스쳐!
-	deviceContext->PSSetShaderResources(0, 1, &TextureRV);
-	deviceContext->PSSetSamplers(0, 1, &SamplerLinear);
+	deviceContext->PSSetShaderResources(0, 1, &pTextureRV);
+	deviceContext->PSSetSamplers(0, 1, &pSamplerLinear);
 
 	// 생성된 버퍼의 정점들을 실제로 파이프라인으로 공급하려면 버퍼를 장치의 한 입력 슬롯에 묶어야 함
 	// 1번째 인자 : 
 
-	deviceContext->IASetVertexBuffers(0, 1, &m_vertexBuffer, &stride, &offset);
-	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	deviceContext->IASetVertexBuffers(0, 1, &pVertexBuffer, &stride, &offset);
+	deviceContext->IASetIndexBuffer(pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 
 	deviceContext->DrawIndexed(Indices.size(), 0, 0);
 
 	return;
-}
-
-float CMyObject::CalcDistanceTwoPoint(DirectX::XMFLOAT3 a, DirectX::XMFLOAT3 b)
-{
-	//scintil
-	//계산의 정확도를 위해서 pow나 ^2를 쓰지 않고 2번 곱함
-	return sqrt((a.x - b.x)*(a.x - b.x) + ((a.y - b.y)*(a.y - b.y)) + ((a.z - b.z)*(a.z - b.z)));
-}
-
-void CMyObject::setTexture(std::wstring texName)
-{
-	textureFilename = texName;
-	loadTexture();
-}
-
-float CMyObject::getCOR() const
-{
-	return ObjectCOR;
-}
-
-void CMyObject::setCOR(float cor)
-{
-	ObjectCOR = cor;
-}
-
-void CMyObject::setCurrentSpeed(float speed)
-{
-	CurrentSpeed = speed;
-}
-
-void CMyObject::setForwardTheta(DirectX::XMFLOAT3 theta)
-{
-	ForwardTheta = theta;
-}
-
-void CMyObject::setOuterTheta(DirectX::XMFLOAT3 theta)
-{
-	OuterTheta = theta;
-}
-
-void CMyObject::setOuterVector(float x, float y, float z)
-{
-	OuterVector.x = x;
-	OuterVector.y = y;
-	OuterVector.z = z;
-}
-
-DirectX::XMFLOAT3 CMyObject::getMoveTheta()
-{
-	return OuterTheta;
-}
-
-float CMyObject::getOuterSpeed() const
-{
-	return OuterSpeed;
-}
-
-void CMyObject::setOuterSpeed(float speed)
-{
-	OuterSpeed = speed;
 }

@@ -4,6 +4,7 @@
 #include "Poco/FileChannel.h"
 #include "Singleton.h"
 #include "Poco/ConsoleChannel.h"
+#include <chrono>
 
 //static Poco::Logger& FileLogger;
 
@@ -24,6 +25,8 @@ public:
 	static Poco::Logger& fileLogger;
 private:
 	
+	std::string time_point_to_string(std::chrono::system_clock::time_point &tp);
+
 
 };
 

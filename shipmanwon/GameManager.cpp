@@ -18,12 +18,16 @@ bool CGameManager::frame()
 
 void CGameManager::collisionCheck(std::vector<CPlayerObject*> playerVector)
 {
+	//////////////////////////////////////////////////////////////////////////
+	//두 플레이어 오브젝트에 대하여 충돌 체크를 실시한다.
+	//////////////////////////////////////////////////////////////////////////
+
 	if (playerVector.size() < 2)
 		return;
 
-	for (auto iter = playerVector.begin(); iter < playerVector.end() - 1; ++iter)
+	for (auto& iter = playerVector.begin(); iter < playerVector.end() - 1; ++iter)
 	{
-		for (auto iter2 = (iter + 1); iter2 < playerVector.end(); ++iter2)
+		for (auto& iter2 = (iter + 1); iter2 < playerVector.end(); ++iter2)
 		{
 			if((*iter)->isCollisionPlayer(*iter2))
 				doCollision(*iter, *iter2);
@@ -77,7 +81,7 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 
 	//Forward Vector에 대하여 내적을 진행하여 각도에 따라 충돌을 분리
 	auto FV_Dot_product = p1FV.x * p2FV.x + p1FV.y * p2FV.y + p1FV.z * p2FV.z;
-
+	
 	//물체가 비벼질 경우 물체의 위치가 겹쳐서 충돌이 계속 일어나는 경우가 발생.
 	//최대한 방지 하기 위해 충돌시 물체의 현재 위치를 충돌 포인트에서 조금씩 뒤로 띄워줌.
 	player1->moveToward(-colVec.x, colVec.y , -colVec.z);
@@ -88,7 +92,9 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 	{
 		//////////////////////////////////////////////////////////////////////////
 		//Logic.1
-		//OutputDebugStringW(L"scintil \n");
+		//두 오브젝트의 충돌 벡터 방향이 -90에서 90 사이일때 진행.
+		//////////////////////////////////////////////////////////////////////////
+		OutputDebugStringW(L"Logic 1 \n");
 
 		newP1x = p2xSpeed*(-colVec.x);
  		newP1z = p2zSpeed*(-colVec.z);
@@ -112,7 +118,9 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 	{
 		//////////////////////////////////////////////////////////////////////////
 		//Logic.2
-		//OutputDebugStringW(L"jsfumato \n"); 
+		//두 오브젝트의 충돌 벡터 방향이 -180 ~ -90, 90 ~ 180 일때 진행.
+		//////////////////////////////////////////////////////////////////////////
+		OutputDebugStringW(L"Logic 2 \n"); 
 
 		newP1x = (p1m - p2m*e) / (p1m + p2m)*p1xSpeed + (p2m + p2m*e) / (p1m + p2m)*p2xSpeed;
 		newP1z = (p1m - p2m*e) / (p1m + p2m)*p1zSpeed + (p2m + p2m*e) / (p1m + p2m)*p2zSpeed;
@@ -122,29 +130,33 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 
 		auto euler = (float)exp(1);
 
-		float newP1OuterSpeed = sqrt(newP1x*newP1x + newP1z*newP1z);
-		float newP2OuterSpeed = sqrt(newP2x*newP2x + newP2z*newP2z);
+		//float newP1OuterSpeed = sqrt(newP1x*newP1x + newP1z*newP1z);
+		//float newP2OuterSpeed = sqrt(newP2x*newP2x + newP2z*newP2z);
+
+		//특정 상황시 속력이 비정상적으로 나타나는 문제를 해결하기 위해 로그를 취하여 정규화를 시킨다.
 
 		//P1 벡터 합성
-		//auto newP1OuterSpeed = sqrt( log( newP1x*newP1x + newP1z*newP1z + euler) ) - 0.8f;
-
-		player1->setOuterSpeed( newP1OuterSpeed );
-		player1->setCurrentSpeed(0);
+		auto newP1OuterSpeed = sqrt( log( newP1x*newP1x + newP1z*newP1z + euler) ) - 0.84f;
+		
+		player1->setOuterSpeed( newP1OuterSpeed ); //P1의 충돌 후 속도를 셋팅.
+		player1->setCurrentSpeed(0); //P1의 충돌 전 속도를 0으로 변경.
 
 		//P2 벡터 합성
-		//auto newP2OuterSpeed = sqrt( log( newP2x*newP2x + newP2z*newP2z + euler) ) - 0.8f;
+		auto newP2OuterSpeed = sqrt( log( newP2x*newP2x + newP2z*newP2z + euler) ) - 0.84f;
 
-		player2->setOuterSpeed( newP2OuterSpeed );
-		player2->setCurrentSpeed(0);
+		player2->setOuterSpeed( newP2OuterSpeed ); //P2의 충돌 후 속도를 셋팅.
+		player2->setCurrentSpeed(0); //P2의 충돌 전 속도를 0으로 변경
 
+		//충돌각을 설정해준다.
 		player1->setOuterTheta({ 0.0f, DirectX::XM_2PI - atan2(newP1z, newP1x), 0.0f });
 		player2->setOuterTheta({ 0.0f, DirectX::XM_2PI - atan2(newP2z, newP2x), 0.0f });
 	}
 
-	//충돌후 벡터 방향
+	//충돌 후 벡터의 각도
 	float theta1 = player1->getMoveTheta().y;
 	float theta2 = player2->getMoveTheta().y;
 
+	//충돌 후 벡터를 설정해준다.
 	player1->setOuterVector(1.0f*cosf(-theta1), 0.0f, 1.0f*sinf(-theta1));
 	player2->setOuterVector(1.0f*cosf(-theta2), 0.0f, 1.0f*sinf(-theta2));
 }
@@ -166,7 +178,7 @@ void CGameManager::doGetOut(CPlayerObject* player)
 	player->dropDown(0.1f);
 
 	if(player->getCurrentPosition().y <= -10.0f)
-		player->SetOutPlayer(true);
+		player->setOutPlayer(true);
 }
 
 void CGameManager::resultCheck(std::vector<CPlayerObject*> playerVector)
@@ -186,7 +198,7 @@ bool CGameManager::isEnd(std::vector<CPlayerObject*> playerVector)
 	CPlayerObject* winPlayer;
 	for (auto& i : playerVector)
 	{
-		if (i->GetOutPlayer())
+		if (i->getOutPlayer())
 			playerCount++;
 		else
 			winPlayer = i;
@@ -210,7 +222,7 @@ void CGameManager::doEnd()
 	CSceneManager::GetInstance()->pushBack(resultScene);
 
 	CResultObject* resultObject = new CResultObject();
-	resultObject->SetWinPlayerNum(winPlayer->GetplayerNumber());
+	resultObject->SetWinPlayerNum(winPlayer->getPlayerNumber());
 	resultScene->pushBack(resultObject, 10);
 	/*
 	if(CInputClass::GetInstance()->isKeyDown(VK_SPACE))

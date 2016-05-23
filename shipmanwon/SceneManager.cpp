@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include "StartScene.h"
 #include "GameScene.h"
+#include "Log.h"
 
 void CSceneManager::initialize()
 {
@@ -17,6 +18,8 @@ void CSceneManager::initialize()
 
 bool CSceneManager::pushBack(CMyScene* scene)
 {
+	CLog::GetInstance()->SendErrorLogMessage("SceneChange\n");
+
 	size_t preSize = SceneStack.size();
 	SceneStack.push_back(scene);
 

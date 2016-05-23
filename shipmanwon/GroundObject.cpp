@@ -113,7 +113,7 @@ void CGroundObject::createTempVertex(std::vector<VertexType>& vec, float width, 
 
 			vec.push_back({
 				XMFLOAT3(deltaWidth*j - width / 2 + randWidth, height + alpha, deltaLength*i - length / 2 + randLength),
-				XMFLOAT4(0.2f, 0.3f, 0.0f, 1.0f),
+				XMFLOAT4(0.3f, 0.4f, 0.4f, 1.0f),
 				XMFLOAT3(0.0f, 1.0f, 0.0f),
 				XMFLOAT2(0.0f, 0.0f) }
 			);

@@ -5,6 +5,7 @@
 #include "ResultObject.h"
 #include "Log.h"
 #include "InputClass.h"
+#include "SoundManager.h"
 
 void CGameManager::initialize()
 {
@@ -28,6 +29,7 @@ void CGameManager::collisionCheck(std::vector<CPlayerObject*> playerVector)
 		{
 			if ((*iter)->isCollisionPlayer(*iter2))
 			{
+				CSoundManager::GetInstance()->playCollisionSound();
 				CLog::GetInstance()->SendErrorLogMessage("Collision\n");
 				doCollision(*iter, *iter2);
 				
@@ -210,6 +212,8 @@ bool CGameManager::isEnd(std::vector<CPlayerObject*> playerVector)
 
 void CGameManager::doEnd()
 {
+
+	CSoundManager::GetInstance()->playResultSound();
 	CLog::GetInstance()->SendErrorLogMessage("GameEnd\n");
 
 	CResultScene* resultScene = new CResultScene();

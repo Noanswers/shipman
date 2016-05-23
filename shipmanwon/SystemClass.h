@@ -19,7 +19,7 @@
 #include "PlayerData.h"
 #include "StartObject.h"
 #include "StageObject.h"
-#include "Sound.h"
+#include "SoundManager.h"
 
 class CSystemClass
 {
@@ -56,7 +56,7 @@ private:
 	CGameManager*	GameManager = nullptr;
 	CSceneManager*	SceneManager;
 
-	CSound*			Sound = nullptr;
+	CSoundManager*	SoundManager;
 
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;

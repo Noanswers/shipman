@@ -21,7 +21,27 @@
 ///////////////////////////////////////////////////////////////////////////////
 class CSound
 {
+
+
+public:
+	CSound();
+	~CSound();
+	bool Initialize(HWND hwnd, std::wstring soundPath);
+	void Shutdown();
+	bool play(bool isLoop); 
+	bool stop();
+
 private:
+	bool InitializeDirectSound(HWND);
+	void ShutdownDirectSound();
+
+	bool LoadWaveFile(std::wstring filename, IDirectSoundBuffer8 ** secondaryBuffer);
+
+	void ShutdownWaveFile(IDirectSoundBuffer8**);
+
+	bool PlayWaveFile(bool isLoop);
+
+
 	struct WaveHeaderType
 	{
 		char chunkId[4];
@@ -39,27 +59,8 @@ private:
 		unsigned long dataSize;
 	};
 
-public:
-	CSound();
-	CSound(const CSound&);
-	~CSound();
-	bool Initialize(HWND);
-	void Shutdown();
+	
 
-private:
-	bool InitializeDirectSound(HWND);
-	void ShutdownDirectSound();
-
-	bool LoadWaveFile(std::wstring filename, IDirectSoundBuffer8 ** secondaryBuffer);
-
-	//bool LoadWaveFile(WCHAR * filename, IDirectSoundBuffer8 ** secondaryBuffer);
-
-	//bool LoadWaveFile(char*, IDirectSoundBuffer8**);
-	void ShutdownWaveFile(IDirectSoundBuffer8**);
-
-	bool PlayWaveFile();
-
-private:
 	IDirectSound8* m_DirectSound;
 	IDirectSoundBuffer* m_primaryBuffer;
 	IDirectSoundBuffer8* m_secondaryBuffer1;

@@ -6,6 +6,7 @@
 #include "StartObject.h"
 #include "config.h"
 #include "SkyObject.h"
+#include "SoundManager.h"
 
 void CStartScene::initialize()
 {
@@ -27,6 +28,8 @@ void CStartScene::initialize()
 
 	CMyObject* sky = new CSkyObject();
 	pushBack(sky, 10);
+
+	
 }
 
 void CStartScene::doAction(float delta)

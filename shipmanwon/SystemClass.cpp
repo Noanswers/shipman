@@ -25,6 +25,10 @@ bool CSystemClass::initialize()
 	if (SceneManager == nullptr)
 		return false;
 
+	SoundManager = CSoundManager::GetInstance();
+	if (SoundManager == nullptr)
+		return false;
+
 	SceneManager->initialize();
 	CMyScene* scene = SceneManager->getCurrentScene();
 	scene->initialize();
@@ -33,6 +37,7 @@ bool CSystemClass::initialize()
 	Input = CInputClass::GetInstance();
 	Input->initialize();
 
+	SoundManager->initialize(m_hwnd);
 
 	//Log initialize
 
@@ -60,22 +65,8 @@ bool CSystemClass::initialize()
 		return false;
 
 	}
-		
 
-	Sound = new CSound();
-	if (!Sound)
-	{
-		log->SendErrorLogMessage("Sound create error!\n");
-		return false;
-	}
-
-	result = Sound->Initialize(m_hwnd);
-	if (!result)
-	{
-		log->SendErrorLogMessage("sound initialize error!\n");
-		return false;
-
-	}
+	CSoundManager::GetInstance()->playStartBackGroundSound();
 
 	return true;
 }
@@ -104,13 +95,6 @@ void CSystemClass::shutdown()
 
 	// Shutdown the window.
 
-	if (Sound)
-	{
-		CLog::GetInstance()->SendErrorLogMessage("shut down!\n");
-		Sound->Shutdown();
-		delete Sound;
-		Sound = nullptr;
-	}
 
 	shutdownWindows();
 
@@ -186,6 +170,9 @@ void CSystemClass::gameSceneInit()
 
 	//!! 임시!! 빠른 수정 요망!!
 	Graphics->gameScene = true;
+
+	SoundManager->GetInstance()->stopStartBackGroundSound();
+
 }
 
 

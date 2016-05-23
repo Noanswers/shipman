@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Sound.h"
 #include "config.h"
+#include "Log.h"
 
 CSound::CSound()
 {
@@ -10,17 +11,12 @@ CSound::CSound()
 }
 
 
-CSound::CSound(const CSound& other)
-{
-}
-
-
 CSound::~CSound()
 {
 }
 
 
-bool CSound::Initialize(HWND hwnd)
+bool CSound::Initialize(HWND hwnd, std::wstring soundPath)
 {
 	bool result;
 	// Initialize direct sound and the primary sound buffer.
@@ -31,16 +27,24 @@ bool CSound::Initialize(HWND hwnd)
 	}
 
 	// Load a wave audio file onto a secondary buffer.
-	result = LoadWaveFile(soundDefault, &m_secondaryBuffer1);
+	result = LoadWaveFile(soundPath, &m_secondaryBuffer1);
 	if (!result)
 	{
+		CLog::GetInstance()->SendErrorLogMessage("Load Wave Error\n");
 		return false;
 	}
 
+}
+
+
+bool CSound::play(bool isLoop)
+{
+	
 	// Play the wave file now that it has been loaded.
-	result = PlayWaveFile();
+	bool result = PlayWaveFile(isLoop);
 	if (!result)
 	{
+		CLog::GetInstance()->SendErrorLogMessage("Play Wave Error\n");
 		return false;
 	}
 
@@ -56,6 +60,13 @@ void CSound::Shutdown()
 	ShutdownDirectSound();
 
 	return;
+}
+
+bool CSound::stop()
+{
+	bool result = m_secondaryBuffer1->Stop();
+
+	return result;
 }
 
 bool CSound::InitializeDirectSound(HWND hwnd)
@@ -311,7 +322,7 @@ void CSound::ShutdownWaveFile(IDirectSoundBuffer8** secondaryBuffer)
 	return;
 }
 
-bool CSound::PlayWaveFile()
+bool CSound::PlayWaveFile(bool isLoop)
 {
 	HRESULT result;
 
@@ -329,14 +340,17 @@ bool CSound::PlayWaveFile()
 	{
 		return false;
 	}
-
+	if (isLoop)
+		result = m_secondaryBuffer1->Play(0, 0, 1);
 	// Play the contents of the secondary sound buffer.
-	result = m_secondaryBuffer1->Play(0, 0, 0);
+	else
+		result = m_secondaryBuffer1->Play(0, 0, 0);
+
 	if (FAILED(result))
 	{
 		return false;
 	}
-
+	
 	return true;
 }
 

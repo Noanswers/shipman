@@ -46,7 +46,7 @@ private:
 	std::vector<std::tuple<CPlayerData*, CPlayerObject*>> PlayerDataVector;
 
 	//¼öÁ¤
-	CStageObject* stage;
+	CStageObject*	stage;
 
 	CGraphicsClass* Graphics;
 	CInputClass*	Input = nullptr;
@@ -55,10 +55,10 @@ private:
 	CGameManager*	GameManager = nullptr;
 	CSceneManager*	SceneManager;
 
-	LPCWSTR m_applicationName;
-	HINSTANCE m_hinstance;
-	HWND m_hwnd;
-	bool uiCheck = true;
+	LPCWSTR			m_applicationName;
+	HINSTANCE		m_hinstance;
+	HWND			m_hwnd;
+	bool			uiCheck = true;
 };
 
 static CSystemClass* ApplicationHandle = nullptr;

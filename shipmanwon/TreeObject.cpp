@@ -4,7 +4,7 @@
 
 bool CTreeObject::initialize(ID3D11Device* device, HWND hWnd)
 {
-	temp_device = device;
+	pTemp_Device = device;
 
 	if (textureFilename.empty() == true)
 		textureFilename = textureStage;
@@ -42,10 +42,10 @@ void CTreeObject::createShader()
 		&pVSBlob, &pErrorBlob);
 
 	//버텍스 쉐이더 생성
-	hr = temp_device->CreateVertexShader(
+	hr = pTemp_Device->CreateVertexShader(
 		pVSBlob->GetBufferPointer(),
 		pVSBlob->GetBufferSize(),
-		0, &m_pVertexShader);
+		0, &pVertexShader);
 
 	//	해당 D3D_INPUT_ELEMENT_DESC 를 vertex의 struct에 맞춰서 수정해야 함
 
@@ -64,10 +64,10 @@ void CTreeObject::createShader()
 
 	UINT numElements = ARRAYSIZE(layout);
 
-	hr = temp_device->CreateInputLayout(layout, numElements,
+	hr = pTemp_Device->CreateInputLayout(layout, numElements,
 		pVSBlob->GetBufferPointer(),
 		pVSBlob->GetBufferSize(),
-		&m_pVertexLayout);
+		&pVertexLayout);
 
 	pVSBlob->Release();
 
@@ -79,9 +79,9 @@ void CTreeObject::createShader()
 		0, 0,												// 쉐이더 옵션
 		&pPSBlob, &pErrorBlob);								// 리턴
 
-	hr = temp_device->CreatePixelShader(pPSBlob->GetBufferPointer(),
+	hr = pTemp_Device->CreatePixelShader(pPSBlob->GetBufferPointer(),
 		pPSBlob->GetBufferSize(),
-		0, &m_pPixelShader);
+		0, &pPixelShader);
 
 	pPSBlob->Release();
 }

@@ -6,9 +6,9 @@
 
 bool CSkyObject::initialize(ID3D11Device* device, HWND hWnd)
 {
-	if (temp_device != device)
+	if (pTemp_Device != device)
 	{
-		temp_device = device;
+		pTemp_Device = device;
 		IsInit = false;
 	}
 
@@ -45,7 +45,7 @@ void CSkyObject::createShader()
 	HRESULT hr = D3DCompileFromFile(SkyFxFile.c_str(), 0, 0, "VS", "vs_5_0", 0,
 		0, &pVSBlob, &pErrorBlob);
 
-	hr = temp_device->CreateVertexShader(
+	hr = pTemp_Device->CreateVertexShader(
 		pVSBlob->GetBufferPointer(),
 		pVSBlob->GetBufferSize(),
 		NULL, &SkyVertexShader);
@@ -60,7 +60,7 @@ void CSkyObject::createShader()
 	};
 
 	UINT numElements = ARRAYSIZE(layout);
-	hr = temp_device->CreateInputLayout(layout, numElements,
+	hr = pTemp_Device->CreateInputLayout(layout, numElements,
 		pVSBlob->GetBufferPointer(),
 		pVSBlob->GetBufferSize(),
 		&SkyVertexLayout);
@@ -69,7 +69,7 @@ void CSkyObject::createShader()
 		0, "PS", "ps_5_0", 0,
 		0, &pPSBlob, &pErrorBlob);
 
-	hr = temp_device->CreatePixelShader(pPSBlob->GetBufferPointer(),
+	hr = pTemp_Device->CreatePixelShader(pPSBlob->GetBufferPointer(),
 		pPSBlob->GetBufferSize(),
 		NULL,
 		&SkyPixelShader);
@@ -87,7 +87,7 @@ void CSkyObject::createSkyVertexShader(ID3DBlob* pVSBlob, ID3DBlob* pErrorBlob)
 	HRESULT hr = D3DCompileFromFile(SkyFxFile.c_str(), 0, 0, "VS", "vs_5_0", 0,
 		0, &pVSBlob, &pErrorBlob);
 
-	hr = temp_device->CreateVertexShader(
+	hr = pTemp_Device->CreateVertexShader(
 		pVSBlob->GetBufferPointer(), 
 		pVSBlob->GetBufferSize(), 
 		NULL, &SkyVertexShader);
@@ -99,7 +99,7 @@ void CSkyObject::createSkyPixelShader(ID3DBlob* pPSBlob, ID3DBlob* pErrorBlob)
 		0, "PS", "ps_5_0", 0,
 		0, &pPSBlob, &pErrorBlob);
 
-	hr = temp_device->CreatePixelShader(pPSBlob->GetBufferPointer(),
+	hr = pTemp_Device->CreatePixelShader(pPSBlob->GetBufferPointer(),
 		pPSBlob->GetBufferSize(),
 		NULL,
 		&SkyPixelShader);
@@ -114,7 +114,7 @@ void CSkyObject::createSkyVertexBufferLayout(ID3DBlob* pVSBlob)
 	};
 	
 	UINT numElements = ARRAYSIZE(layout);
-	HRESULT hr = temp_device->CreateInputLayout(layout, numElements,
+	HRESULT hr = pTemp_Device->CreateInputLayout(layout, numElements,
 		pVSBlob->GetBufferPointer(),
 		pVSBlob->GetBufferSize(),
 		&SkyVertexLayout);
@@ -143,7 +143,7 @@ void CSkyObject::createSkyVertexBuffer()
 	D3D11_SUBRESOURCE_DATA InitData;
 	ZeroMemory(&InitData, sizeof(InitData));
 	InitData.pSysMem = vertices;      			// vertex 정보가 담긴 vector
-	temp_device->CreateBuffer(&bd, &InitData, &SkyVertBuffer);
+	pTemp_Device->CreateBuffer(&bd, &InitData, &SkyVertBuffer);
 }
 
 void CSkyObject::createSkyIndexBuffer()
@@ -158,12 +158,12 @@ void CSkyObject::createSkyIndexBuffer()
 	D3D11_SUBRESOURCE_DATA iinitData;
 	ZeroMemory(&iinitData, sizeof(iinitData));
 	iinitData.pSysMem = &Indices[0];
-	temp_device->CreateBuffer(&ibd, &iinitData, &SkyIndexBuffer);
+	pTemp_Device->CreateBuffer(&ibd, &iinitData, &SkyIndexBuffer);
 }
 
 void CSkyObject::loadSkyTexture()
 {
-	CreateDDSTextureFromFile(temp_device, textureFilename.c_str(), &Resource, &TextureRV, NULL);
+	CreateDDSTextureFromFile(pTemp_Device, textureFilename.c_str(), &Resource, &pTextureRV, NULL);
 }
 
 void CSkyObject::createRenderState()
@@ -174,7 +174,7 @@ void CSkyObject::createRenderState()
 	rasterizerDesc.CullMode = D3D11_CULL_NONE;             // Sky Dome 안쪽이 보여야 한다.
 	rasterizerDesc.FrontCounterClockwise = false;
 	
-	temp_device->CreateRasterizerState(&rasterizerDesc,  &SolidRS);
+	pTemp_Device->CreateRasterizerState(&rasterizerDesc,  &SolidRS);
 }
 
 void CSkyObject::createDepthStencil()
@@ -185,7 +185,7 @@ void CSkyObject::createDepthStencil()
 	dssDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	dssDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 	
-	temp_device->CreateDepthStencilState(&dssDesc, &DepthStencilLessEqual);
+	pTemp_Device->CreateDepthStencilState(&dssDesc, &DepthStencilLessEqual);
 }
 
 void CSkyObject::createSphere(float radius, int sliceCount, int stackCount)
@@ -263,8 +263,8 @@ void CSkyObject::renderBuffers(ID3D11DeviceContext* deviceContext)
 	deviceContext->VSSetShader(SkyVertexShader, NULL, 0);
 	deviceContext->PSSetShader(SkyPixelShader, NULL, 0);
 	//텍스쳐!
-	deviceContext->PSSetShaderResources(0, 1, &TextureRV);
-	deviceContext->PSSetSamplers(0, 1, &SamplerLinear);
+	deviceContext->PSSetShaderResources(0, 1, &pTextureRV);
+	deviceContext->PSSetSamplers(0, 1, &pSamplerLinear);
 
 	// 생성된 버퍼의 정점들을 실제로 파이프라인으로 공급하려면 버퍼를 장치의 한 입력 슬롯에 묶어야 함
 	// 1번째 인자 : 

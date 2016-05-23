@@ -14,13 +14,11 @@ public:
 
 	void createObject();
 
-	
-
-
 	void SetWinPlayerNum(int set)
 	{
 		winPlayerNum = set;
 	}
+
 private:
 	int winPlayerNum;
 };

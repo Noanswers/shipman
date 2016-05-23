@@ -3,9 +3,9 @@
 
 bool CStartObject::initialize(ID3D11Device* device, HWND hWnd)
 {
-	if (temp_device != device)
+	if (pTemp_Device != device)
 	{
-		temp_device = device;
+		pTemp_Device = device;
 		IsInit = false;
 	}
 

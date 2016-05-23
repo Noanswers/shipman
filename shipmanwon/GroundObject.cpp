@@ -105,10 +105,15 @@ void CGroundObject::createTempVertex(std::vector<VertexType>& vec, float width, 
 	{
 		for (int j = 0; j <= slice; ++j)
 		{
-			float height = 3.0f * sinf(100.0f / (rand() % 200));
+			float height = 1.0f * sinf(100.0f / (rand() % 200 + 1));
+			float alpha = 5.0f * cosf((deltaWidth*j - width / 2 + deltaLength*i - length / 2) / (width / 2 + length / 2) * XM_PI / 2);
+
+			float randWidth = deltaWidth / 2 * sinf(100.0f / (rand() % 200 + 1));
+			float randLength = deltaLength / 2 * sinf(100.0f / (rand() % 200 + 1));
+
 			vec.push_back({
-				XMFLOAT3(deltaWidth*j - width / 2, height, deltaLength*i - length / 2),
-				XMFLOAT4(0.2f, 0.3f, 0.0f, 1.0f),
+				XMFLOAT3(deltaWidth*j - width / 2 + randWidth, height + alpha, deltaLength*i - length / 2 + randLength),
+				XMFLOAT4(0.3f, 0.4f, 0.4f, 1.0f),
 				XMFLOAT3(0.0f, 1.0f, 0.0f),
 				XMFLOAT2(0.0f, 0.0f) }
 			);

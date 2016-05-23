@@ -1,9 +1,11 @@
 #include "stdafx.h"
 #include "MyScene.h"
+#include "Log.h"
+#include <chrono>
 
 void CMyScene::initialize()
 {
-
+	
 }
 
 bool CMyScene::renderScene(ID3D11DeviceContext* deviceContext, std::function<bool(ID3D11DeviceContext*, CMyObject*)> setShaderfunc)

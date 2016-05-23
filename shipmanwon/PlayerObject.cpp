@@ -2,6 +2,7 @@
 #include "PlayerObject.h"
 #include "config.h"
 #include "InputClass.h"
+#include "Log.h"
 #include <directxmath.h>
 
 bool CPlayerObject::initialize(ID3D11Device* device, HWND hWnd)
@@ -41,6 +42,7 @@ void CPlayerObject::dropDown(float speed)
 	/*if (currentPosition.y < -2000.0f)
 		return;*/
 
+	CLog::GetInstance()->SendErrorLogMessage("dropdown\n");
 	DirectX::XMMATRIX temp = {
 		0.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f,
@@ -51,8 +53,8 @@ void CPlayerObject::dropDown(float speed)
 
 	setCurrentPosition(currentPosition.x, currentPosition.y - speed, currentPosition.z);
 	
-	ObjectRotate *= DirectX::XMMatrixRotationX(sinf(ForwardTheta.y) * speed/5);
-	ObjectRotate *= DirectX::XMMatrixRotationZ(cosf(ForwardTheta.y) * speed/5);
+	ObjectRotate *= DirectX::XMMatrixRotationX(sinf(ForwardTheta.y) * speed/2);
+	ObjectRotate *= DirectX::XMMatrixRotationZ(cosf(ForwardTheta.y) * speed/2);
 
 	ObjectWorld = ObjectScale * ObjectRotate * ObjectTranslate;
 }

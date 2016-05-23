@@ -46,12 +46,21 @@ bool CSystemClass::initialize()
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	Graphics = new CGraphicsClass;
 	if (!Graphics)
+	{
+		
 		return false;
+	}
+		
 
 	// Initialize the graphics object.
 	result = Graphics->initialize(screenWidth, screenHeight, m_hwnd);
 	if (!result)
+	{
+		log->SendErrorLogMessage("graphic initialize error!\n");
 		return false;
+
+	}
+		
 	
 	return true;
 }
@@ -61,6 +70,7 @@ void CSystemClass::shutdown()
 	// Release the graphics object.
 	if (Graphics)
 	{
+		CLog::GetInstance()->SendErrorLogMessage("shut down!\n");
 		Graphics->shutdown();
 		delete Graphics;
 		Graphics = nullptr;
@@ -164,6 +174,7 @@ bool CSystemClass::frame()
 	//Space 입력시 Scene변경 (임시)
 	if ((uiCheck) && (Input->isKeyDown(VK_SPACE)))
 	{
+		CLog::GetInstance()->SendErrorLogMessage("Scene Change To GameScene!\n");
 		gameSceneInit();
 		uiCheck = false;
 	}
@@ -330,6 +341,7 @@ void CSystemClass::shutdownWindows()
 
 void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 {
+	CLog::GetInstance()->SendErrorLogMessage("init player data\n");
 	for (int i = 0; i < playerNum; ++i)
 	{
 		CPlayerObject* pObj1 = new CPlayerObject();

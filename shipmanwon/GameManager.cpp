@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "ResultScene.h"
 #include "ResultObject.h"
+#include "Log.h"
 #include "InputClass.h"
 
 void CGameManager::initialize()
@@ -25,8 +26,13 @@ void CGameManager::collisionCheck(std::vector<CPlayerObject*> playerVector)
 	{
 		for (auto iter2 = (iter + 1); iter2 < playerVector.end(); ++iter2)
 		{
-			if((*iter)->isCollisionPlayer(*iter2))
+			if ((*iter)->isCollisionPlayer(*iter2))
+			{
+				CLog::GetInstance()->SendErrorLogMessage("Collision\n");
 				doCollision(*iter, *iter2);
+				
+			}
+				
 		}
 	}
 }
@@ -165,7 +171,7 @@ void CGameManager::doGetOut(CPlayerObject* player)
 	//if (player->getCurrentPosition().y > -10000.0f)
 	player->dropDown(0.1f);
 
-	if(player->getCurrentPosition().y <= -10.0f)
+	if(player->getCurrentPosition().y <= -100000000.0f)
 		player->SetOutPlayer(true);
 }
 
@@ -204,6 +210,8 @@ bool CGameManager::isEnd(std::vector<CPlayerObject*> playerVector)
 
 void CGameManager::doEnd()
 {
+	CLog::GetInstance()->SendErrorLogMessage("GameEnd\n");
+
 	CResultScene* resultScene = new CResultScene();
 
 	resultScene->initialize();

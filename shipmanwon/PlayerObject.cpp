@@ -195,9 +195,6 @@ void CPlayerObject::createBottomCap()
 		vertex.tex = DirectX::XMFLOAT2(u, v);
 
 		Verticies.push_back(vertex);
-
-		/*cyVerticies.push_back({ DirectX::XMFLOAT3(x, y, z), DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
-			DirectX::XMFLOAT3(0.0f, 0.0f, 1.0f), DirectX::XMFLOAT2(u, v) });*/
 	}
 
 	//center of cap vertex

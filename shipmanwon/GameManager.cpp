@@ -11,9 +11,18 @@ void CGameManager::initialize()
 
 }
 
-bool CGameManager::frame()
+bool CGameManager::frame(std::vector<CPlayerObject*> playerVector)
 {
-	//CMyScene* curentScene = CSceneManager::GetInstance()->getCurrentScene();	
+	// game scene ÀÇ °æ¿ì
+	for (auto& iter : playerVector)
+	{
+		iter->move();
+	}
+
+	collisionCheck(playerVector);
+	getOutCheck(playerVector, currentStageObject);
+	resultCheck(playerVector);
+
 	return true;
 }
 
@@ -29,10 +38,8 @@ void CGameManager::collisionCheck(std::vector<CPlayerObject*> playerVector)
 			if ((*iter)->isCollisionPlayer(*iter2))
 			{
 				CLog::GetInstance()->SendErrorLogMessage("Collision\n");
-				doCollision(*iter, *iter2);
-				
+				doCollision(*iter, *iter2);	
 			}
-				
 		}
 	}
 }
@@ -168,7 +175,6 @@ void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageO
 }
 void CGameManager::doGetOut(CPlayerObject* player)
 {
-	//if (player->getCurrentPosition().y > -10000.0f)
 	player->dropDown(0.1f);
 
 	if(player->getCurrentPosition().y <= -100000000.0f)
@@ -177,12 +183,10 @@ void CGameManager::doGetOut(CPlayerObject* player)
 
 void CGameManager::resultCheck(std::vector<CPlayerObject*> playerVector)
 {
-
 	if (isEnd(playerVector))
 	{
 		doEnd();
 	}
-	
 }
 
 bool CGameManager::isEnd(std::vector<CPlayerObject*> playerVector)
@@ -220,7 +224,10 @@ void CGameManager::doEnd()
 	CResultObject* resultObject = new CResultObject();
 	resultObject->SetWinPlayerNum(winPlayer->GetplayerNumber());
 	resultScene->pushBack(resultObject, 10);
-	/*
-	if(CInputClass::GetInstance()->isKeyDown(VK_SPACE))
-		CSceneManager::GetInstance()->popBack();*/
 }
+
+void CGameManager::setStage(CStageObject * stage)
+{
+	currentStageObject = stage;
+}
+

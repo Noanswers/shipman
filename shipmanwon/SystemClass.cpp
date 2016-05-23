@@ -29,39 +29,26 @@ bool CSystemClass::initialize()
 	CMyScene* scene = SceneManager->getCurrentScene();
 	scene->initialize();
 
-
 	Input = CInputClass::GetInstance();
 	Input->initialize();
 
-
 	//Log initialize
-
 	CLog* log = new CLog;
 	log->initialize();
-	log->SendErrorLogMessage("test\n");
-	log->SendErrorLogMessage("test2\n");
-
-
 
 	// Create the graphics object.  This object will handle rendering all the graphics for this application.
 	Graphics = new CGraphicsClass;
 	if (!Graphics)
-	{
-		
 		return false;
-	}
 		
-
 	// Initialize the graphics object.
 	result = Graphics->initialize(screenWidth, screenHeight, m_hwnd);
 	if (!result)
 	{
 		log->SendErrorLogMessage("graphic initialize error!\n");
 		return false;
-
 	}
 		
-	
 	return true;
 }
 
@@ -76,17 +63,6 @@ void CSystemClass::shutdown()
 		Graphics = nullptr;
 	}
 
-	/*if (Input)
-	{
-		Input->DestorySingleton();
-	}*/
-
-	/*
-	if (GameManager)
-	{
-		GameManager->DestorySingleton();
-	}*/
-
 	// Shutdown the window.
 	shutdownWindows();
 
@@ -96,7 +72,6 @@ void CSystemClass::shutdown()
 void CSystemClass::run()
 {
 	MSG msg;
-	bool done, result;
 	
 	MyTime->Init();
 
@@ -104,14 +79,9 @@ void CSystemClass::run()
 	ZeroMemory(&msg, sizeof(MSG));
 
 	// Loop until there is a quit message from the window or the user.
-	done = false;
+	bool done = false;
 	while (!done)
 	{
-		//MyTime->ProcessTime();
-		//float delta = MyTime->GetElapsedTime();
-		//static float deltaTime = 0;
-		//deltaTime += delta;
-
 		// Handle the windows messages.
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -127,7 +97,7 @@ void CSystemClass::run()
 		else
 		{
 			// Otherwise do the frame processing. ( Input + Graphic + logic )
-			result = frame();
+			bool result = frame();
 			if (!result)
 			{
 				done = true;
@@ -141,7 +111,7 @@ void CSystemClass::run()
 void CSystemClass::gameSceneInit()
 {
 	CGameScene* gameScene = new CGameScene();
-
+	
 	SceneManager->pushBack(gameScene);
 	
 	CMyScene* scene = SceneManager->getCurrentScene();
@@ -149,7 +119,8 @@ void CSystemClass::gameSceneInit()
 	//수정
 	CStageObject* stageobject = new CStageObject();
 	gameScene->pushBack(stageobject, 10);
-	stage = stageobject;
+	GameManager->setStage(stageobject);
+	gameScene->initialize();
 
 	initPlayerData(scene, 2);
 
@@ -158,7 +129,7 @@ void CSystemClass::gameSceneInit()
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyLeft(VK_A);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyRight(VK_D);
 	
-	scene->initialize();
+	
 
 	//!! 임시!! 빠른 수정 요망!!
 	Graphics->gameScene = true;
@@ -167,48 +138,42 @@ void CSystemClass::gameSceneInit()
 
 bool CSystemClass::frame()
 {
+	bool result;
+	CMyScene* currentScene = SceneManager->getCurrentScene();
+
 	// 게임 종료 키입니다!
 	if (Input->isKeyDown(VK_ESCAPE))
 		return false;
 
 	//Space 입력시 Scene변경 (임시)
-	if ((uiCheck) && (Input->isKeyDown(VK_SPACE)))
+	if (Input->isKeyDown(VK_SPACE))
 	{
-		CLog::GetInstance()->SendErrorLogMessage("Scene Change To GameScene!\n");
-		gameSceneInit();
-		uiCheck = false;
+		if (dynamic_cast<CStartScene*>(currentScene))
+		{
+			CLog::GetInstance()->SendErrorLogMessage("Scene Change To GameScene!\n");
+			gameSceneInit();
+		}
 	}
 
 	// 플레이어의 입력을 받습니다
 	getPlayerInput();
-	SceneManager->getCurrentScene()->doAction(0.1f);
-
-	// 임시
-	std::vector<CPlayerObject*> playerVector;
-	for (auto& iter : PlayerDataVector)
-	{
-		std::get<CPlayerObject*>(iter)->move();
-		playerVector.push_back(std::get<CPlayerObject*>(iter));
-		
-	}
 	
+	// render 외에 scene 별로 정의된 연산을 수행합니다
+	currentScene->doAction(0.1f);
 
-	bool result = GameManager->frame();
-	if (!result)
-	{
-		CLog::GetInstance()->SendErrorLogMessage("GameManager Frame Error!\n");
-		return false;
-
-	}
-	
 	result = Graphics->frame(m_hwnd);
 	if (!result)
 		return false;
 
-	GameManager->collisionCheck(playerVector);
-	GameManager->getOutCheck(playerVector, stage);
-	GameManager->resultCheck(playerVector);
-	
+	if (dynamic_cast<CGameScene*>(currentScene))
+	{
+		result = GameManager->frame(playerVector);
+		if (!result)
+		{
+			CLog::GetInstance()->SendErrorLogMessage("GameManager Frame Error!\n");
+			return false;
+		}
+	}
 	return true;
 }
 
@@ -348,28 +313,33 @@ void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 	CLog::GetInstance()->SendErrorLogMessage("init player data\n");
 	for (int i = 0; i < playerNum; ++i)
 	{
-		CPlayerObject* pObj1 = new CPlayerObject();
-		pObj1->SetPlayerNumber(i+1);
-		scene->pushBack(pObj1, 10);
-/*
-		if (i == 0)
-		{
-			pObj1->setForwardVector(-1.0f, 0.0f, 0.0f);
-		}
-		*/
-		PlayerDataVector.push_back(std::make_tuple(new CPlayerData(), pObj1));
+		CPlayerObject* playerObj = new CPlayerObject();
+		playerObj->SetPlayerNumber(i+1);
+		scene->pushBack(playerObj, 10);
+	
+		PlayerDataVector.push_back(std::make_tuple(new CPlayerData(), playerObj));
+		playerVector.push_back(playerObj);
 	}
 	
-	int i = 0;
 	for (auto& iter : PlayerDataVector)
 	{
+		auto it = std::find(PlayerDataVector.begin(), PlayerDataVector.end(), iter);
+		auto index = std::distance(PlayerDataVector.begin(), it);
+		float theta = DirectX::XM_2PI*index / playerNum;
+
 		std::get<CPlayerData*>(iter)->initialize();
-		std::get<CPlayerObject*>(iter)->setTranslate(
-			3.0f*cosf(DirectX::XM_2PI*i / playerNum),
-			0.0f,
-			3.0f*sinf(DirectX::XM_2PI*i / playerNum)
-		);
-		++i;
+
+		// 초기 위치와 텍스쳐의 방향을 initialize합니다.
+		std::get<CPlayerObject*>(iter)->setTranslate( 3.0f*cosf(theta), 0.0f, 3.0f*sinf(theta) );
+		std::get<CPlayerObject*>(iter)->setRotate( 0.0f, -1.0f * cosf(theta), 0.0f );
+		
+		// OuterVector를 initialize합니다.
+		std::get<CPlayerObject*>(iter)->setOuterVector(	-1.0f*cosf(theta), 0.0f, -1.0f*sinf(theta) );
+		std::get<CPlayerObject*>(iter)->setOuterTheta(XMFLOAT3(0.0f, -1.0f * cosf(theta), 0.0f));
+
+		// ForwardVector를 initialize합니다.
+		std::get<CPlayerObject*>(iter)->setForwardVector( -1.0f*cosf(theta), 0.0f, -1.0f*sinf(theta) );		
+		std::get<CPlayerObject*>(iter)->setForwardTheta( XMFLOAT3(0.0f, -1.0f * cosf(theta), 0.0f) );
 	}
 }
 

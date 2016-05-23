@@ -28,7 +28,7 @@ private:
 	float bottomRadius = 8.0f;
 
 	float height = 10.0f;
-	int slice = 15;
+	int slice = 10;
 	int stack = 1;
 };
 

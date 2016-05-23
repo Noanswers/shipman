@@ -18,23 +18,25 @@ void CGameScene::initialize()
 
 //	test code
 	CMyObject* tree = new CTreeObject();
-	tree->setTranslate(15.0f, -20.0f, 10.0f);
+	tree->setTranslate(5.0f, -5.0f, 7.0f);
+	tree->setScale(0.5f, 0.5f, 0.5f);
 	pushBack(tree, 10);
 
 	CMyObject* tree2 = new CTreeObject();
-	tree2->setTranslate(14.0f, -20.0f, 15.0f);
+	tree2->setTranslate(6.0f, -5.0f, 4.0f);
 	tree2->setRotate(0.0f, 15.0f, 0.0f);
+	tree2->setScale(0.7f, 0.7f, 0.7f);
 	pushBack(tree2, 10);
 
 	CMyObject* tree3 = new CTreeObject();
-	tree3->setTranslate(15.0f, -20.0f, 22.0f);
+	tree3->setTranslate(10.0f, -5.0f, 17.0f);
 	pushBack(tree3, 10);
 
 	CMyObject* tree4 = new CTreeObject();
-	tree4->setTranslate(10.0f, -20.0f, 18.0f);
+	tree4->setTranslate(5.0f, -5.0f, 13.0f);
 	pushBack(tree4, 10);
 
 	CMyObject* ground = new CGroundObject();
-	ground->setTranslate(0.0f, -20.0f, 0.0f);
+	ground->setTranslate(0.0f, -10.0f, 0.0f);
 	pushBack(ground, 10);
 }

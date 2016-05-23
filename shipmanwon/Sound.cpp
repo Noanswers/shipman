@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "Sound.h"
-
+#include "config.h"
 
 CSound::CSound()
 {
@@ -31,7 +31,7 @@ bool CSound::Initialize(HWND hwnd)
 	}
 
 	// Load a wave audio file onto a secondary buffer.
-	result = LoadWaveFile("../Engine/data/sound01.wav", &m_secondaryBuffer1);
+	result = LoadWaveFile(soundDefault, &m_secondaryBuffer1);
 	if (!result)
 	{
 		return false;
@@ -136,7 +136,7 @@ void CSound::ShutdownDirectSound()
 }
 
 
-bool CSound::LoadWaveFile(char* filename, IDirectSoundBuffer8** secondaryBuffer)
+bool CSound::LoadWaveFile(std::wstring filename, IDirectSoundBuffer8** secondaryBuffer)
 {
 	int error;
 	FILE* filePtr;
@@ -150,7 +150,7 @@ bool CSound::LoadWaveFile(char* filename, IDirectSoundBuffer8** secondaryBuffer)
 	unsigned char *bufferPtr;
 	unsigned long bufferSize;
 	// Open the wave file in binary.
-	error = fopen_s(&filePtr, filename, "rb");
+	error = _wfopen_s(&filePtr, filename.c_str(), L"rb");
 	if (error != 0)
 	{
 		return false;

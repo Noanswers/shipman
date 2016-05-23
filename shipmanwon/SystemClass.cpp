@@ -61,7 +61,22 @@ bool CSystemClass::initialize()
 
 	}
 		
-	
+
+	Sound = new CSound();
+	if (!Sound)
+	{
+		log->SendErrorLogMessage("Sound create error!\n");
+		return false;
+	}
+
+	result = Sound->Initialize(m_hwnd);
+	if (!result)
+	{
+		log->SendErrorLogMessage("sound initialize error!\n");
+		return false;
+
+	}
+
 	return true;
 }
 
@@ -88,6 +103,15 @@ void CSystemClass::shutdown()
 	}*/
 
 	// Shutdown the window.
+
+	if (Sound)
+	{
+		CLog::GetInstance()->SendErrorLogMessage("shut down!\n");
+		Sound->Shutdown();
+		delete Sound;
+		Sound = nullptr;
+	}
+
 	shutdownWindows();
 
 	return;

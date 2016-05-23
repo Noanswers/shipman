@@ -13,6 +13,7 @@
 #include <mmsystem.h>
 #include <dsound.h>
 #include <stdio.h>
+#include <string>
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -49,7 +50,11 @@ private:
 	bool InitializeDirectSound(HWND);
 	void ShutdownDirectSound();
 
-	bool LoadWaveFile(char*, IDirectSoundBuffer8**);
+	bool LoadWaveFile(std::wstring filename, IDirectSoundBuffer8 ** secondaryBuffer);
+
+	//bool LoadWaveFile(WCHAR * filename, IDirectSoundBuffer8 ** secondaryBuffer);
+
+	//bool LoadWaveFile(char*, IDirectSoundBuffer8**);
 	void ShutdownWaveFile(IDirectSoundBuffer8**);
 
 	bool PlayWaveFile();

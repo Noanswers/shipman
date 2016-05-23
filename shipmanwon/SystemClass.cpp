@@ -195,8 +195,12 @@ bool CSystemClass::frame()
 
 	bool result = GameManager->frame();
 	if (!result)
+	{
+		CLog::GetInstance()->SendErrorLogMessage("GameManager Frame Error!\n");
 		return false;
 
+	}
+	
 	result = Graphics->frame(m_hwnd);
 	if (!result)
 		return false;

@@ -28,6 +28,9 @@
     <Filter Include="소스 파일\object\subClass">
       <UniqueIdentifier>{f797e0f3-2aa3-4e9e-8bf8-9a69520ce6a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\System\Sound">
+      <UniqueIdentifier>{4260b7de-5ed0-4e89-8d50-15a16f51891d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -123,6 +126,9 @@
     <ClInclude Include="ResultScene.h">
       <Filter>소스 파일\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Sound.h">
+      <Filter>소스 파일\System\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -205,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="ResultScene.cpp">
       <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound.cpp">
+      <Filter>소스 파일\System\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

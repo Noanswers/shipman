@@ -5,6 +5,7 @@
 #include "ResultScene.h"
 #include "Log.h"
 #include "SkyObject.h"
+#include "ResultObject.h"
 
 bool CSystemClass::initialize()
 {
@@ -149,6 +150,7 @@ bool CSystemClass::frame()
 			Input->keyUp(VK_SPACE);
 			CLog::GetInstance()->SendErrorLogMessage("Scene Change To GameScene!\n");
 			gameSceneInit();
+			Graphics->setCurrentInterval(0);
 		}
 
 		if (dynamic_cast<CResultScene*>(currentScene))
@@ -166,7 +168,6 @@ bool CSystemClass::frame()
 			}
 			PlayerDataVector.clear();
 			Graphics->gameScene = false;
-			Graphics->setCurrentInterval(0);
 		}
 	}
 
@@ -190,7 +191,14 @@ bool CSystemClass::frame()
 			CLog::GetInstance()->SendErrorLogMessage("GameManager Frame Error!\n");
 			return false;
 		}
+
+		if (GameManager->isGameEnd(PlayerVector))
+		{
+			CPlayerObject* player = GameManager->getWinnerPlayer(PlayerVector);
+			endGameScene(player);
+		}
 	}
+
 	return true;
 }
 
@@ -387,4 +395,18 @@ void CSystemClass::getPlayerInput()
 		if (Input->isKeyDown(key.down))
 			std::get<CPlayerObject*>(iter)->moveStop();
 	}
+}
+
+void CSystemClass::endGameScene(CPlayerObject* winner)
+{
+	Graphics->setCameraStartScene();
+	CResultScene* resultScene = new CResultScene();
+
+	resultScene->initialize();
+	CSceneManager::GetInstance()->pushBack(resultScene);
+
+	CResultObject* resultObject = new CResultObject();
+	resultObject->SetWinPlayerNum(winner->getPlayerNumber());
+	resultScene->pushBack(resultObject, 10);
+	resultObject->setTranslate(0.0f, 1.0f, 0.0f);
 }

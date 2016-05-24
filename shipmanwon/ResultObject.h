@@ -8,18 +8,13 @@ public:
 	CResultObject(const CResultObject&) = default;
 	virtual ~CResultObject() = default;
 
-
 	bool	initialize(ID3D11Device* device, HWND hWnd) override;
 	void	shutdown() override;
 
-	void createObject();
-
-	void SetWinPlayerNum(int set)
-	{
-		winPlayerNum = set;
-	}
+	void	createObject();
+	void	SetWinPlayerNum(int set);
 
 private:
-	int winPlayerNum;
+	int		winPlayerNum;
 };
 

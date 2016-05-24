@@ -21,7 +21,6 @@ bool CGameManager::frame(std::vector<CPlayerObject*> playerVector)
 
 	collisionCheck(playerVector);
 	getOutCheck(playerVector);
-	resultCheck(playerVector);
 
 	return true;
 }
@@ -193,47 +192,35 @@ void CGameManager::doGetOut(CPlayerObject* player)
 		player->setOutPlayer(true);
 }
 
-void CGameManager::resultCheck(std::vector<CPlayerObject*> playerVector)
+bool CGameManager::isGameEnd(std::vector<CPlayerObject*> playerVector)
 {
-	if (isEnd(playerVector))
-	{
-		doEnd();
-	}
-}
-
-bool CGameManager::isEnd(std::vector<CPlayerObject*> playerVector)
-{
-	int playerCount = 0;
-	
+	int numOfPlayer = playerVector.size();
 	CPlayerObject* winPlayer;
-	for (auto& i : playerVector)
+
+	for (auto& iter : playerVector)
 	{
-		if (i->getOutPlayer())
-			playerCount++;
-		else
-			winPlayer = i;
+		if (iter->getOutPlayer())
+			numOfPlayer--;
 	}
 
-	if (playerCount == (numPlayer - 1))
-	{
-		this->winPlayer = winPlayer;
+	if (numOfPlayer == 1)
 		return true;
-	}
 
 	return false;
-
 }
 
-void CGameManager::doEnd()
+CPlayerObject* CGameManager::getWinnerPlayer(std::vector<CPlayerObject*> playerVector)
 {
-	CResultScene* resultScene = new CResultScene();
+	if (isGameEnd(playerVector) == false)
+		return nullptr;
 
-	resultScene->initialize();
-	CSceneManager::GetInstance()->pushBack(resultScene);
+	for (auto& iter : playerVector)
+	{
+		if (iter->getOutPlayer() == false)
+			return iter;
+	}
 
-	CResultObject* resultObject = new CResultObject();
-	resultObject->SetWinPlayerNum(winPlayer->getPlayerNumber());
-	resultScene->pushBack(resultObject, 10);
+	return nullptr;
 }
 
 void CGameManager::setStage(CStageObject * stage)

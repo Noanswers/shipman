@@ -14,9 +14,10 @@ public:
 	void initialize();
 	bool frame(std::vector<CPlayerObject*> playerVector);
 
-	bool isEnd(std::vector<CPlayerObject*> playerVector);
-	void doEnd();
+	bool isGameEnd(std::vector<CPlayerObject*> playerVector);
 	void setStage(CStageObject* stage);
+
+	CPlayerObject* getWinnerPlayer(std::vector<CPlayerObject*> playerVector);
 
 private:
 	//충돌
@@ -26,15 +27,6 @@ private:
 	//추락
 	void getOutCheck(std::vector<CPlayerObject*> playerVector);
 	void doGetOut(CPlayerObject* player);
-
-	//결과 체크
-	void resultCheck(std::vector<CPlayerObject*> playerVector);
 	
-	bool test_checker = false;
-	bool getout_checker = false;
-	
-	CPlayerObject* winPlayer = nullptr;
 	CStageObject* currentStageObject = nullptr;
-
-	int numPlayer = 2; //setting 필요
 };

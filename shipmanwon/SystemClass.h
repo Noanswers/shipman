@@ -40,6 +40,7 @@ private:
 	void shutdownWindows();
 	void initPlayerData(CMyScene * scene, int playerNum);
 	void getPlayerInput();
+	void endGameScene(CPlayerObject * winner);
 	void gameSceneInit();
 
 //	variables

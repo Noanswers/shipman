@@ -28,12 +28,18 @@ bool CSystemClass::initialize()
 	if (SceneManager == nullptr)
 		return false;
 
+	SoundManager = CSoundManager::GetInstance();
+	if (SoundManager == nullptr)
+		return false;
+
 	SceneManager->initialize();
 	CMyScene* scene = SceneManager->getCurrentScene();
 	scene->initialize();
 
 	Input = CInputClass::GetInstance();
 	Input->initialize();
+
+	SoundManager->initialize(m_hwnd);
 
 	//Log initialize
 	CLog* log = new CLog;
@@ -51,6 +57,8 @@ bool CSystemClass::initialize()
 		log->SendErrorLogMessage("graphic initialize error!\n");
 		return false;
 	}
+
+	CSoundManager::GetInstance()->play(CSound::SoundKind::START_BACKGROUND_SOUND, true);
 		
 	return true;
 }
@@ -67,6 +75,8 @@ void CSystemClass::shutdown()
 	}
 
 	// Shutdown the window.
+
+
 	shutdownWindows();
 
 	return;
@@ -130,6 +140,9 @@ void CSystemClass::gameSceneInit()
 
 	initPlayerData(scene, 2);
 	Graphics->gameScene = true;
+
+	SoundManager->GetInstance()->stop(CSound::SoundKind::START_BACKGROUND_SOUND);
+
 }
 
 

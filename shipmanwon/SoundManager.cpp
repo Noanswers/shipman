@@ -8,44 +8,49 @@ bool CSoundManager::initialize(HWND hwnd)
 {
 	bool result = true;
 
-	if (!m_collisionSound)
-	{
-		m_collisionSound = new CSound();
-		result = m_collisionSound->Initialize(hwnd, soundCollision);
-	}
+	CSound* crashSound = new CSound();
+	result = crashSound->Initialize(hwnd, soundCollision);
+	crashSound->setSoundKind(CSound::SoundKind::CRASH_SCOUND);
 
-	if (!m_startBackGroundSound)
-	{
-		m_startBackGroundSound = new CSound();
-		result = m_startBackGroundSound->Initialize(hwnd, soundStart);
-	}
+	m_soundVector.push_back(crashSound);
 
-	if (!m_resultSound)
-	{
-		m_resultSound = new CSound();
-		result = m_resultSound->Initialize(hwnd, soundResult);
-	}
-		
+
+
+	CSound* startBackgroundSound = new CSound();
+	result = startBackgroundSound->Initialize(hwnd, soundStart);
+	startBackgroundSound->setSoundKind(CSound::SoundKind::START_BACKGROUND_SOUND);
+
+	m_soundVector.push_back(startBackgroundSound);
+
+
+
+	CSound* resultBackgroundSound = new CSound();
+	result = resultBackgroundSound->Initialize(hwnd, soundResult);
+	resultBackgroundSound->setSoundKind(CSound::SoundKind::RESULT_BACKGROUND_SOUND);
+
+	m_soundVector.push_back(resultBackgroundSound);
+
 	return result;
 }
 
-
-void CSoundManager::playStartBackGroundSound()
+void CSoundManager::play(CSound::SoundKind soundkind, bool isLoop)
 {
-	m_startBackGroundSound->play(true);
+	for (auto& i : m_soundVector)
+	{
+		if (i->getSoundKind() == soundkind)
+		{
+			i->play(isLoop);
+		}
+	}
 }
 
-void CSoundManager::playCollisionSound()
+void CSoundManager::stop(CSound::SoundKind soundkind)
 {
-	m_collisionSound->play(false);
-}
-
-void CSoundManager::playResultSound()
-{
-	m_resultSound->play(false);
-}
-
-void CSoundManager::stopStartBackGroundSound()
-{
-	m_startBackGroundSound->stop();
+	for (auto& i : m_soundVector)
+	{
+		if (i->getSoundKind() == soundkind)
+		{
+			i->stop();
+		}
+	}
 }

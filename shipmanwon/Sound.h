@@ -24,12 +24,31 @@ class CSound
 
 
 public:
+
+
 	CSound();
 	~CSound();
+
+	enum class SoundKind
+	{
+		START_BACKGROUND_SOUND,
+		CRASH_SCOUND,
+		RESULT_BACKGROUND_SOUND
+	};
+
 	bool Initialize(HWND hwnd, std::wstring soundPath);
 	void Shutdown();
 	bool play(bool isLoop); 
 	bool stop();
+
+	void setSoundKind(SoundKind set)
+	{
+		soundkind = set;
+	}
+	SoundKind getSoundKind()
+	{
+		return soundkind;
+	}
 
 private:
 	bool InitializeDirectSound(HWND);
@@ -40,6 +59,8 @@ private:
 	void ShutdownWaveFile(IDirectSoundBuffer8**);
 
 	bool PlayWaveFile(bool isLoop);
+
+	SoundKind soundkind;
 
 
 	struct WaveHeaderType

@@ -1,10 +1,12 @@
 #pragma once
 #include "Singleton.h"
 #include "Sound.h"
+#include <vector>
 
 class CSoundManager : public CSingleton<CSoundManager>
 {
 public:
+	
 	CSoundManager() = default;
 	~CSoundManager() = default;
 	CSoundManager(CSoundManager&) = delete;
@@ -17,17 +19,11 @@ public:
 
 	bool initialize(HWND hwnd);
 
-	void playStartBackGroundSound();
-	void playCollisionSound();
-	void playResultSound();
-
-	void stopStartBackGroundSound();
-
+	void play(CSound::SoundKind soundkind, bool isLoop);
+	void stop(CSound::SoundKind soundkind);
 
 private:
-	CSound* m_startBackGroundSound = nullptr;
-	CSound* m_collisionSound = nullptr;
-	CSound* m_resultSound = nullptr;
+	std::vector<CSound*> m_soundVector;
 
 };
 

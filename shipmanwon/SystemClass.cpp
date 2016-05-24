@@ -66,7 +66,8 @@ bool CSystemClass::initialize()
 
 	}
 
-	CSoundManager::GetInstance()->playStartBackGroundSound();
+	CSoundManager::GetInstance()->play(CSound::SoundKind::START_BACKGROUND_SOUND, true);
+		
 
 	return true;
 }
@@ -171,7 +172,7 @@ void CSystemClass::gameSceneInit()
 	//!! 임시!! 빠른 수정 요망!!
 	Graphics->gameScene = true;
 
-	SoundManager->GetInstance()->stopStartBackGroundSound();
+	SoundManager->GetInstance()->stop(CSound::SoundKind::START_BACKGROUND_SOUND);
 
 }
 

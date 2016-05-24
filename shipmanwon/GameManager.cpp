@@ -29,7 +29,7 @@ void CGameManager::collisionCheck(std::vector<CPlayerObject*> playerVector)
 		{
 			if ((*iter)->isCollisionPlayer(*iter2))
 			{
-				CSoundManager::GetInstance()->playCollisionSound();
+				CSoundManager::GetInstance()->play(CSound::SoundKind::CRASH_SCOUND, false);
 				CLog::GetInstance()->SendErrorLogMessage("Collision\n");
 				doCollision(*iter, *iter2);
 				
@@ -213,7 +213,7 @@ bool CGameManager::isEnd(std::vector<CPlayerObject*> playerVector)
 void CGameManager::doEnd()
 {
 
-	CSoundManager::GetInstance()->playResultSound();
+	CSoundManager::GetInstance()->play(CSound::SoundKind::RESULT_BACKGROUND_SOUND, true);
 	CLog::GetInstance()->SendErrorLogMessage("GameEnd\n");
 
 	CResultScene* resultScene = new CResultScene();

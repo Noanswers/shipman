@@ -385,7 +385,7 @@ void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 		
 		// 초기 위치와 방향을 initialize합니다.
 		std::get<CPlayerObject*>(iter)->setTranslate(3.0f*cosf(theta), 0.0f, 3.0f*sinf(theta));
-		std::get<CPlayerObject*>(iter)->setRotate(0.0f, 0.0f, 0.0f);
+		std::get<CPlayerObject*>(iter)->setRotate(0.0f, 360.0f, 0.0f);
 	}
 
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyUp(VK_W);

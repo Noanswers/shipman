@@ -20,14 +20,14 @@ public:
 		Verticies.clear();
 		Indices.clear();
 
-		//delete	Resource;
-		//delete	pTextureRV;
-		//delete	pSamplerLinear;
-		//delete	pVertexBuffer;
-		//delete	pIndexBuffer;
-		//delete	pVertexShader;
-		//delete	pVertexLayout;
-		//delete	pPixelShader;
+		if (Resource)		{ Resource->Release();			}
+		if (pTextureRV)		{ pTextureRV->Release();		}
+		if (pSamplerLinear) { pSamplerLinear->Release();	}
+		if (pVertexBuffer)	{ pVertexBuffer->Release();		}
+		if (pIndexBuffer)	{ pIndexBuffer->Release();		}
+		if (pVertexShader)	{ pVertexShader->Release();		}
+		if (pVertexLayout)	{ pVertexLayout->Release();		}
+		if (pPixelShader)	{ pPixelShader->Release();		}
 	}; 
 
 	virtual bool	initialize(ID3D11Device* device, HWND hWnd);

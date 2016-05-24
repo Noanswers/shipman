@@ -25,3 +25,5 @@ static const std::wstring texturePress		= config::makeDirectory("shipmanwon\\tex
 static const std::wstring textureSky		= config::makeDirectory("shipmanwon\\texture\\grasscube1024.dds");
 
 static const std::wstring resultTextureDefault = config::makeDirectory("shipmanwon\\texture\\resultP");
+static const std::wstring playerTexture_1 = config::makeDirectory("shipmanwon\\texture\\p1.png");
+static const std::wstring playerTexture_2 = config::makeDirectory("shipmanwon\\texture\\p2.png");

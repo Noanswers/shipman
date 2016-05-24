@@ -74,53 +74,9 @@ void CSkyObject::createShader()
 		NULL,
 		&SkyPixelShader);
 
-	/*createSkyVertexShader(pVSBlob, pErrorBlob);
-	createSkyVertexBufferLayout(pVSBlob);
-	createSkyPixelShader(pPSBlob, pErrorBlob);*/
-
 	pVSBlob->Release();
 	pPSBlob->Release();
 }
-
-void CSkyObject::createSkyVertexShader(ID3DBlob* pVSBlob, ID3DBlob* pErrorBlob)
-{
-	HRESULT hr = D3DCompileFromFile(SkyFxFile.c_str(), 0, 0, "VS", "vs_5_0", 0,
-		0, &pVSBlob, &pErrorBlob);
-
-	hr = pTemp_Device->CreateVertexShader(
-		pVSBlob->GetBufferPointer(), 
-		pVSBlob->GetBufferSize(), 
-		NULL, &SkyVertexShader);
-}
-
-void CSkyObject::createSkyPixelShader(ID3DBlob* pPSBlob, ID3DBlob* pErrorBlob)
-{
-	HRESULT hr = D3DCompileFromFile(SkyFxFile.c_str(), 0,
-		0, "PS", "ps_5_0", 0,
-		0, &pPSBlob, &pErrorBlob);
-
-	hr = pTemp_Device->CreatePixelShader(pPSBlob->GetBufferPointer(),
-		pPSBlob->GetBufferSize(),
-		NULL,
-		&SkyPixelShader);
-}
-
-void CSkyObject::createSkyVertexBufferLayout(ID3DBlob* pVSBlob)
-{
-	// Create the input layout
-	D3D11_INPUT_ELEMENT_DESC layout[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-	
-	UINT numElements = ARRAYSIZE(layout);
-	HRESULT hr = pTemp_Device->CreateInputLayout(layout, numElements,
-		pVSBlob->GetBufferPointer(),
-		pVSBlob->GetBufferSize(),
-		&SkyVertexLayout);
-}
-
-// initializeBuffer function
 
 bool CSkyObject::initializeBuffers(ID3D11Device* device)
 {

@@ -12,9 +12,11 @@ bool CPlayerObject::initialize(ID3D11Device* device, HWND hWnd)
 		IsInit = false;
 	}
 
-	if (textureFilename.empty() == true)
-		textureFilename = textureDefault;
-
+	if(playerNumber == 1)
+		textureFilename = playerTexture_1;
+	else
+		textureFilename = playerTexture_2;
+		
 	if (IsInit == true)
 		return true;
 
@@ -38,9 +40,6 @@ void CPlayerObject::shutdown()
 
 void CPlayerObject::dropDown(float speed)
 {
-	/*if (currentPosition.y < -2000.0f)
-		return;*/
-
 	DirectX::XMMATRIX temp = {
 		0.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 0.0f,
@@ -140,15 +139,11 @@ void CPlayerObject::createTopCap()
 		float x = topRadius*cosf(i*dTheta);
 		float z = topRadius*sinf(i*dTheta);
 
-		//texture coordinate
-		float u = x / height;
-		float v = z / height;
-
 		VertexType vertex;
 		vertex.position = DirectX::XMFLOAT3(x, y, z);
 		vertex.color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 		vertex.normal = DirectX::XMFLOAT3(0.0f, y, 0.0f);
-		vertex.tex = DirectX::XMFLOAT2(u, v);
+		vertex.tex = DirectX::XMFLOAT2(cosf(i*dTheta)/2+0.5f, 1.0f-(sinf(i*dTheta)/2+0.5f));
 
 		Verticies.push_back(vertex);
 	}
@@ -189,7 +184,7 @@ void CPlayerObject::createBottomCap()
 		vertex.position = DirectX::XMFLOAT3(x, y, z);
 		vertex.color = DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 		vertex.normal = DirectX::XMFLOAT3(0.0f, -1.0f, 0.0f);
-		vertex.tex = DirectX::XMFLOAT2(u, v);
+		vertex.tex = DirectX::XMFLOAT2(x, z);
 
 		Verticies.push_back(vertex);
 	}

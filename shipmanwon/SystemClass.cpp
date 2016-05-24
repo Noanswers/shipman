@@ -357,10 +357,6 @@ void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 
 		std::get<CPlayerData*>(iter)->initialize();
 
-		// 초기 위치와 방향을 initialize합니다.
-		std::get<CPlayerObject*>(iter)->setTranslate( 3.0f*cosf(theta), 0.0f, 3.0f*sinf(theta) );
-		std::get<CPlayerObject*>(iter)->setRotate( 0.0f, theta + XM_PI, 0.0f );
-		
 		// OuterVector를 initialize합니다.
 		std::get<CPlayerObject*>(iter)->setOuterVector(	-1.0f*cosf(theta), 0.0f, -1.0f*sinf(theta) );
 		std::get<CPlayerObject*>(iter)->setOuterTheta(XMFLOAT3(0.0f, theta + XM_PI, 0.0f));
@@ -368,8 +364,11 @@ void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 		// ForwardVector를 initialize합니다.
 		std::get<CPlayerObject*>(iter)->setForwardVector( -1.0f*cosf(theta), 0.0f, -1.0f*sinf(theta) );		
 		std::get<CPlayerObject*>(iter)->setForwardTheta( XMFLOAT3(0.0f, theta + XM_PI, 0.0f) );
+		
+		// 초기 위치와 방향을 initialize합니다.
+		std::get<CPlayerObject*>(iter)->setTranslate(3.0f*cosf(theta), 0.0f, 3.0f*sinf(theta));
+		std::get<CPlayerObject*>(iter)->setRotate(0.0f, 0.0f, 0.0f);
 	}
-
 
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyUp(VK_W);
 	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyDown(VK_S);

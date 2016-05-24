@@ -18,11 +18,8 @@ public:
 	bool	isGetOutStage(DirectX::XMFLOAT3 position);
 
 private:
-	void createStage();
-	
 	std::vector<XMFLOAT3> BorderVertices;
-	//DirectX::XMFLOAT3 realPosition[4];
-	
+		
 	void createShader() override;
 
 	void createStage(float topRadius, float bottomRadius, float height, int slice);

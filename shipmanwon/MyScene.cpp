@@ -57,7 +57,8 @@ bool CMyScene::pushBack(CMyObject* object, int layerNum)
 	bool isExist = checkLayerExist(layerNum);
 	if (isExist == false)
 	{
-		LayerList.emplace_back(std::make_tuple(layerNum, new CMyLayer()));
+		CMyLayer* layer = new CMyLayer();
+		LayerList.emplace_back(std::make_tuple(layerNum, layer));
 	}
 
 	CMyLayer* layer = getLayerByNum(layerNum);

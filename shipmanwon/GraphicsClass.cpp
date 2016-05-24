@@ -252,5 +252,10 @@ void CGraphicsClass::setCameraGameScene()
 	++CurrentInterval;
 	/*m_Camera->SetPosition(0.0f, 9.0f, -6.0f);
 	m_Camera->SetRotation(60.0f, 0.0f, 0.0f);*/
-};
+}
+
+void CGraphicsClass::setCurrentInterval(int value)
+{
+	CurrentInterval = value;
+}
 	

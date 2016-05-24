@@ -1,20 +1,12 @@
 #pragma once
 #include "MyScene.h"
-class CResultScene :
-	public CMyScene
+class CResultScene : public CMyScene
 {
 public:
-	CResultScene(): CMyScene()
-	{
-
-	};
-
+	CResultScene() = default;
+	CResultScene(const CResultScene&) = default;
+	~CResultScene() = default;
 
 	void initialize() override;
-	
-
-
-private:
-
 };
 

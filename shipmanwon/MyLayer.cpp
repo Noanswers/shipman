@@ -14,8 +14,9 @@ bool CMyLayer::renderLayer(ID3D11DeviceContext* deviceContext, std::function<boo
 
 bool CMyLayer::pushBack(CMyObject* object)
 {
+	CMyObject* obj = object;
 	size_t preSize = ObjectVector.size();
-	ObjectVector.push_back(object);
+	ObjectVector.push_back(obj);
 
 	size_t currentSize = ObjectVector.size();
 	if (currentSize == (preSize + 1))

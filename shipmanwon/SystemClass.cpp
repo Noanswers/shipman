@@ -2,6 +2,7 @@
 #include "SystemClass.h"
 #include "StartScene.h"
 #include "GameScene.h"
+#include "ResultScene.h"
 #include "Log.h"
 #include "SkyObject.h"
 
@@ -17,7 +18,8 @@ bool CSystemClass::initialize()
 	// Initialize the windows api.
 	initializeWindows(screenWidth, screenHeight);
 
-	GameManager = CGameManager::GetInstance();
+	/*GameManager = CGameManager::GetInstance();*/
+	GameManager = new CGameManager();
 	if (GameManager == nullptr)
 		return false;
 
@@ -110,6 +112,9 @@ void CSystemClass::run()
 
 void CSystemClass::gameSceneInit()
 {
+	if (GameManager == nullptr)
+		GameManager = new CGameManager();
+	
 	CGameScene* gameScene = new CGameScene();
 	
 	SceneManager->pushBack(gameScene);
@@ -117,19 +122,12 @@ void CSystemClass::gameSceneInit()
 	CMyScene* scene = SceneManager->getCurrentScene();
 	
 	//수정
-	CStageObject* stageobject = new CStageObject();
-	gameScene->pushBack(stageobject, 10);
-	GameManager->setStage(stageobject);
+	CStageObject* stageObject = new CStageObject();
+	gameScene->pushBack(stageObject, 10);
+	GameManager->setStage(stageObject);
 	gameScene->initialize();
 
 	initPlayerData(scene, 2);
-
-	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyUp(VK_W);
-	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyDown(VK_S);
-	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyLeft(VK_A);
-	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyRight(VK_D);
-	
-	//!! 임시!! 빠른 수정 요망!!
 	Graphics->gameScene = true;
 }
 
@@ -148,10 +146,31 @@ bool CSystemClass::frame()
 	{
 		if (dynamic_cast<CStartScene*>(currentScene))
 		{
+			Input->keyUp(VK_SPACE);
 			CLog::GetInstance()->SendErrorLogMessage("Scene Change To GameScene!\n");
 			gameSceneInit();
 		}
+
+		if (dynamic_cast<CResultScene*>(currentScene))
+		{
+			CLog::GetInstance()->SendErrorLogMessage("Scene Change To StartScene!\n");
+			SceneManager->popBack();
+			SceneManager->popBack();
+			Input->keyUp(VK_SPACE);
+			Graphics->setCameraStartScene();
+			delete GameManager;
+			GameManager = nullptr;
+			for (auto& iter : PlayerDataVector)
+			{
+				delete std::get<CPlayerData*>(iter);
+			}
+			PlayerDataVector.clear();
+			Graphics->gameScene = false;
+			Graphics->setCurrentInterval(0);
+		}
 	}
+
+	currentScene = SceneManager->getCurrentScene();
 
 	// 플레이어의 입력을 받습니다
 	getPlayerInput();
@@ -309,6 +328,9 @@ void CSystemClass::shutdownWindows()
 void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 {
 	CLog::GetInstance()->SendErrorLogMessage("init player data\n");
+	PlayerDataVector.clear();
+	PlayerVector.clear();
+
 	for (int i = 0; i < playerNum; ++i)
 	{
 		CPlayerObject* playerObj = new CPlayerObject();
@@ -339,6 +361,12 @@ void CSystemClass::initPlayerData(CMyScene* scene, int playerNum)
 		std::get<CPlayerObject*>(iter)->setForwardVector( -1.0f*cosf(theta), 0.0f, -1.0f*sinf(theta) );		
 		std::get<CPlayerObject*>(iter)->setForwardTheta( XMFLOAT3(0.0f, theta + XM_PI, 0.0f) );
 	}
+
+
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyUp(VK_W);
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyDown(VK_S);
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyLeft(VK_A);
+	std::get<CPlayerData*>(PlayerDataVector[1])->setPlayerKeyRight(VK_D);
 }
 
 void CSystemClass::getPlayerInput()

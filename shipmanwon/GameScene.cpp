@@ -22,7 +22,7 @@ void CGameScene::initialize()
 //	tree ¹èÄ¡
 	int radius = 10.0f;
 	int maxRadius = 12.0f;
-	for (int i = 0; i < 40 ; ++i)
+	for (int i = 0; i < 10 ; ++i)
 	{
 		float alpha = 0.1f*i;
 		float theta = fmod((rand()), XM_2PI);

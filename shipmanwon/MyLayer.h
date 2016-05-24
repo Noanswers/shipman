@@ -10,7 +10,13 @@ class CMyLayer
 public:
 	CMyLayer() = default;
 	CMyLayer(const CMyLayer&) = default;
-	~CMyLayer() = default;
+	~CMyLayer() 
+	{
+		for (auto& iter : ObjectVector)
+		{
+			delete iter;
+		}
+	};
 
 	bool initLayer(ID3D11Device* device, HWND hWnd);
 

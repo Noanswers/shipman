@@ -32,6 +32,7 @@ bool CSceneManager::pushBack(CMyScene* scene)
 bool CSceneManager::popBack()
 {
 	size_t preSize = SceneStack.size();
+	delete SceneStack.back();
 	SceneStack.pop_back();
 
 	size_t currentSize = SceneStack.size();

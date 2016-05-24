@@ -1,40 +1,35 @@
 #pragma once
-#include "Singleton.h"
+//#include "Singleton.h"
 #include <vector>
 #include "PlayerObject.h"
 #include "StageObject.h"
 
-class CGameManager : public CSingleton<CGameManager>
+class CGameManager
 {
 public:
 	CGameManager() = default;
 	~CGameManager() = default;
 	CGameManager(CGameManager&) = delete;
 
-	void DestorySingleton() override
-	{
-
-	}
-
 	void initialize();
 	bool frame(std::vector<CPlayerObject*> playerVector);
-	//bool frame();
-
-	//충돌
-	void collisionCheck(std::vector<CPlayerObject*> playerVector);
-	void doCollision(CPlayerObject* player1, CPlayerObject* player2);
-
-	//추락
-	void getOutCheck(std::vector<CPlayerObject*> playerVector, CStageObject* stage);
-	void doGetOut(CPlayerObject* player);
-
-	void resultCheck(std::vector<CPlayerObject*> playerVector);
 
 	bool isEnd(std::vector<CPlayerObject*> playerVector);
 	void doEnd();
 	void setStage(CStageObject* stage);
 
 private:
+	//충돌
+	void collisionCheck(std::vector<CPlayerObject*> playerVector);
+	void doCollision(CPlayerObject* player1, CPlayerObject* player2);
+
+	//추락
+	void getOutCheck(std::vector<CPlayerObject*> playerVector);
+	void doGetOut(CPlayerObject* player);
+
+	//결과 체크
+	void resultCheck(std::vector<CPlayerObject*> playerVector);
+	
 	bool test_checker = false;
 	bool getout_checker = false;
 	

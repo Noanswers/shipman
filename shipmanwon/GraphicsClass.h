@@ -30,6 +30,8 @@ public:
 	void setCameraGameScene();
 
 	bool gameScene = false;
+	void setCurrentInterval(int value);
+
 private:
 	bool render(HWND hWnd);
 	bool renderCurrentScene();

@@ -20,7 +20,7 @@ bool CGameManager::frame(std::vector<CPlayerObject*> playerVector)
 	}
 
 	collisionCheck(playerVector);
-	getOutCheck(playerVector, currentStageObject);
+	getOutCheck(playerVector);
 	resultCheck(playerVector);
 
 	return true;
@@ -174,12 +174,12 @@ void CGameManager::doCollision(CPlayerObject* player1, CPlayerObject* player2)
 	player2->setOuterVector(1.0f*cosf(-theta2), 0.0f, 1.0f*sinf(-theta2));
 }
 
-void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector, CStageObject* stage)
+void CGameManager::getOutCheck(std::vector<CPlayerObject*> playerVector)
 {
 	for (auto& iter : playerVector)
 	{
 		DirectX::XMFLOAT3 currentPos = iter->getCurrentPosition();
-		if (stage->isGetOutStage(currentPos))
+		if (currentStageObject->isGetOutStage(currentPos))
 		{
 			doGetOut(iter);
 		}

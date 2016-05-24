@@ -15,7 +15,20 @@ class CMyObject
 public:
 	CMyObject() = default;
 	CMyObject(const CMyObject&) = default;
-	virtual ~CMyObject() = default;
+	virtual ~CMyObject() 
+	{
+		Verticies.clear();
+		Indices.clear();
+
+		//delete	Resource;
+		//delete	pTextureRV;
+		//delete	pSamplerLinear;
+		//delete	pVertexBuffer;
+		//delete	pIndexBuffer;
+		//delete	pVertexShader;
+		//delete	pVertexLayout;
+		//delete	pPixelShader;
+	}; 
 
 	virtual bool	initialize(ID3D11Device* device, HWND hWnd);
 	virtual void	shutdown();

@@ -13,7 +13,16 @@ class CMyScene
 public:
 	CMyScene() = default;
 	CMyScene(const CMyScene&) = delete;
-	virtual ~CMyScene() = default;
+	virtual ~CMyScene()
+	{
+		for (auto& iter : LayerList)
+		{
+			CMyLayer* curlayer = std::get<CMyLayer*>(iter);
+			delete curlayer;
+		}
+		LayerList.clear();
+		ObjectList.clear();
+	};
 
 	virtual void initialize() = 0;
 	bool initScene(ID3D11Device* device, HWND hWnd);

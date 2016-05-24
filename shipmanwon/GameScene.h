@@ -4,9 +4,9 @@
 class CGameScene : public CMyScene
 {
 public:
-	CGameScene() : CMyScene()
-	{
-	};
+	CGameScene() = default;
+	CGameScene(const CGameScene&) = default;
+	~CGameScene() = default;
 
 	void initialize() override;
 };

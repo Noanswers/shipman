@@ -15,7 +15,8 @@ public:
 	{
 
 	}
-
+	
+	void shutdown();
 
 	bool initialize(HWND hwnd);
 

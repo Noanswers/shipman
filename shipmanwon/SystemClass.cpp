@@ -76,6 +76,11 @@ void CSystemClass::shutdown()
 
 	// Shutdown the window.
 
+	if (CSoundManager::GetInstance())
+	{
+		CSoundManager::GetInstance()->shutdown();
+	}
+
 
 	shutdownWindows();
 

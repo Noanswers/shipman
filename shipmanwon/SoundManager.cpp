@@ -3,6 +3,13 @@
 #include "config.h"
 
 
+void CSoundManager::shutdown()
+{
+	for (auto& i : m_soundVector)
+	{
+		i->Shutdown();
+	}
+}
 
 bool CSoundManager::initialize(HWND hwnd)
 {

@@ -18,11 +18,11 @@ std::wstring config::makeDirectory(std::string fileDir)
 
 	//	Make VSPath
 	auto currentPath = Poco::Path(buffer).makeParent();
-	auto VSPath = currentPath.popDirectory();
-	VSPath = VSPath.popDirectory().append(fileDir);
+	auto Path = currentPath;
+	Path = Path.append(fileDir);
 
 	//	return type set
-	std::string temp = VSPath.toString();
+	std::string temp = Path.toString();
 	std::wstring temp2(temp.begin(), temp.end());
 
 	return temp2;

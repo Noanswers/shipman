@@ -30,6 +30,13 @@ bool CSoundManager::initialize(HWND hwnd)
 
 	m_soundVector.push_back(resultBackgroundSound);
 
+
+	CSound* resultGameBackroundSound = new CSound();
+	result = resultGameBackroundSound->Initialize(hwnd, soundGame);
+	resultGameBackroundSound->setSoundKind(CSound::SoundKind::GAME_BACKGROUND_SOUND);
+
+	m_soundVector.push_back(resultGameBackroundSound);
+
 	return result;
 }
 

@@ -33,7 +33,8 @@ public:
 	{
 		START_BACKGROUND_SOUND,
 		CRASH_SCOUND,
-		RESULT_BACKGROUND_SOUND
+		RESULT_BACKGROUND_SOUND,
+		GAME_BACKGROUND_SOUND
 	};
 
 	bool Initialize(HWND hwnd, std::wstring soundPath);

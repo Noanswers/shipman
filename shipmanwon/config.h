@@ -27,3 +27,8 @@ static const std::wstring textureSky		= config::makeDirectory("shipmanwon\\textu
 static const std::wstring resultTextureDefault = config::makeDirectory("shipmanwon\\texture\\resultP");
 static const std::wstring playerTexture_1 = config::makeDirectory("shipmanwon\\texture\\p1.png");
 static const std::wstring playerTexture_2 = config::makeDirectory("shipmanwon\\texture\\p2.png");
+
+static const std::wstring soundCollision = config::makeDirectory("shipmanwon\\sound\\collision.wav");
+static const std::wstring soundStart = config::makeDirectory("shipmanwon\\sound\\start.wav");
+static const std::wstring soundResult = config::makeDirectory("shipmanwon\\sound\\result.wav");
+static const std::wstring soundGame = config::makeDirectory("shipmanwon\\sound\\game.wav");

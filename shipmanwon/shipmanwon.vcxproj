@@ -311,6 +311,8 @@
     <ClInclude Include="shipmanwon.h" />
     <ClInclude Include="Singleton.h" />
     <ClInclude Include="SkyObject.h" />
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="StageObject.h" />
     <ClInclude Include="StartObject.h" />
     <ClInclude Include="StartScene.h" />
@@ -342,6 +344,8 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="shipmanwon.cpp" />
     <ClCompile Include="SkyObject.cpp" />
+    <ClCompile Include="Sound.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="StageObject.cpp" />
     <ClCompile Include="StartObject.cpp" />
     <ClCompile Include="StartScene.cpp" />

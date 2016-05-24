@@ -19,6 +19,7 @@
 #include "PlayerData.h"
 #include "StartObject.h"
 #include "StageObject.h"
+#include "SoundManager.h"
 
 class CSystemClass
 {
@@ -34,7 +35,7 @@ public:
 	LRESULT CALLBACK messageHandler(HWND hwnd, UINT umsg, WPARAM wparam, LPARAM lparam);
 
 private:
-//	function
+	//	function
 	bool frame();
 	void initializeWindows(int& screenWidth, int& screenHeight);
 	void shutdownWindows();
@@ -43,7 +44,7 @@ private:
 	void endGameScene(CPlayerObject * winner);
 	void gameSceneInit();
 
-//	variables
+	//	variables
 	std::vector<std::tuple<CPlayerData*, CPlayerObject*>> PlayerDataVector;
 	std::vector<CPlayerObject*> PlayerVector;
 
@@ -57,6 +58,7 @@ private:
 	LPCWSTR			m_applicationName;
 	HINSTANCE		m_hinstance;
 	HWND			m_hwnd;
+	CSoundManager*	SoundManager;
 };
 
 static CSystemClass* ApplicationHandle = nullptr;

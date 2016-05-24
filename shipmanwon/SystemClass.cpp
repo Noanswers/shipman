@@ -28,12 +28,18 @@ bool CSystemClass::initialize()
 	if (SceneManager == nullptr)
 		return false;
 
+	SoundManager = CSoundManager::GetInstance();
+	if (SoundManager == nullptr)
+		return false;
+
 	SceneManager->initialize();
 	CMyScene* scene = SceneManager->getCurrentScene();
 	scene->initialize();
 
 	Input = CInputClass::GetInstance();
 	Input->initialize();
+
+	SoundManager->initialize(m_hwnd);
 
 	//Log initialize
 	CLog* log = new CLog;
@@ -51,6 +57,8 @@ bool CSystemClass::initialize()
 		log->SendErrorLogMessage("graphic initialize error!\n");
 		return false;
 	}
+
+	CSoundManager::GetInstance()->play(CSound::SoundKind::START_BACKGROUND_SOUND, true);
 		
 	return true;
 }
@@ -67,6 +75,13 @@ void CSystemClass::shutdown()
 	}
 
 	// Shutdown the window.
+
+	if (CSoundManager::GetInstance())
+	{
+		CSoundManager::GetInstance()->shutdown();
+	}
+
+
 	shutdownWindows();
 
 	return;
@@ -115,13 +130,13 @@ void CSystemClass::gameSceneInit()
 {
 	if (GameManager == nullptr)
 		GameManager = new CGameManager();
-	
+
 	CGameScene* gameScene = new CGameScene();
-	
+
 	SceneManager->pushBack(gameScene);
-	
+
 	CMyScene* scene = SceneManager->getCurrentScene();
-	
+
 	//¼öÁ¤
 	CStageObject* stageObject = new CStageObject();
 	gameScene->pushBack(stageObject, 10);
@@ -130,8 +145,10 @@ void CSystemClass::gameSceneInit()
 
 	initPlayerData(scene, 2);
 	Graphics->gameScene = true;
-}
 
+	SoundManager->GetInstance()->stop(CSound::SoundKind::START_BACKGROUND_SOUND);
+	SoundManager->GetInstance()->play(CSound::SoundKind::GAME_BACKGROUND_SOUND, true);
+}
 
 bool CSystemClass::frame()
 {
@@ -155,6 +172,7 @@ bool CSystemClass::frame()
 
 		if (dynamic_cast<CResultScene*>(currentScene))
 		{
+			
 			CLog::GetInstance()->SendErrorLogMessage("Scene Change To StartScene!\n");
 			SceneManager->popBack();
 			SceneManager->popBack();
@@ -408,4 +426,6 @@ void CSystemClass::endGameScene(CPlayerObject* winner)
 	resultObject->SetWinPlayerNum(winner->getPlayerNumber());
 	resultScene->pushBack(resultObject, 10);
 	resultObject->setTranslate(0.0f, 1.0f, 0.0f);
+	CSoundManager::GetInstance()->stop(CSound::SoundKind::GAME_BACKGROUND_SOUND);
+	CSoundManager::GetInstance()->play(CSound::SoundKind::RESULT_BACKGROUND_SOUND, false);
 }
